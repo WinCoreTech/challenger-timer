@@ -150,6 +150,10 @@ List<(String, int)> featureXp(DayView v) {
       if (w.state == 'lost') out.add(('Streak wager lost', -w.amount));
     }
   }
+  if (v.flagOn(57)) {
+    final c = comebackBonus(v);
+    if (c > 0) out.add(('Comeback bonus (double XP)', c));
+  }
   return out;
 }
 
@@ -159,4 +163,127 @@ bool inWindow(Rec habit, int minuteOfDay) {
   final from = habit.data['from'], to = habit.data['to'];
   if (from is! int || to is! int || from == to) return true;
   return from < to ? minuteOfDay >= from && minuteOfDay < to : minuteOfDay >= from || minuteOfDay < to;
+}
+
+// ---- 58. Repair task ----------------------------------------------------------
+/// Days restored by a repair (double minimum done the day after).
+Set<int> repairedDays(DayView v) => {
+      for (final e in v.type(Ev.tool))
+        if (e.get<int>('n') == 58 && e.get<int>('repairDay') != null) e.get<int>('repairDay')!
+    };
+
+/// Yesterday can be repaired when it had nothing and today already holds
+/// twice the minimum (4 minutes).
+bool canRepair(DayView v) {
+  final y = v.today - 1;
+  final had = v.sessionDays.contains(y) ||
+      v.type(Ev.habitTick).any((e) => e.day == y) ||
+      repairedDays(v).contains(y);
+  final any = v.events.any((e) => e.day < y);
+  return !had && any && v.minutesToday >= 4;
+}
+
+// ---- 59. Sick and travel mode, 60. Exam mode ----------------------------------
+/// Days covered by on/off toggle events of tool [n], through today while on.
+Set<int> _toggledDays(DayView v, int n) {
+  final out = <int>{};
+  int? from;
+  for (final e in v.type(Ev.tool).where((e) => e.get<int>('n') == n && e.payload.containsKey('on'))) {
+    if (e.payload['on'] == true) {
+      from ??= e.day;
+    } else if (from != null) {
+      for (var d = from; d <= e.day; d++) {
+        out.add(d);
+      }
+      from = null;
+    }
+  }
+  if (from != null) {
+    for (var d = from; d <= v.today; d++) {
+      out.add(d);
+    }
+  }
+  return out;
+}
+
+bool _toggleOn(DayView v, int n) {
+  var on = false;
+  for (final e in v.type(Ev.tool)) {
+    if (e.get<int>('n') == n && e.payload.containsKey('on')) on = e.payload['on'] == true;
+  }
+  return on;
+}
+
+Set<int> pausedDays(DayView v) => _toggledDays(v, 59);
+bool pauseOn(DayView v) => _toggleOn(v, 59);
+Set<int> examDays(DayView v) => _toggledDays(v, 60);
+bool examOn(DayView v) => v.flagOn(60) && _toggleOn(v, 60);
+
+// ---- 57. Comeback bonus ---------------------------------------------------------
+/// The first session of each comeback day pays its XP a second time.
+int comebackBonus(DayView v) {
+  var xp = 0;
+  for (final d in v.master.comebackDays) {
+    for (final e in v.type(Ev.sessionDone)) {
+      if (e.day == d) {
+        xp += 50 + 2 * (e.get<num>('minutes') ?? 0).toInt();
+        break;
+      }
+    }
+  }
+  return xp;
+}
+
+// ---- 64. Restart at tiny ---------------------------------------------------------
+/// For 3 days after a habit's streak broke, the tiny version is the ask.
+bool restartAtTiny(DayView v, String habitId) {
+  final b = v.habitStreak(habitId).lastBreakDay;
+  return b != null && v.today - b <= 3;
+}
+
+// ---- 65. Fresh-start dates ---------------------------------------------------------
+/// "Monday", "the 1st" or "your birthday" when today is one of them.
+String? freshStart(int today, {String birthday = ''}) {
+  final d = DateTime.utc(1970, 1, 1 + today);
+  final m = RegExp(r'^(\d{1,2})\D+(\d{1,2})').firstMatch(birthday.trim());
+  if (m != null && int.parse(m.group(1)!) == d.day && int.parse(m.group(2)!) == d.month) return 'your birthday';
+  if (d.day == 1) return 'the 1st';
+  if (d.weekday == DateTime.monday) return 'Monday';
+  return null;
+}
+
+// ---- 68. Half-credit days, 75. Gold bad days ------------------------------------------
+/// Days with a started session that was never finished and nothing else.
+Set<int> halfDays(DayView v) =>
+    {for (final e in v.type(Ev.sessionStart)) if (!v.showedUpDays.contains(e.day)) e.day};
+
+/// Session days on which the mood check (tool 276) was 2 or lower.
+Set<int> goldDays(DayView v) {
+  final low = <int>{};
+  for (final e in v.type(Ev.tool)) {
+    final val = e.get<num>('value');
+    if (e.get<int>('n') == 276 && val != null && val <= 2) low.add(e.day);
+  }
+  return low.intersection(v.sessionDays);
+}
+
+// ---- 71. Return screen ------------------------------------------------------------------
+/// Whole days since the last finished session or habit tick, 0 if none yet.
+int daysAway(DayView v) {
+  final past = v.showedUpDays.where((d) => d <= v.today);
+  if (past.isEmpty) return 0;
+  return v.today - past.reduce((a, b) => a > b ? a : b);
+}
+
+// ---- 70. Gifted freeze (local honour version) -----------------------------------------------
+/// Days a gifted freeze was logged, at most one per calendar month.
+List<int> giftDays(DayView v) {
+  final seen = <int>{};
+  final out = <int>[];
+  for (final e in v.type(Ev.tool)) {
+    if (e.get<int>('n') != 70) continue;
+    final d = DateTime.utc(1970, 1, 1 + e.day);
+    if (seen.add(d.year * 12 + d.month)) out.add(e.day);
+  }
+  return out;
 }

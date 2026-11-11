@@ -275,5 +275,115 @@
 "What stopped me?",
 "What is first tomorrow?"
 ]
+},
+{
+"n": 53,
+"kind": "card",
+"title": "Earned freezes",
+"body": "Every 7 active days in a row earns one extra freeze. Earned freezes do not expire at month end. They show as extra lives on the Streaks tab."
+},
+{
+"n": 55,
+"kind": "toggle",
+"title": "Decay, not reset",
+"intro": "With this on, a break (two uncovered misses in a row) costs 20% of the streak instead of all of it. Off keeps the standard rule.",
+"setKey": "decay",
+"setLabel": "A break keeps 80% of the streak"
+},
+{
+"n": 56,
+"kind": "stat",
+"title": "Comeback counter",
+"stat": "comebacks"
+},
+{
+"n": 57,
+"kind": "card",
+"title": "Comeback bonus",
+"body": "The first session after an uncovered miss pays its XP twice. Coming back is rewarded more than never slipping."
+},
+{
+"n": 58,
+"kind": "special",
+"title": "Repair task",
+"intro": "Missed yesterday? Do double the minimum today (4 minutes) and restore it."
+},
+{
+"n": 59,
+"kind": "special",
+"title": "Sick and travel mode",
+"intro": "Pauses every streak. No day counts as a miss while it is on. Use it when you are ill or travelling, not when you are avoiding."
+},
+{
+"n": 60,
+"kind": "special",
+"title": "Exam mode",
+"intro": "During exams, show only the habits you marked as your exam set (open a habit on the Streaks tab to mark it). The others are paused, not broken."
+},
+{
+"n": 62,
+"kind": "log",
+"title": "Miss autopsy",
+"intro": "One tap. No essay, no blame. It only feeds the pattern finder.",
+"choices": [
+"tired",
+"forgot",
+"avoided",
+"busy"
+]
+},
+{
+"n": 63,
+"kind": "stat",
+"title": "Miss pattern finder",
+"stat": "missPattern"
+},
+{
+"n": 65,
+"kind": "single",
+"title": "Fresh-start dates",
+"intro": "Mondays, the 1st of a month and your birthday are natural restart days. Home mentions it on those days if the streak needs a restart.",
+"prompts": [
+"Birthday as day-month, e.g. 14-08 (optional)"
+]
+},
+{
+"n": 70,
+"kind": "special",
+"title": "Gifted freeze"
+},
+{
+"n": 72,
+"kind": "single",
+"title": "Lapse plan",
+"intro": "Write it now, while you are calm. Home shows it back to you right after a missed day.",
+"prompts": [
+"If I miss a day, I will..."
+]
+},
+{
+"n": 73,
+"kind": "log",
+"title": "Friend test",
+"intro": "You are kinder to friends than to yourself. Borrow that.",
+"prompts": [
+"What would I say to a friend who missed a day?"
+]
+},
+{
+"n": 74,
+"kind": "special",
+"title": "Archive",
+"intro": "Old habits are never deleted. Their streaks stay as proof you can do it."
+},
+{
+"n": 276,
+"kind": "rate",
+"title": "Mood check",
+"intro": "One tap. Low-mood days you still worked on turn gold in the heatmap.",
+"choices": [
+"rough",
+"great"
+]
 }
 ]

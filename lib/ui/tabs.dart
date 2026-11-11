@@ -10,6 +10,7 @@ import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
 import '../core/rules.dart';
+import '../core/stats.dart';
 import '../core/streak_engine.dart';
 import 'home.dart';
 import 'theme.dart';
@@ -42,35 +43,13 @@ class Lives extends StatelessWidget {
 class StreaksScreen extends ConsumerWidget {
   const StreaksScreen({super.key});
 
-  Widget _card(BuildContext context, String title, StreakResult s, int today, Set<int> days,
-      {Widget? trailing, Key? key}) =>
-      Padding(
-          padding: const EdgeInsets.only(bottom: 14),
-          child: Panel(
-              key: key,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Row(children: [
-                  Expanded(child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800))),
-                  ?trailing,
-                ]),
-                const SizedBox(height: 12),
-                Row(children: [
-                  _stat('Current', '${s.current}', color: s.state == StreakState.paused ? dim : cyan),
-                  _stat('Longest', '${s.longest}'),
-                  _stat('Total days', '${s.totalDays}'),
-                ]),
-                const SizedBox(height: 12),
-                Heatmap(today: today, level: (d) => days.contains(d) ? 3 : s.frozenDays.contains(d) ? -1 : 0),
-                const SizedBox(height: 8),
-                Text(streakLine(s), style: const TextStyle(color: dim)),
-              ])));
-
   Widget _habitCard(BuildContext context, DayView v, App app, Rec h) {
     final days = v.habitDays(h.id);
     final s = v.habitStreak(h.id);
     final weekly = v.on(29) ? h.integer('weekly') : 0;
     final open = !v.on(49) || inWindow(h, v.now.minuteOfDay);
     final tiny = v.on(28) ? h.str('tiny') : '';
+    final small = v.on(64) && restartAtTiny(v, h.id);
     return Padding(
         padding: const EdgeInsets.only(bottom: 14),
         child: Panel(
@@ -95,6 +74,9 @@ class StreaksScreen extends ConsumerWidget {
                         key: Key('tiny-${h.id}'),
                         onPressed: () => app.tickHabit(h.id, tiny: true),
                         child: Text('TINY VERSION: ${tiny.toUpperCase()}'))),
+              if (small)
+                Text('Restarting small: for three days ${tiny.isEmpty ? 'the tiniest version' : '"$tiny"'} is all that is asked.',
+                    style: const TextStyle(color: cyan)),
               if (!open)
                 Text('Counts between ${hhmm(h.integer('from'))} and ${hhmm(h.integer('to'))}.', style: const TextStyle(color: dim)),
               const SizedBox(height: 12),
@@ -133,7 +115,40 @@ class StreaksScreen extends ConsumerWidget {
         ])),
       ])),
       const SizedBox(height: 14),
-      _card(context, 'SHOWED UP (master)', v.master, v.today, v.showedUpDays, key: const Key('masterCard')),
+      Padding(
+          padding: const EdgeInsets.only(bottom: 14),
+          child: Panel(
+              key: const Key('masterCard'),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                const Text('SHOWED UP (master)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
+                const SizedBox(height: 12),
+                Row(children: [
+                  _stat('Current', '${v.master.current}', color: v.master.state == StreakState.paused ? dim : cyan),
+                  _stat('Longest', '${v.master.longest}'),
+                  _stat('Total days', '${v.master.totalDays}'),
+                  if (v.on(69)) _stat('Last 30', '${consistency(v)}%'),
+                ]),
+                const SizedBox(height: 12),
+                Builder(builder: (_) {
+                  final half = v.on(68) ? halfDays(v) : const <int>{};
+                  final golds = v.on(75) ? goldDays(v) : const <int>{};
+                  return Heatmap(
+                      today: v.today,
+                      level: (d) => golds.contains(d)
+                          ? 4
+                          : v.showedUpDays.contains(d)
+                              ? 3
+                              : v.master.frozenDays.contains(d)
+                                  ? -1
+                                  : half.contains(d)
+                                      ? 1
+                                      : 0);
+                }),
+                const SizedBox(height: 8),
+                Text(streakLine(v.master), style: const TextStyle(color: dim)),
+                if (v.on(56) && v.master.comebacks > 0)
+                  Text('Comebacks: ${v.master.comebacks}. That is the skill that matters.', style: const TextStyle(color: cyan)),
+              ]))),
       if (v.on(34))
         Padding(
             padding: const EdgeInsets.only(bottom: 14),
@@ -147,7 +162,12 @@ class StreaksScreen extends ConsumerWidget {
                   const Text('In one UCL study, 66 days was the median time for a habit to become automatic. It varied a lot between people.',
                       style: TextStyle(color: dim, fontSize: 12)),
                 ]))),
-      for (final h in v.habits) _habitCard(context, v, app, h),
+      if (examOn(v))
+        const Padding(
+            padding: EdgeInsets.only(bottom: 10),
+            child: Text('Exam mode: only your exam set is showing. Other habits are paused, not broken.', style: TextStyle(color: gold))),
+      for (final h in v.habits)
+        if (!examOn(v) || h.flag('exam')) _habitCard(context, v, app, h),
       if (v.maintained.isNotEmpty) ...[
         const Padding(padding: EdgeInsets.only(top: 8, bottom: 6), child: H('Maintained (runs on its own now)')),
         for (final h in v.maintained)

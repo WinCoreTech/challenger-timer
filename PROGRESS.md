@@ -41,3 +41,7 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
 - Batch 2 (features 26 to 50): tiny and weekly habits, time windows, graduation, chain
   calendar, 66-day track, growing flame, before-noon, plan-kept, wake, upload and review
   streaks, stacking bonus, odd milestones, streak wager, rest days, task due dates.
+- Batch 3 (features 51 to 75): earned freezes, optional decay, comeback counter and bonus,
+  repair task, sick/travel mode, exam mode, miss autopsy and pattern finder, restart at
+  tiny, fresh-start dates, slip guard, half-credit and gold days, gifted freeze (local
+  version), return screen, lapse plan, friend test, archive.

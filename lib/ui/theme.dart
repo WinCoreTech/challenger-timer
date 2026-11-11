@@ -255,8 +255,8 @@ class _PosterPainter extends CustomPainter {
   bool shouldRepaint(_PosterPainter old) => old.art != art || old.color != color || old.level != level;
 }
 
-/// One year of days as a 53x7 grid. [level] returns 0 (empty) .. 3 (full);
-/// negative means a frozen day.
+/// One year of days as a 53x7 grid. [level] returns 0 (empty), 1 (half
+/// credit), 3 (full) or 4 (gold); negative means a frozen day.
 class Heatmap extends StatelessWidget {
   const Heatmap({super.key, required this.today, required this.level});
   final int today;
@@ -282,7 +282,13 @@ class _HeatPainter extends CustomPainter {
         if (day > today) continue;
         final l = level(day);
         final paint = Paint()
-          ..color = l < 0 ? const Color(0xFF3A5560) : l == 0 ? line : cyan.withValues(alpha: 0.35 + 0.65 * (l.clamp(1, 3) / 3));
+          ..color = l < 0
+              ? const Color(0xFF3A5560)
+              : l == 0
+                  ? line
+                  : l >= 4
+                      ? gold
+                      : cyan.withValues(alpha: 0.35 + 0.65 * (l.clamp(1, 3) / 3));
         canvas.drawRRect(
             RRect.fromRectAndRadius(Rect.fromLTWH(c * cell + 0.8, r * cell + 0.8, cell - 1.6, cell - 1.6), const Radius.circular(1.5)),
             paint);

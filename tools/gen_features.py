@@ -54,8 +54,8 @@ lines = [head.read_text().rstrip() if head.exists() else '# Feature status', '',
          'Status words: **done** = built and covered by tests or trivially simple; **partial** = a '
          'working smaller version, the note says what is missing; **needs-backend** = screen and local '
          'logic built against a fake, see BACKEND.md; **blocked** = Android does not allow it, closest '
-         'allowed version built; **todo** = not built yet. "Device" in a note means it needs a real '
-         'phone to verify.', '', '| # | Feature | Status | Note |', '| --- | --- | --- | --- |']
+         'allowed version built; **todo** = not built yet. "Built, untested on device" means the code '
+         'exists and compiles but has never run on a phone: it is on the phone test checklist.', '', '| # | Feature | Status | Note |', '| --- | --- | --- | --- |']
 for f in out:
     note = meta.get(f['n'], ('', '', ''))[2]
     lines.append(f"| {f['n']} | {f['name']} | {f['status']} | {note} |")

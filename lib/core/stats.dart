@@ -6,6 +6,7 @@ import 'day.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'tools.dart';
 import 'streak_engine.dart';
 
 typedef Stat = List<String> Function(DayView v);
@@ -100,7 +101,37 @@ Set<int> wakeOnTimeDays(DayView v) {
   };
 }
 
+/// Feature 63: the weekday and the autopsy reason that repeat most.
+List<String> missPattern(DayView v) {
+  const names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  final byDay = List.filled(7, 0);
+  for (final d in {...v.master.missedDays, ...v.master.frozenDays}) {
+    byDay[weekdayOf(d) - 1]++;
+  }
+  final reasons = <String, int>{};
+  for (final e in v.type(Ev.tool)) {
+    final c = e.get<String>('choice');
+    if (e.get<int>('n') == 62 && c != null) reasons[c] = (reasons[c] ?? 0) + 1;
+  }
+  final total = byDay.fold(0, (a, b) => a + b);
+  if (total == 0) return ['No misses yet', 'Nothing to find a pattern in. Good problem to have.'];
+  final top = byDay.indexOf(byDay.reduce((a, b) => a > b ? a : b));
+  final lines = [names[top], 'is your most-missed day (${byDay[top]} of $total missed days).'];
+  if (reasons.isNotEmpty) {
+    final r = reasons.entries.reduce((a, b) => a.value >= b.value ? a : b);
+    lines.add('Most common reason you gave: "${r.key}" (${r.value} times).');
+  }
+  lines.add('Idea: shrink that day to the tiny version in advance.');
+  return lines;
+}
+
 final Map<String, Stat> stats = {
+  'comebacks': (v) => ['${v.master.comebacks}', 'times you came back after a miss', 'Coming back is the skill. This number is worth more than the streak.'],
+  'missPattern': missPattern,
+  'freshStart': (v) {
+    final f = freshStart(v.today, birthday: v.kv['t.65'] == null ? '' : v.single(const ToolDef(n: 65, kind: 'single', title: '', prompts: [''])).first);
+    return [f == null ? 'Not today' : 'Today', f == null ? 'Next clean page: the coming Monday or the 1st, whichever is sooner.' : 'It is $f: a natural day to start a fresh page.'];
+  },
   'beforeNoon': (v) => _streakLines(v, beforeNoonDays(v), 'with a session started before noon'),
   'earlySubmit': (v) {
     final n = earlySubmissions(v).length;

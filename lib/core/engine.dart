@@ -129,17 +129,37 @@ class DayView {
   /// Master streak: any finished session or any habit tick.
   late final Set<int> showedUpDays = {
     ...sessionDays,
-    for (final e in type(Ev.habitTick)) e.day
+    for (final e in type(Ev.habitTick)) e.day,
+    if (flagOn(58)) ...repairedDays(this),
   };
   /// Feature 48: weekdays that never count as a miss.
   Set<int> get restWeekdays => flagOn(48)
       ? {for (final c in (kv['restDays'] ?? '').split('')) if (int.tryParse(c) != null) int.parse(c)}
       : const {};
-  late final StreakRules streakRules = StreakRules(restWeekdays: restWeekdays);
+  late final StreakRules streakRules = StreakRules(
+      restWeekdays: restWeekdays,
+      earnFreezeEvery: flagOn(53) ? 7 : 0,
+      decayKeepPercent: flagOn(55) && kv['decay'] == '1' ? 80 : 0,
+      pausedDays: flagOn(59) ? pausedDays(this) : const {},
+      freezeGainDays: flagOn(70) ? giftDays(this) : const []);
   late final StreakResult master = computeStreak(showedUpDays, today, rules: streakRules);
+  /// Lives shown to the user: the master streak's freezes.
+  int get lives => master.freezesLeft;
   Set<int> habitDays(String habitId) =>
       {for (final e in type(Ev.habitTick)) if (e.get<String>('habitId') == habitId) e.day};
-  StreakResult habitStreak(String habitId) => computeStreak(habitDays(habitId), today, rules: streakRules);
+  StreakResult habitStreak(String habitId) {
+    // Feature 60: in exam mode, habits outside the exam set are paused, not broken.
+    final exam = flagOn(60) && rec(habitId)?.flag('exam') != true ? examDays(this) : const <int>{};
+    return computeStreak(habitDays(habitId), today,
+        rules: exam.isEmpty
+            ? streakRules
+            : StreakRules(
+                restWeekdays: streakRules.restWeekdays,
+                earnFreezeEvery: streakRules.earnFreezeEvery,
+                decayKeepPercent: streakRules.decayKeepPercent,
+                pausedDays: {...streakRules.pausedDays, ...exam},
+                freezeGainDays: streakRules.freezeGainDays));
+  }
   bool tickedToday(String habitId) => habitDays(habitId).contains(today);
 
   // ---- XP, rank, bonus

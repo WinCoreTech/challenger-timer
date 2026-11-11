@@ -18,6 +18,7 @@ class StreakRules {
     this.decayKeepPercent = 0,
     this.restWeekdays = const {},
     this.pausedDays = const {},
+    this.freezeGainDays = const [],
   });
 
   final int freezesPerMonth;
@@ -34,6 +35,10 @@ class StreakRules {
 
   /// Feature 59: days paused for sickness or travel; never a miss.
   final Set<int> pausedDays;
+
+  /// Feature 70: days on which one extra freeze was received. It can only
+  /// cover misses after that day.
+  final List<int> freezeGainDays;
 }
 
 enum StreakState {
@@ -62,6 +67,8 @@ class StreakResult {
     required this.comebacks,
     required this.breaks,
     required this.earnedFreezes,
+    this.comebackDays = const {},
+    this.lastBreakDay,
   });
   final int current;
   final int longest;
@@ -79,6 +86,12 @@ class StreakResult {
   final int comebacks;
   final int breaks;
   final int earnedFreezes;
+
+  /// Active days that followed an uncovered miss (feature 57).
+  final Set<int> comebackDays;
+
+  /// The second missed day of the most recent break (feature 64).
+  final int? lastBreakDay;
 }
 
 StreakResult computeStreak(Set<int> activeDays, int today,
@@ -104,10 +117,16 @@ StreakResult computeStreak(Set<int> activeDays, int today,
   var streak = 0, longest = 0, missRun = 0, comebacks = 0, breaks = 0;
   var earned = 0, run = 0;
   var hadGap = false;
+  final comebackDays = <int>{};
+  int? lastBreak;
 
   for (var d = past.first; d <= today; d++) {
+    earned += rules.freezeGainDays.where((g) => g == d).length;
     if (active.contains(d)) {
-      if (hadGap) comebacks++;
+      if (hadGap) {
+        comebacks++;
+        comebackDays.add(d);
+      }
       hadGap = false;
       missRun = 0;
       streak++;
@@ -140,6 +159,7 @@ StreakResult computeStreak(Set<int> activeDays, int today,
     if (missRun >= 2) {
       streak = streak * rules.decayKeepPercent ~/ 100;
       breaks++;
+      lastBreak = d;
       missRun = 0;
     }
   }
@@ -165,5 +185,7 @@ StreakResult computeStreak(Set<int> activeDays, int today,
       totalDays: active.length,
       comebacks: comebacks,
       breaks: breaks,
-      earnedFreezes: earned);
+      earnedFreezes: earned,
+      comebackDays: comebackDays,
+      lastBreakDay: lastBreak);
 }

@@ -112,7 +112,9 @@ class _ToolState extends ConsumerState<ToolScreen> {
           body: const Center(child: Text('This tool is switched off or not unlocked yet.')));
     }
     if (!loaded) {
-      final init = t.kind == 'single' ? v.single(t) : List.filled(t.prompts.isEmpty ? 1 : t.prompts.length, '');
+      final init = t.kind == 'single'
+          ? v.single(t)
+          : List.filled(t.kind == 'log' ? t.prompts.length : (t.prompts.isEmpty ? 1 : t.prompts.length), '');
       c.addAll([for (final s in init) TextEditingController(text: s)]);
       loaded = true;
     }

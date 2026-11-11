@@ -8,6 +8,7 @@ import '../core/engine.dart';
 import '../core/extras.dart';
 import '../core/rules.dart';
 import '../core/streak_engine.dart';
+import '../core/tools.dart';
 import 'theme.dart';
 
 String streakLine(StreakResult s) => switch (s.state) {
@@ -17,6 +18,21 @@ String streakLine(StreakResult s) => switch (s.state) {
       StreakState.none => s.longest > 0 ? 'Fresh page. Day one starts with two minutes.' : 'Day one starts with two minutes.',
     };
 
+/// The one line under the streak. Kind by rule: no blame, ever.
+String homeLine(DayView v) {
+  final slipped = v.master.state == StreakState.paused || v.master.frozenDays.contains(v.today - 1);
+  if (slipped && !v.workedToday) {
+    final plan = (v.kv['t.72'] ?? '').length > 4 ? v.single(const ToolDef(n: 72, kind: 'single', title: '', prompts: [''])).first : '';
+    if (v.on(72) && plan.isNotEmpty) return 'Your own plan for this moment: "$plan"';
+    if (v.on(66)) return 'The day is not lost. Two minutes saves it.';
+  }
+  if (v.on(65) && !v.workedToday && v.master.state != StreakState.pending) {
+    final f = freshStart(v.today, birthday: v.kv['t.65'] == null ? '' : v.single(const ToolDef(n: 65, kind: 'single', title: '', prompts: [''])).first);
+    if (f != null) return 'It is $f. A clean page, if you want one.';
+  }
+  return streakLine(v.master);
+}
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -25,6 +41,29 @@ class HomeScreen extends ConsumerWidget {
     final v = ref.watch(viewProvider);
     final app = ref.read(appProvider.notifier);
     final active = v.active;
+    // Feature 71: after three or more days away, one button and no stats.
+    if (v.on(71) && daysAway(v) >= 3 && !v.workedToday && active == null) {
+      return SafeArea(
+          child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                const Center(child: Poster(PosterArt.door, size: 120)),
+                const SizedBox(height: 24),
+                const Text('WELCOME BACK.', textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
+                const SizedBox(height: 8),
+                const Text('Nothing to catch up on. No numbers today. Just this.', textAlign: TextAlign.center, style: TextStyle(color: dim, fontSize: 16)),
+                const SizedBox(height: 32),
+                SizedBox(
+                    height: 96,
+                    child: FilledButton(
+                        key: const Key('start'),
+                        onPressed: () async {
+                          await app.startSession();
+                          if (context.mounted) context.go('/timer');
+                        },
+                        child: const Text('START AGAIN', style: TextStyle(fontSize: 30)))),
+              ])));
+    }
     return SafeArea(
       child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 24), children: [
         Row(children: [
@@ -53,7 +92,7 @@ class HomeScreen extends ConsumerWidget {
               ])),
         ]),
         const SizedBox(height: 6),
-        Text(streakLine(v.master), style: const TextStyle(color: dim)),
+        Text(homeLine(v), key: const Key('homeLine'), style: const TextStyle(color: dim)),
         const SizedBox(height: 20),
         Panel(
             border: cyan,
