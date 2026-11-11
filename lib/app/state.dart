@@ -103,69 +103,180 @@ class App extends Notifier<AppData> {
 
   // ---- sessions
   Future<void> startSession(
-      {int? minutes, String? projectId, String? title, String source = 'app', int? startMs}) async {
+      {int? minutes,
+      String? projectId,
+      String? title,
+      String source = 'app',
+      int? startMs,
+      bool flow = false,
+      bool hard = false,
+      String tag = '',
+      String? chain,
+      int cycleWork = 0,
+      int cycleRest = 0,
+      int cycleLeft = 0}) async {
     final v = view;
     if (v.active != null) return;
     final now = _now;
     final begin = startMs ?? now.ms;
     minutes ??= v.doorMinutes;
     final pid = projectId ?? state.kv[K.lastProject];
-    final s = ActiveSession(newId(), begin, minutes, pid, title ?? v.nextStep, source);
+    final s = ActiveSession(newId(), begin, flow ? 0 : minutes, pid, title ?? v.nextStep, source,
+        flow: flow, hard: hard, tag: tag, chain: chain, cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft);
     await setKv(K.active, s.encode());
     if (pid != null) await setKv(K.lastProject, pid);
-    await log(Ev.sessionStart,
-        {'sid': s.sid, 'minutes': minutes, 'projectId': pid, 'source': source, 'title': s.title},
-        Moment(begin, now.offsetMin));
+    await log(Ev.sessionStart, {
+      'sid': s.sid, 'minutes': s.minutes, 'projectId': pid, 'source': source, 'title': s.title,
+      if (tag.isNotEmpty) 'tag': tag, if (flow) 'flow': true, if (hard) 'hard': true,
+    }, Moment(begin, now.offsetMin));
     native.haptic();
+    if (hard) await native.keepScreenOn(true);
     if (startMs == null) await native.startTimer(s.endMs, s.title);
     await syncNative();
   }
 
-  /// Call often. If the running session has reached its end (even while the
-  /// app was dead), records it at the moment it ended. Returns true if it did.
+  /// Call often. If the running session (or break) has reached its end, even
+  /// while the app was dead, records it at the moment it ended. Returns true
+  /// if a work session was completed.
   Future<bool> completeIfDue() async {
     final s = view.active;
     final now = _now;
-    if (s == null || now.ms < s.endMs) return false;
-    await _finish(s, s.minutes, Moment(s.endMs, now.offsetMin));
+    if (s == null || s.paused || now.ms < s.endMs) return false;
+    if (s.isBreak) {
+      await _endBreak(s, now.ms - s.endMs);
+      return false;
+    }
+    await _finish(s, s.flow ? ActiveSession.flowCapMinutes : s.minutes, Moment(s.endMs, now.offsetMin));
+    // Feature 77: the next phase starts on its own, but only if we are
+    // actually here. A cycle never runs by itself while the app is closed.
+    if (s.cycleLeft > 0 && now.ms - s.endMs < 2 * msPerMinute) await startBreak(s.cycleRest, from: s, startMs: s.endMs);
     return true;
   }
 
   Future<void> _finish(ActiveSession s, int minutes, Moment at) async {
-    // "Just five more" adds to the proof that is already waiting.
-    final carried = s.source == 'five_more' ? (view.pendingProof?['minutes'] as int? ?? 0) : 0;
+    // Linked sessions (just five more, pomodoro rounds) add to the waiting proof.
+    final prior = view.pendingProof;
+    final chain = s.chain ?? s.sid;
+    await _quiet(s);
+    final carried = prior != null && (prior['chain'] == chain || s.source == 'five_more') ? prior['minutes'] as int? ?? 0 : 0;
     await setKv(K.active, null);
-    await log(Ev.sessionDone, {'sid': s.sid, 'minutes': minutes, 'projectId': s.projectId}, at);
-    await setKv(K.pendingProof,
-        jsonEncode({'sid': s.sid, 'projectId': s.projectId, 'minutes': minutes + carried, 'title': s.title}));
+    await log(Ev.sessionDone,
+        {'sid': s.sid, 'minutes': minutes, 'projectId': s.projectId, if (s.tag.isNotEmpty) 'tag': s.tag}, at);
+    await setKv(
+        K.pendingProof,
+        jsonEncode({
+          'sid': s.sid, 'projectId': s.projectId, 'minutes': minutes + carried, 'title': s.title, 'chain': chain,
+          if (s.flow) 'break': minutes ~/ 5 < 1 ? 1 : minutes ~/ 5,
+        }));
     celebrate();
     await syncNative();
   }
 
   /// Stopping early. Two minutes or more still counts as a finished session.
-  Future<void> stopSession() async {
+  Future<void> stopSession({String reason = ''}) async {
     final s = view.active;
     if (s == null) return;
     final now = _now;
-    final elapsedMin = (now.ms - s.startMs) ~/ msPerMinute;
     await native.stopTimer();
-    if (elapsedMin >= 2) {
+    await _quiet(s);
+    if (s.isBreak) {
+      await setKv(K.active, null);
+      return syncNative();
+    }
+    final elapsedMin = s.elapsedMs(now.ms) ~/ msPerMinute;
+    if (elapsedMin >= view.doorMinutes.clamp(1, 2) && reason != 'left') {
       await _finish(s, elapsedMin, now);
     } else {
       await setKv(K.active, null);
-      await log(Ev.sessionAbandon, {'sid': s.sid, 'elapsedSec': (now.ms - s.startMs) ~/ 1000});
+      await log(Ev.sessionAbandon,
+          {'sid': s.sid, 'elapsedSec': s.elapsedMs(now.ms) ~/ 1000, if (reason.isNotEmpty) 'reason': reason});
       await syncNative();
     }
   }
 
-  Future<void> saveProof({required String type, required String value, String parkingNote = ''}) async {
+  Future<void> _quiet(ActiveSession s) async {
+    if (s.hard) await native.keepScreenOn(false);
+    if (view.kv['noise'] != null && view.kv['noise']!.isNotEmpty) await native.noise('');
+  }
+
+  Future<void> skipBreak() async {
+    final b = view.active;
+    if (b == null || !b.isBreak) return;
+    await native.stopTimer();
+    await _endBreak(b, 0);
+  }
+
+  /// A rest timer. [from] carries a pomodoro cycle forward.
+  Future<void> startBreak(int minutes, {ActiveSession? from, int? startMs}) async {
+    if (view.active != null) return;
+    final b = ActiveSession(newId(), startMs ?? _now.ms, minutes < 1 ? 1 : minutes, from?.projectId, from?.title ?? '', 'break',
+        isBreak: true,
+        chain: from?.chain ?? from?.sid,
+        tag: from?.tag ?? '',
+        cycleWork: from?.cycleWork ?? 0,
+        cycleRest: from?.cycleRest ?? 0,
+        cycleLeft: from?.cycleLeft ?? 0);
+    await setKv(K.active, b.encode());
+    await log(Ev.breakStart, {'minutes': b.minutes});
+    await native.startTimer(b.endMs, 'Break');
+  }
+
+  Future<void> _endBreak(ActiveSession b, int lateMs) async {
+    await setKv(K.active, null);
+    // Feature 93: a break has a hard end. Coming back late is counted, not punished.
+    if (lateMs > msPerMinute && view.on(93)) await log(Ev.tool, {'n': 93, 'over': (lateMs / msPerMinute).ceil()});
+    if (b.cycleLeft > 0 && lateMs < 2 * msPerMinute) {
+      await startSession(
+          minutes: b.cycleWork, projectId: b.projectId, title: b.title, source: 'cycle', tag: b.tag,
+          chain: b.chain, cycleWork: b.cycleWork, cycleRest: b.cycleRest, cycleLeft: b.cycleLeft - 1);
+    } else {
+      await syncNative();
+    }
+  }
+
+  /// Feature 91: at most two pauses per session, each with a reason.
+  Future<bool> pauseSession(String reason) async {
+    final s = view.active;
+    if (s == null || s.paused || s.isBreak || s.hard || s.pauses >= 2) return false;
+    await setKv(K.active, s.copy(pausedAt: _now.ms, pauses: s.pauses + 1).encode());
+    await log(Ev.sessionPause, {'sid': s.sid, 'reason': reason});
+    await native.stopTimer();
+    return true;
+  }
+
+  Future<void> resumeSession() async {
+    final s = view.active;
+    if (s == null || !s.paused) return;
+    final r = s.copy(startMs: s.startMs + (_now.ms - s.pausedAt!), clearPause: true);
+    await setKv(K.active, r.encode());
+    await native.startTimer(r.endMs, r.title);
+  }
+
+  /// Feature 90: called when the app comes back. Returns true if the session
+  /// was ended because the user left during hard mode.
+  Future<bool> hardModeCheck(int awayMs, {required bool leftWithScreenOn}) async {
+    final s = view.active;
+    if (s == null || !s.hard || s.isBreak || awayMs < 10000 || !leftWithScreenOn) return false;
+    await stopSession(reason: 'left');
+    return true;
+  }
+
+  String? lastProofId;
+
+  Future<void> saveProof(
+      {required String type, required String value, String parkingNote = '', String outcome = '', int difficulty = 0}) async {
     final p = view.pendingProof;
     if (p == null) return;
     final rec = await addRec(Kind.proof, {
       'sid': p['sid'], 'projectId': p['projectId'], 'type': type, 'value': value,
       'minutes': p['minutes'], 'title': p['title'], 'day': view.today,
+      if (outcome.isNotEmpty) 'outcome': outcome, if (difficulty > 0) 'difficulty': difficulty,
     });
-    await log(Ev.proof, {'sid': p['sid'], 'recId': rec.id, 'kind': type, 'projectId': p['projectId']});
+    lastProofId = rec.id;
+    await log(Ev.proof, {
+      'sid': p['sid'], 'recId': rec.id, 'kind': type, 'projectId': p['projectId'],
+      if (outcome.isNotEmpty) 'outcome': outcome, if (difficulty > 0) 'difficulty': difficulty,
+    });
     if (parkingNote.trim().isNotEmpty) {
       await log(Ev.parkingNote, {'text': parkingNote.trim(), 'projectId': p['projectId']});
     }

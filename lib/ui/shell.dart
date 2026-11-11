@@ -54,6 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
               GoRoute(path: '/me', pageBuilder: (c, s) => const NoTransitionPage(child: MeScreen())),
             ]),
         GoRoute(path: '/proof', builder: (c, s) => const ProofScreen()),
+        GoRoute(path: '/receipt', builder: (c, s) => const ReceiptScreen()),
         GoRoute(path: '/settings', builder: (c, s) => const SettingsScreen()),
         GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
         GoRoute(path: '/ritual', builder: (c, s) => const RitualScreen()),
@@ -92,9 +93,22 @@ class _AppState extends ConsumerState<ChallengerApp> with WidgetsBindingObserver
     super.dispose();
   }
 
+  int? _leftAt;
+
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) _wake();
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    final clock = ref.read(clockProvider);
+    if (state == AppLifecycleState.paused) _leftAt = clock().ms;
+    if (state == AppLifecycleState.resumed) {
+      final left = _leftAt;
+      _leftAt = null;
+      if (left != null) {
+        final native = ref.read(nativeProvider);
+        await ref.read(appProvider.notifier)
+            .hardModeCheck(clock().ms - left, leftWithScreenOn: await native.leftWithScreenOn());
+      }
+      await _wake();
+    }
   }
 
   /// Runs on open, on resume, on native actions and every few seconds:

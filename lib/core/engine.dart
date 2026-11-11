@@ -34,11 +34,31 @@ abstract final class K {
 }
 
 class ActiveSession {
-  const ActiveSession(this.sid, this.startMs, this.minutes, this.projectId, this.title, this.source);
+  const ActiveSession(this.sid, this.startMs, this.minutes, this.projectId, this.title, this.source,
+      {this.isBreak = false,
+      this.flow = false,
+      this.hard = false,
+      this.tag = '',
+      this.chain,
+      this.cycleWork = 0,
+      this.cycleRest = 0,
+      this.cycleLeft = 0,
+      this.pausedAt,
+      this.pauses = 0});
   factory ActiveSession.parse(String s) {
     final j = jsonDecode(s) as Map;
     return ActiveSession(j['sid'] as String, j['startMs'] as int, j['minutes'] as int,
-        j['projectId'] as String?, j['title'] as String? ?? '', j['source'] as String? ?? 'app');
+        j['projectId'] as String?, j['title'] as String? ?? '', j['source'] as String? ?? 'app',
+        isBreak: j['isBreak'] == true,
+        flow: j['flow'] == true,
+        hard: j['hard'] == true,
+        tag: j['tag'] as String? ?? '',
+        chain: j['chain'] as String?,
+        cycleWork: j['cycleWork'] as int? ?? 0,
+        cycleRest: j['cycleRest'] as int? ?? 0,
+        cycleLeft: j['cycleLeft'] as int? ?? 0,
+        pausedAt: j['pausedAt'] as int?,
+        pauses: j['pauses'] as int? ?? 0);
   }
   final String sid;
   final int startMs;
@@ -46,11 +66,47 @@ class ActiveSession {
   final String? projectId;
   final String title;
   final String source;
-  int get endMs => startMs + minutes * msPerMinute;
-  int remainingMs(int nowMs) => (endMs - nowMs).clamp(0, minutes * msPerMinute);
+
+  /// A rest between work rounds (features 77, 78, 99). Not a session.
+  final bool isBreak;
+
+  /// Feature 78: counts up with no fixed end (capped at [flowCapMinutes]).
+  final bool flow;
+
+  /// Feature 90: leaving the app fails the session.
+  final bool hard;
+
+  /// Feature 97: study, code, write, admin.
+  final String tag;
+
+  /// Sessions that share one proof (just-five-more, pomodoro rounds).
+  final String? chain;
+
+  /// Feature 77: remaining automatic rounds and their lengths.
+  final int cycleWork, cycleRest, cycleLeft;
+
+  /// Feature 91: set while paused.
+  final int? pausedAt;
+  final int pauses;
+
+  static const flowCapMinutes = 180;
+  int get endMs => startMs + (flow ? flowCapMinutes : minutes) * msPerMinute;
+  int _clock(int nowMs) => pausedAt ?? nowMs;
+  int remainingMs(int nowMs) => (endMs - _clock(nowMs)).clamp(0, (flow ? flowCapMinutes : minutes) * msPerMinute);
+  int elapsedMs(int nowMs) => (_clock(nowMs) - startMs).clamp(0, 1 << 40);
+  bool get paused => pausedAt != null;
+
+  ActiveSession copy({int? startMs, int? pausedAt, bool clearPause = false, int? pauses}) => ActiveSession(
+      sid, startMs ?? this.startMs, minutes, projectId, title, source,
+      isBreak: isBreak, flow: flow, hard: hard, tag: tag, chain: chain,
+      cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft,
+      pausedAt: clearPause ? null : pausedAt ?? this.pausedAt, pauses: pauses ?? this.pauses);
+
   String encode() => jsonEncode({
         'sid': sid, 'startMs': startMs, 'minutes': minutes, 'projectId': projectId,
-        'title': title, 'source': source
+        'title': title, 'source': source, 'isBreak': isBreak, 'flow': flow, 'hard': hard, 'tag': tag,
+        'chain': chain, 'cycleWork': cycleWork, 'cycleRest': cycleRest, 'cycleLeft': cycleLeft,
+        'pausedAt': pausedAt, 'pauses': pauses,
       });
 }
 
@@ -91,7 +147,11 @@ class DayView {
 
   /// Feature 15: on a declared rough day the door shrinks to one minute.
   bool get badDay => on(15) && kv['badDay'] == '$today';
-  int get doorMinutes => badDay ? 1 : 2;
+  int get doorMinutes => badDay
+      ? 1
+      : on(80) && kv['ramp'] == '1'
+          ? rampMinutes(this)
+          : 2;
 
   // ---- records
   List<Rec> of(String kind) => recs.where((r) => r.kind == kind).toList()

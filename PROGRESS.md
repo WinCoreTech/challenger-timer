@@ -45,3 +45,7 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   repair task, sick/travel mode, exam mode, miss autopsy and pattern finder, restart at
   tiny, fresh-start dates, slip guard, half-credit and gold days, gifted freeze (local
   version), return screen, lapse plan, friend test, archive.
+- Batch 4 (features 76 to 100): pomodoro cycles, flowtime, ramp ladder, intention, outcome,
+  daily/weekly/monthly challenges, mission cards, beat yesterday, ghost race, hard mode,
+  soft-mode pauses, wander tally, strict breaks, break menu, hidden clock, generated
+  noise, tags, difficulty XP, marathon day, session receipt.

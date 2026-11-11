@@ -385,5 +385,93 @@
 "rough",
 "great"
 ]
+},
+{
+"n": 77,
+"kind": "card",
+"title": "Pomodoro cycles",
+"body": "On the Timer tab open \"More ways to run it\" and choose Pomodoro. Four 25-minute rounds with 5-minute breaks run by themselves while the app is open. All rounds share one proof at the end."
+},
+{
+"n": 78,
+"kind": "card",
+"title": "Flowtime",
+"body": "On the Timer tab open \"More ways to run it\" and choose Flowtime. The timer counts up. Stop when focus fades and you are offered a break one fifth as long as the work."
+},
+{
+"n": 80,
+"kind": "toggle",
+"title": "Ramp ladder",
+"intro": "The Home session grows by one minute for each day you work, from 2 up to 60. Switch it off any time to go back to 2 minutes.",
+"setKey": "ramp",
+"setLabel": "Grow my daily session by 1 minute a day"
+},
+{
+"n": 84,
+"kind": "stat",
+"title": "Daily challenge",
+"stat": "daily"
+},
+{
+"n": 85,
+"kind": "stat",
+"title": "Weekly boss",
+"stat": "boss"
+},
+{
+"n": 86,
+"kind": "stat",
+"title": "Monthly campaign",
+"stat": "campaign"
+},
+{
+"n": 87,
+"kind": "stat",
+"title": "Mission card",
+"stat": "mission"
+},
+{
+"n": 88,
+"kind": "stat",
+"title": "Beat yesterday",
+"stat": "beat"
+},
+{
+"n": 89,
+"kind": "stat",
+"title": "Ghost race",
+"stat": "ghost"
+},
+{
+"n": 90,
+"kind": "card",
+"title": "Hard mode",
+"body": "On the Timer tab open \"More ways to run it\" and switch on Hard mode before you start. If you leave the app for more than 10 seconds, that session ends without credit. Turning the screen off does not count as leaving."
+},
+{
+"n": 92,
+"kind": "stat",
+"title": "Wander tally",
+"stat": "wander",
+"intro": "The running timer has a \"mind wandered\" button."
+},
+{
+"n": 93,
+"kind": "stat",
+"title": "Strict breaks",
+"stat": "overruns",
+"intro": "Breaks end on time. If you come back late, the overrun is counted here."
+},
+{
+"n": 96,
+"kind": "card",
+"title": "Ambient sounds",
+"body": "On the Timer tab open \"More ways to run it\" and pick brown noise, a rain-like hiss or white noise. They are generated on the phone, so there is no cafe recording."
+},
+{
+"n": 99,
+"kind": "card",
+"title": "Marathon day",
+"body": "On the Timer tab open \"More ways to run it\" and choose Marathon day: six 25-minute rounds with enforced 5-minute breaks. Optional, and only on days you choose."
 }
 ]

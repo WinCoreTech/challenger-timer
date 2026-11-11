@@ -2,6 +2,7 @@
 /// function returns lines of plain text: the first is the headline. Pure Dart.
 library;
 
+import 'challenges.dart';
 import 'day.dart';
 import 'engine.dart';
 import 'events.dart';
@@ -125,7 +126,34 @@ List<String> missPattern(DayView v) {
   return lines;
 }
 
+List<String> _challenge(Challenge c, [String extra = '']) => [
+      c.done ? 'Done' : '${c.have} / ${c.need}',
+      c.title,
+      if (c.xp > 0) c.done ? 'Paid ${c.xp} XP.' : 'Pays ${c.xp} XP when finished.',
+      if (extra.isNotEmpty) extra,
+    ];
+
 final Map<String, Stat> stats = {
+  'daily': (v) => _challenge(dailyChallenge(v, v.today), 'A new one every day.'),
+  'boss': (v) => _challenge(weeklyBoss(v, weekOf(v.today)), 'Judged on Sunday night. Next week it asks for one more than this week.'),
+  'campaign': (v) => _challenge(monthlyCampaign(v, monthKey(v.today))),
+  'mission': (v) {
+    final m = missionCard(v, v.today);
+    return m == null ? ['No mission today', 'Missions turn up on some days only. Check back tomorrow.'] : _challenge(m);
+  },
+  'beat': (v) => _challenge(beatYesterday(v)),
+  'ghost': (v) {
+    final g = ghostRace(v);
+    if (g.bestDay < 0) return ['No ghost yet', 'After your first full day there will be a best day to race.'];
+    return [
+      '${g.youNow} vs ${g.ghostNow} min',
+      'You today against your best day (${dayLabel(g.bestDay)}) at this same hour.',
+      'That day ended on ${g.bestTotal} minutes.',
+      g.youNow >= g.ghostNow ? 'You are ahead of your own ghost.' : 'The ghost is ahead. One session narrows it.',
+    ];
+  },
+  'wander': (v) => ['${wanderCount(v)}', 'times you noticed your mind drift and came back', 'Noticing is the skill. There is no penalty for a tap.'],
+  'overruns': (v) => ['${breakOverruns(v)}', 'breaks that ran over', 'Counted only so you can see it. Nothing is taken away.'],
   'comebacks': (v) => ['${v.master.comebacks}', 'times you came back after a miss', 'Coming back is the skill. This number is worth more than the streak.'],
   'missPattern': missPattern,
   'freshStart': (v) {

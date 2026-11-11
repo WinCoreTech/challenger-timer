@@ -11,7 +11,9 @@ abstract final class Ev {
   static const sessionDone = 'session_done'; // sid, minutes
   static const sessionAbandon = 'session_abandon'; // sid, elapsedSec
   static const sessionExtend = 'session_extend'; // sid, minutes
-  static const proof = 'proof'; // sid, recId, kind
+  static const sessionPause = 'session_pause'; // sid, reason
+  static const breakStart = 'break_start'; // minutes
+  static const proof = 'proof'; // sid, recId, kind, outcome, difficulty
   static const habitTick = 'habit_tick'; // habitId
   static const parkingNote = 'parking_note'; // text, projectId
   static const planSet = 'plan_set'; // forDay, task, cueMinute

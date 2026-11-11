@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.speech.RecognizerIntent
+import android.view.WindowManager
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -25,6 +26,7 @@ class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private var pendingPermission: MethodChannel.Result? = null
     private var pendingSpeech: MethodChannel.Result? = null
+    private var screenOnAtPause = true
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -42,6 +44,17 @@ class MainActivity : FlutterActivity() {
             applicationContext.registerReceiver(PowerReceiver(), IntentFilter(Intent.ACTION_POWER_CONNECTED))
             powerRegistered = true
         }
+    }
+
+    override fun onPause() {
+        // Feature 90: tells "switched to another app" apart from "screen turned off".
+        screenOnAtPause = getSystemService(PowerManager::class.java).isInteractive
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        Noise.stop()
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,6 +128,17 @@ class MainActivity : FlutterActivity() {
                 "sendSms" -> result.success(
                     Core.sendSms(this, call.argument<String>("phone") ?: "", call.argument<String>("text") ?: "")
                 )
+                "keepScreenOn" -> {
+                    if (call.arguments == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    result.success(null)
+                }
+                "leftWithScreenOn" -> result.success(screenOnAtPause)
+                "noise" -> {
+                    val kind = call.arguments as? String ?: ""
+                    if (kind.isEmpty()) Noise.stop() else Noise.start(kind)
+                    result.success(null)
+                }
                 "openUrl" -> {
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(call.arguments as String)))
                     result.success(null)

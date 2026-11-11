@@ -20,6 +20,15 @@ abstract class Native {
 
   Future<void> openUrl(String url);
 
+  /// Keeps the screen awake (hard mode).
+  Future<void> keepScreenOn(bool on);
+
+  /// True if the screen was on when the app last went to the background.
+  Future<bool> leftWithScreenOn();
+
+  /// Generated background noise: 'brown', 'rain', 'white', or '' to stop.
+  Future<void> noise(String kind);
+
   /// Speech to text through the phone's recogniser. Null if nothing was heard.
   Future<String?> listen();
 
@@ -80,6 +89,12 @@ class ChannelNative implements Native {
   @override
   Future<void> openUrl(String url) => _call<void>('openUrl', url);
   @override
+  Future<void> keepScreenOn(bool on) => _call<void>('keepScreenOn', on);
+  @override
+  Future<bool> leftWithScreenOn() async => await _call<bool>('leftWithScreenOn') ?? true;
+  @override
+  Future<void> noise(String kind) => _call<void>('noise', kind);
+  @override
   Future<String?> listen() => _call<String>('listen');
   @override
   void haptic({bool heavy = false}) =>
@@ -138,8 +153,15 @@ class FakeNative implements Native {
   @override
   Future<void> tone() async => calls.add('tone');
   String? heard;
+  bool screenOnAtPause = true;
   @override
   Future<void> openUrl(String url) async => calls.add('url:$url');
+  @override
+  Future<void> keepScreenOn(bool on) async => calls.add('keepOn:$on');
+  @override
+  Future<bool> leftWithScreenOn() async => screenOnAtPause;
+  @override
+  Future<void> noise(String kind) async => calls.add('noise:$kind');
   @override
   Future<String?> listen() async => heard;
   @override

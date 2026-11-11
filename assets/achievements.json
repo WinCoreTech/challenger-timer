@@ -234,5 +234,13 @@
   "metric": "longest",
   "gte": 47,
   "hidden": true
+ },
+ {
+  "id": "marathon",
+  "name": "Six In A Day",
+  "desc": "Finish six sessions in one day.",
+  "metric": "bestDaySessions",
+  "gte": 6,
+  "hidden": true
  }
 ]

@@ -3,6 +3,7 @@ library;
 
 import 'dart:math';
 
+import 'challenges.dart';
 import 'engine.dart';
 import 'events.dart';
 
@@ -150,6 +151,12 @@ List<(String, int)> featureXp(DayView v) {
       if (w.state == 'lost') out.add(('Streak wager lost', -w.amount));
     }
   }
+  out.addAll(challengeXp(v));
+  if (v.flagOn(98)) {
+    // Feature 98: harder sessions pay more. Difficulty 2 = +10, 3 = +20.
+    final d = v.type(Ev.proof).fold<int>(0, (a, e) => a + (((e.get<int>('difficulty') ?? 1) - 1).clamp(0, 2)) * 10);
+    if (d > 0) out.add(('Difficulty bonus', d));
+  }
   if (v.flagOn(57)) {
     final c = comebackBonus(v);
     if (c > 0) out.add(('Comeback bonus (double XP)', c));
@@ -287,3 +294,27 @@ List<int> giftDays(DayView v) {
   }
   return out;
 }
+
+// ---- 80. Ramp ladder --------------------------------------------------------------
+/// Session length grows by one minute for each day worked since the ramp
+/// was switched on, from 2 up to 60.
+int rampMinutes(DayView v) {
+  final from = v.settingInt('rampFrom', v.today);
+  final worked = v.sessionDays.where((d) => d >= from && d < v.today).length;
+  return (2 + worked).clamp(2, 60);
+}
+
+// ---- 94. Break menu ----------------------------------------------------------------
+const breakIdeas = [
+  'Walk to the door and back.', 'Drink a glass of water.', 'Stretch your arms over your head.',
+  'Look out of a window at something far away.', 'Roll your shoulders ten times.', 'Refill your bottle.',
+  'Stand up and take five slow breaths.',
+];
+
+/// Never suggests a screen. Rotates with the break's start time.
+String breakIdea(int seed) => breakIdeas[seed.abs() % breakIdeas.length];
+
+// ---- 92. Wander tally, 93. Strict breaks -------------------------------------------------
+int wanderCount(DayView v, {String? sid}) =>
+    v.type(Ev.tool).where((e) => e.get<int>('n') == 92 && (sid == null || e.get<String>('sid') == sid)).length;
+int breakOverruns(DayView v) => v.type(Ev.tool).where((e) => e.get<int>('n') == 93).length;

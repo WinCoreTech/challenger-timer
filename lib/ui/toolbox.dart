@@ -165,7 +165,10 @@ class _ToolState extends ConsumerState<ToolScreen> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(t.setLabel),
                     value: v.kv[t.setKey] == '1',
-                    onChanged: (x) => app.setSetting(t.setKey, x ? '1' : '0')),
+                    onChanged: (x) async {
+                      if (x) await app.setKv('${t.setKey}From', '${v.today}');
+                      await app.setSetting(t.setKey, x ? '1' : '0');
+                    }),
               ],
             'dayflag' => [
                 SwitchListTile(
