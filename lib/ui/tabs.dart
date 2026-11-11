@@ -387,17 +387,9 @@ class _PlanState extends ConsumerState<PlanScreen> {
                             subtitle: t.data['due'] is int ? Text('Due ${dayLabel(t.integer('due'))}', style: const TextStyle(color: dim, fontSize: 12)) : null,
                             secondary: IconButton(
                                 key: Key('due-${t.id}'),
-                                tooltip: 'Set due date',
-                                icon: const Icon(Icons.event, color: dim),
-                                onPressed: () async {
-                                  final base = dateOfDay(t.data['due'] is int ? t.integer('due') : v.today + 7);
-                                  final d = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime(base.year, base.month, base.day),
-                                      firstDate: DateTime(2020),
-                                      lastDate: DateTime(2100));
-                                  if (d != null) await app.putRec(t.copy({'due': dayOfDate(d.year, d.month, d.day)}));
-                                }),
+                                tooltip: 'Due date and deadline tools',
+                                icon: const Icon(Icons.chevron_right, color: dim),
+                                onPressed: () => context.push('/task/${t.id}')),
                             title: Text(t.str('title'),
                                 style: TextStyle(
                                     decoration: t.flag('done') ? TextDecoration.lineThrough : null,

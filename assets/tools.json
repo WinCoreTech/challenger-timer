@@ -473,5 +473,79 @@
 "kind": "card",
 "title": "Marathon day",
 "body": "On the Timer tab open \"More ways to run it\" and choose Marathon day: six 25-minute rounds with enforced 5-minute breaks. Optional, and only on days you choose."
+},
+{
+"n": 101,
+"kind": "card",
+"title": "Deadline tools",
+"body": "On the Plan tab, open a task (the arrow on its right), give it a due date and a rough size. The app then sets your own due date 48 hours early and shows sessions left, a daily quota, a start-by date, a backward plan, what waiting 5 days would cost, and the XP bonus for working early."
+},
+{
+"n": 104,
+"kind": "stat",
+"title": "First-touch rule",
+"stat": "firstTouch",
+"intro": "Every new task with a due date deserves 5 minutes within 24 hours. Open the task from the Plan tab to do it."
+},
+{
+"n": 105,
+"kind": "stat",
+"title": "Day-one streak",
+"stat": "dayOne"
+},
+{
+"n": 108,
+"kind": "stat",
+"title": "Neck-level alarm",
+"stat": "neck",
+"intro": "You also get one reminder a day at cue time while any deadline is at neck level."
+},
+{
+"n": 109,
+"kind": "single",
+"title": "Cost-of-delay note",
+"intro": "Write what the last all-nighter really cost you. It is shown back to you when you try to postpone a task.",
+"prompts": [
+"What did the last-minute rush cost me?"
+]
+},
+{
+"n": 110,
+"kind": "log",
+"title": "Future-self letter",
+"intro": "Write as you, on the morning after the deadline, to you now.",
+"prompts": [
+"Dear me, it is the morning after. Here is what I wish you would do today:"
+]
+},
+{
+"n": 114,
+"kind": "stat",
+"title": "Submission buffer",
+"stat": "buffer"
+},
+{
+"n": 115,
+"kind": "stat",
+"title": "Load calendar",
+"stat": "load",
+"intro": "The next 8 weeks by how much is due. Three or more due dates in one week are flagged."
+},
+{
+"n": 119,
+"kind": "stat",
+"title": "Delay debt meter",
+"stat": "debt"
+},
+{
+"n": 124,
+"kind": "log",
+"title": "Deadline post-mortem",
+"intro": "Three lines after each deadline. No judgement, only data for next time.",
+"prompts": [
+"When did I really start?",
+"When did I finish?",
+"One lesson"
+]
 }
 ]

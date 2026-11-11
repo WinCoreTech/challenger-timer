@@ -101,3 +101,28 @@
 98|done|1|Medium pays +10 XP, hard +20 XP. Tested.
 99|done|1|Six 25-minute rounds with enforced breaks, plus a hidden badge. Tested.
 100|done|1|Receipt card after proof: time, task, project, proof, streak. Widget test.
+101|done|1|Personal due date 48 hours before the real one, on the task screen. Tested.
+102|done|1|Work left shown in 25-minute sessions. Tested.
+103|done|1|Dated milestones between today and the personal due date. Tested.
+104|done|1|New tasks offer a 5-minute first touch for 24 hours. Tested.
+105|done|1|Counts tasks touched on the day they were added. Tested.
+106|done|1|Minutes per day if you start today versus in 5 days. Tested.
+107|done|1|Two bars: work done against time gone. Tested.
+108|done|1|Flags tasks whose work left exceeds your usual pace; daily reminder. Maths tested; reminder delivery built, untested on device.
+109|done|1|Your note is shown in the postpone dialog. Tested.
+110|done|1|Prompted letter entries.
+111|done|1|+15 XP per day finished early, up to 150. Tested.
+112|done|1|Session XP on a task is 3x a week early, falling to 1x on the due day. Tested.
+113|done|1|Draft-zero milestone at the halfway point of the backward plan. Tested.
+114|done|1|Share of finished tasks that beat the due date by 12 hours. Tested.
+115|done|1|Next 8 weeks with number due and minutes left. Tested.
+116|done|1|Weeks with three or more due dates are flagged in the load calendar. Tested.
+117|done|1|Minutes per day to the personal due date. Tested.
+118|done|1|Quota is recomputed from work left, and the original quota is shown beside it. Tested.
+119|done|1|Minutes behind an even pace across all deadlines. Tested.
+120|done|1|Postponing needs a typed reason. Tested.
+121|done|1|The third postpone only offers split, delete or keep the date. Widget test.
+122|done|1|"Pushed N times" on the task. Tested.
+123|partial|1|Sends the due date to your buddy through the share sheet. The buddy cannot follow it live without a server.
+124|done|1|Three-line post-mortem entries.
+125|done|1|Latest start date at your 14-day pace. Tested.

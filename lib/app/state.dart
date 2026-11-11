@@ -112,6 +112,7 @@ class App extends Notifier<AppData> {
       bool hard = false,
       String tag = '',
       String? chain,
+      String? taskId,
       int cycleWork = 0,
       int cycleRest = 0,
       int cycleLeft = 0}) async {
@@ -122,12 +123,13 @@ class App extends Notifier<AppData> {
     minutes ??= v.doorMinutes;
     final pid = projectId ?? state.kv[K.lastProject];
     final s = ActiveSession(newId(), begin, flow ? 0 : minutes, pid, title ?? v.nextStep, source,
-        flow: flow, hard: hard, tag: tag, chain: chain, cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft);
+        flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId,
+        cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft);
     await setKv(K.active, s.encode());
     if (pid != null) await setKv(K.lastProject, pid);
     await log(Ev.sessionStart, {
       'sid': s.sid, 'minutes': s.minutes, 'projectId': pid, 'source': source, 'title': s.title,
-      if (tag.isNotEmpty) 'tag': tag, if (flow) 'flow': true, if (hard) 'hard': true,
+      if (tag.isNotEmpty) 'tag': tag, if (flow) 'flow': true, if (hard) 'hard': true, 'taskId': ?taskId,
     }, Moment(begin, now.offsetMin));
     native.haptic();
     if (hard) await native.keepScreenOn(true);
@@ -161,7 +163,11 @@ class App extends Notifier<AppData> {
     final carried = prior != null && (prior['chain'] == chain || s.source == 'five_more') ? prior['minutes'] as int? ?? 0 : 0;
     await setKv(K.active, null);
     await log(Ev.sessionDone,
-        {'sid': s.sid, 'minutes': minutes, 'projectId': s.projectId, if (s.tag.isNotEmpty) 'tag': s.tag}, at);
+        {
+          'sid': s.sid, 'minutes': minutes, 'projectId': s.projectId,
+          if (s.tag.isNotEmpty) 'tag': s.tag, if (s.taskId != null) 'taskId': s.taskId,
+        },
+        at);
     await setKv(
         K.pendingProof,
         jsonEncode({
@@ -212,6 +218,7 @@ class App extends Notifier<AppData> {
     final b = ActiveSession(newId(), startMs ?? _now.ms, minutes < 1 ? 1 : minutes, from?.projectId, from?.title ?? '', 'break',
         isBreak: true,
         chain: from?.chain ?? from?.sid,
+        taskId: from?.taskId,
         tag: from?.tag ?? '',
         cycleWork: from?.cycleWork ?? 0,
         cycleRest: from?.cycleRest ?? 0,
@@ -227,7 +234,7 @@ class App extends Notifier<AppData> {
     if (lateMs > msPerMinute && view.on(93)) await log(Ev.tool, {'n': 93, 'over': (lateMs / msPerMinute).ceil()});
     if (b.cycleLeft > 0 && lateMs < 2 * msPerMinute) {
       await startSession(
-          minutes: b.cycleWork, projectId: b.projectId, title: b.title, source: 'cycle', tag: b.tag,
+          minutes: b.cycleWork, projectId: b.projectId, title: b.title, source: 'cycle', tag: b.tag, taskId: b.taskId,
           chain: b.chain, cycleWork: b.cycleWork, cycleRest: b.cycleRest, cycleLeft: b.cycleLeft - 1);
     } else {
       await syncNative();
@@ -300,6 +307,16 @@ class App extends Notifier<AppData> {
       await log(Ev.taskDone, {'taskId': task.id});
       celebrate();
     }
+  }
+
+  /// Features 120 to 122: pushing a due date needs a reason and is counted.
+  Future<void> postponeTask(Rec task, int days, String reason) async {
+    await putRec(task.copy({
+      'due': task.integer('due') + days,
+      'postponed': task.integer('postponed') + 1,
+      'reasons': [...(task.data['reasons'] as List? ?? const []), reason],
+    }));
+    await log(Ev.tool, {'n': 120, 'taskId': task.id, 'days': days, 'reason': reason});
   }
 
   /// Returns false when the plan is locked.

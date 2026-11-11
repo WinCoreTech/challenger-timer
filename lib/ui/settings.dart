@@ -6,21 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../app/state.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/rules.dart';
+export 'share.dart';
+import 'share.dart';
 import 'theme.dart';
-
-/// Opens the Android share sheet. Swapped out in tests.
-final shareProvider = Provider<Future<void> Function({String? text, String? filePath})>(
-    (ref) => ({String? text, String? filePath}) async {
-          await SharePlus.instance
-              .share(ShareParams(text: text, files: filePath == null ? null : [XFile(filePath)]));
-        });
 
 /// One permission, one plain reason, asked only when a feature needs it.
 Future<bool> askPermission(BuildContext context, WidgetRef ref, String name, String title, String reason) async {

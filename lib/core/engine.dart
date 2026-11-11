@@ -40,6 +40,7 @@ class ActiveSession {
       this.hard = false,
       this.tag = '',
       this.chain,
+      this.taskId,
       this.cycleWork = 0,
       this.cycleRest = 0,
       this.cycleLeft = 0,
@@ -54,6 +55,7 @@ class ActiveSession {
         hard: j['hard'] == true,
         tag: j['tag'] as String? ?? '',
         chain: j['chain'] as String?,
+        taskId: j['taskId'] as String?,
         cycleWork: j['cycleWork'] as int? ?? 0,
         cycleRest: j['cycleRest'] as int? ?? 0,
         cycleLeft: j['cycleLeft'] as int? ?? 0,
@@ -82,6 +84,9 @@ class ActiveSession {
   /// Sessions that share one proof (just-five-more, pomodoro rounds).
   final String? chain;
 
+  /// The task this session works on (deadline features).
+  final String? taskId;
+
   /// Feature 77: remaining automatic rounds and their lengths.
   final int cycleWork, cycleRest, cycleLeft;
 
@@ -98,14 +103,14 @@ class ActiveSession {
 
   ActiveSession copy({int? startMs, int? pausedAt, bool clearPause = false, int? pauses}) => ActiveSession(
       sid, startMs ?? this.startMs, minutes, projectId, title, source,
-      isBreak: isBreak, flow: flow, hard: hard, tag: tag, chain: chain,
+      isBreak: isBreak, flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId,
       cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft,
       pausedAt: clearPause ? null : pausedAt ?? this.pausedAt, pauses: pauses ?? this.pauses);
 
   String encode() => jsonEncode({
         'sid': sid, 'startMs': startMs, 'minutes': minutes, 'projectId': projectId,
         'title': title, 'source': source, 'isBreak': isBreak, 'flow': flow, 'hard': hard, 'tag': tag,
-        'chain': chain, 'cycleWork': cycleWork, 'cycleRest': cycleRest, 'cycleLeft': cycleLeft,
+        'chain': chain, 'taskId': taskId, 'cycleWork': cycleWork, 'cycleRest': cycleRest, 'cycleLeft': cycleLeft,
         'pausedAt': pausedAt, 'pauses': pauses,
       });
 }

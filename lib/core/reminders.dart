@@ -1,6 +1,7 @@
 /// Daily reminders handed to the native scheduler. Pure Dart.
 library;
 
+import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'tools.dart';
@@ -54,7 +55,17 @@ List<Reminder> fixedReminders(DayView v) {
     }
   }
 
-  add(0, 0, 0, '', ''); // feature 0 never exists: keeps the helper in use until batches add entries
+  // 108 Neck-level alarm: once a day at cue time while any deadline needs
+  // more work than the time left allows.
+  if (v.on(108)) {
+    final neck = deadlines(v).where((t) => t.neckLevel).toList();
+    if (neck.isNotEmpty) {
+      out.add(Reminder(108, v.cueMinute, 'Deadline math',
+          '"${neck.first.task.str('title')}" needs more than the time left at your usual pace. Two minutes now changes the sum.',
+          start: true));
+    }
+  }
+  add(460, 460, v.cueMinute, 'Start-by date', 'A task reaches its start-by date today. Open Plan to see which.', start: true);
   return out;
 }
 

@@ -49,3 +49,6 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   daily/weekly/monthly challenges, mission cards, beat yesterday, ghost race, hard mode,
   soft-mode pauses, wander tally, strict breaks, break menu, hidden clock, generated
   noise, tags, difficulty XP, marathon day, session receipt.
+- Batch 5 (features 101 to 125): task screen with deadline maths (personal due date,
+  sessions left, quota, start-by, panic simulator, pace, backward plan), neck-level alarm,
+  early-bird XP, postpone friction and limit, load calendar, delay debt, buddy share.

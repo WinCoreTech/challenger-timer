@@ -59,6 +59,7 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
         GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
         GoRoute(path: '/ritual', builder: (c, s) => const RitualScreen()),
         GoRoute(path: '/habit/:id', builder: (c, s) => HabitScreen(s.pathParameters['id']!)),
+        GoRoute(path: '/task/:id', builder: (c, s) => TaskScreen(s.pathParameters['id']!)),
         GoRoute(path: '/toolbox', builder: (c, s) => const ToolboxScreen()),
         GoRoute(path: '/features', builder: (c, s) => const FeaturesScreen()),
         GoRoute(path: '/tool/:n', builder: (c, s) => ToolScreen(int.parse(s.pathParameters['n']!))),

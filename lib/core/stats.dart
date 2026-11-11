@@ -4,6 +4,7 @@ library;
 
 import 'challenges.dart';
 import 'day.dart';
+import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
@@ -134,6 +135,45 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
     ];
 
 final Map<String, Stat> stats = {
+  'load': (v) {
+    final cal = loadCalendar(v);
+    final busy = cal.where((w) => w.count > 0).toList();
+    if (busy.isEmpty) return ['Clear', 'No due dates in the next 8 weeks. Give tasks a due date on the Plan tab.'];
+    return [
+      '${busy.length} busy weeks',
+      for (final w in busy)
+        'Week of ${dayLabel(weekStart(w.week))}: ${w.count} due, ${w.minutes} min left'
+            '${w.collision ? '. Three or more land together: start the earliest one now.' : ''}',
+    ];
+  },
+  'debt': (v) {
+    final d = deadlines(v).fold(0, (a, t) => a + t.debt);
+    return ['$d min', 'behind an even pace, across all deadlines', d == 0 ? 'Nothing owed. Enjoy it.' : 'One session takes ${d < sessionSize ? d : sessionSize} minutes off this number.'];
+  },
+  'firstTouch': (v) {
+    final open = deadlines(v).where((t) => t.firstTouchOpen).toList();
+    return [
+      '${open.length}',
+      'new tasks still waiting for their first 5 minutes (within 24 hours of being added)',
+      for (final t in open) '• ${t.task.str('title')}',
+    ];
+  },
+  'dayOne': (v) {
+    final all = deadlines(v, open: false);
+    return ['${all.where((t) => t.dayOne).length} of ${all.length}', 'tasks with a due date were touched on the day they were added'];
+  },
+  'buffer': (v) {
+    final (early, total) = submissionBuffer(v);
+    return ['$early of $total', 'finished tasks beat their due date by 12 hours or more', 'The goal is a calm last evening.'];
+  },
+  'neck': (v) {
+    final n = deadlines(v).where((t) => t.neckLevel).toList();
+    return [
+      n.isEmpty ? 'All clear' : '${n.length} at neck level',
+      n.isEmpty ? 'Every deadline still fits in the time left at your usual pace.' : 'These need more than your usual pace allows. Shrinking the task is allowed.',
+      for (final t in n) '• ${t.task.str('title')}: ${t.left} min left, ${t.daysLeft} days',
+    ];
+  },
   'daily': (v) => _challenge(dailyChallenge(v, v.today), 'A new one every day.'),
   'boss': (v) => _challenge(weeklyBoss(v, weekOf(v.today)), 'Judged on Sunday night. Next week it asks for one more than this week.'),
   'campaign': (v) => _challenge(monthlyCampaign(v, monthKey(v.today))),
@@ -163,7 +203,7 @@ final Map<String, Stat> stats = {
   'beforeNoon': (v) => _streakLines(v, beforeNoonDays(v), 'with a session started before noon'),
   'earlySubmit': (v) {
     final n = earlySubmissions(v).length;
-    return ['$n', 'tasks finished a full day or more before they were due', 'Give a task a due date by long-pressing it on the Plan tab.'];
+    return ['$n', 'tasks finished a full day or more before they were due', 'Give a task a due date by opening it from the Plan tab.'];
   },
   'planKept': (v) => _streakLines(v, planKeptDays(v), 'with the planned first task followed by a session'),
   'wake': (v) => _streakLines(v, wakeOnTimeDays(v), 'up within 30 minutes of your target'),
