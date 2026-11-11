@@ -271,13 +271,21 @@ class App extends Notifier<AppData> {
   String? lastProofId;
 
   Future<void> saveProof(
-      {required String type, required String value, String parkingNote = '', String outcome = '', int difficulty = 0}) async {
+      {required String type,
+      required String value,
+      String parkingNote = '',
+      String outcome = '',
+      int difficulty = 0,
+      int units = 0,
+      String unit = ''}) async {
     final p = view.pendingProof;
     if (p == null) return;
     final rec = await addRec(Kind.proof, {
       'sid': p['sid'], 'projectId': p['projectId'], 'type': type, 'value': value,
       'minutes': p['minutes'], 'title': p['title'], 'day': view.today,
       if (outcome.isNotEmpty) 'outcome': outcome, if (difficulty > 0) 'difficulty': difficulty,
+      if (units > 0 && unit.isNotEmpty) ...{'units': units, 'unit': unit},
+      if (view.type(Ev.sessionDone).where((e) => e.get<String>('sid') == p['sid']).firstOrNull?.get<String>('tag') case final String t) 'tag': t,
     });
     lastProofId = rec.id;
     await log(Ev.proof, {
@@ -293,9 +301,12 @@ class App extends Notifier<AppData> {
   }
 
   // ---- habits, projects, tasks, plan
-  Future<void> tickHabit(String habitId, {bool tiny = false}) async {
-    if (view.tickedToday(habitId)) return;
-    await log(Ev.habitTick, {'habitId': habitId, if (tiny) 'tiny': true});
+  Future<void> tickHabit(String habitId, {bool tiny = false, String proof = ''}) async {
+    final v = view;
+    if (v.tickedToday(habitId)) return;
+    // Feature 137: a proof-required habit only counts with a line of proof.
+    if (v.on(137) && v.rec(habitId)?.flag('proofRequired') == true && proof.trim().isEmpty) return;
+    await log(Ev.habitTick, {'habitId': habitId, if (tiny) 'tiny': true, if (proof.trim().isNotEmpty) 'proof': proof.trim()});
     celebrate();
     await syncNative();
   }
@@ -418,6 +429,8 @@ class App extends Notifier<AppData> {
   }
 
   // ---- data ownership
+  Future<void> markExported() => setKv('lastExport', '${_now.ms}');
+
   String exportJson() => const JsonEncoder.withIndent(' ').convert({
         'app': 'Productivity Challenger Timer',
         'exportedAt': _now.ms,

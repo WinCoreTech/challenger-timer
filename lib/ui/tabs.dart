@@ -12,6 +12,7 @@ import '../core/extras.dart';
 import '../core/rules.dart';
 import '../core/stats.dart';
 import '../core/streak_engine.dart';
+import '../core/vault.dart';
 import 'home.dart';
 import 'theme.dart';
 
@@ -63,7 +64,18 @@ class StreaksScreen extends ConsumerWidget {
                 if (v.tickedToday(h.id))
                   const Icon(Icons.check_circle, color: cyan, size: 36)
                 else if (open)
-                  FilledButton(key: Key('tick-${h.id}'), onPressed: () => app.tickHabit(h.id), child: const Text('DONE'))
+                  FilledButton(
+                      key: Key('tick-${h.id}'),
+                      onPressed: () async {
+                        if (v.on(137) && h.flag('proofRequired')) {
+                          final proof = await askText(context, 'Proof in one line', hint: 'What exactly did you do?', ok: 'COUNT IT');
+                          if (proof == null || proof.trim().isEmpty) return;
+                          await app.tickHabit(h.id, proof: proof);
+                        } else {
+                          await app.tickHabit(h.id);
+                        }
+                      },
+                      child: const Text('DONE'))
                 else
                   const Icon(Icons.schedule, color: dim),
               ]),
@@ -206,12 +218,35 @@ class VaultScreen extends ConsumerStatefulWidget {
 
 class _VaultState extends ConsumerState<VaultScreen> {
   String? project;
+  String q = '';
   @override
   Widget build(BuildContext context) {
     final v = ref.watch(viewProvider);
-    final items = v.proofs.where((p) => project == null || p.str('projectId') == project).toList();
+    final app = ref.read(appProvider.notifier);
+    final items = searchProofs(v, v.on(140) ? q : '', projectId: project);
+    final memories = v.on(148) ? onThisDay(v) : const <(String, Rec)>[];
     int? lastDay;
-    return _page('VAULT', [
+    return _page('VAULT', actions: [
+      if (v.on(147) && backupStale(v))
+        IconButton(
+            key: const Key('backupWarning'),
+            tooltip: 'Not backed up',
+            icon: const Icon(Icons.warning_amber, color: gold),
+            onPressed: () => toast(context, 'The vault has not been exported in the last 7 days. Me, Settings, Export JSON makes a backup file.')),
+    ], [
+      if (v.on(140))
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: TextField(
+                key: const Key('vaultSearch'),
+                decoration: const InputDecoration(hintText: 'Search proof, task, project or tag', prefixIcon: Icon(Icons.search)),
+                onChanged: (x) => setState(() => q = x))),
+      for (final (label, p) in memories)
+        Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Panel(
+                border: gold,
+                child: Text('$label today: ${p.str('type') == 'photo' ? 'a photo for "${p.str('title')}"' : p.str('value')}'))),
       if (v.projects.isNotEmpty)
         SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -246,12 +281,22 @@ class _VaultState extends ConsumerState<VaultScreen> {
                 key: Key('proof-${pr.id}'),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Row(children: [
-                    Icon(switch (pr.str('type')) { 'photo' => Icons.photo_camera, 'link' => Icons.link, _ => Icons.notes },
-                        color: cyan, size: 18),
+                    Icon(
+                        switch (pr.str('type')) { 'photo' => Icons.photo_camera, 'link' => Icons.link, 'voice' => Icons.mic, _ => Icons.notes },
+                        color: cyan,
+                        size: 18),
                     const SizedBox(width: 8),
                     Expanded(
-                        child: H('${pr.integer('minutes')} min · ${v.rec(pr.str('projectId'))?.str('name') ?? 'No project'}',
+                        child: H(
+                            '${pr.integer('minutes')} min · ${v.rec(pr.str('projectId'))?.str('name') ?? 'No project'}'
+                            '${pr.integer('units') > 0 ? ' · ${pr.integer('units')} ${pr.str('unit')}' : ''}'
+                            '${pr.str('tag').isEmpty ? '' : ' · ${pr.str('tag')}'}',
                             size: 11)),
+                    if (v.on(139))
+                      InkWell(
+                          key: Key('pin-${pr.id}'),
+                          onTap: () => app.putRec(pr.copy({'pinned': !pr.flag('pinned')})),
+                          child: Icon(pr.flag('pinned') ? Icons.push_pin : Icons.push_pin_outlined, color: pr.flag('pinned') ? gold : dim, size: 20)),
                   ]),
                   const SizedBox(height: 8),
                   if (pr.str('type') == 'photo')
@@ -262,6 +307,11 @@ class _VaultState extends ConsumerState<VaultScreen> {
                             width: double.infinity,
                             fit: BoxFit.cover,
                             errorBuilder: (_, _, _) => const Text('Photo file is missing.', style: TextStyle(color: dim))))
+                  else if (pr.str('type') == 'voice')
+                    TextButton.icon(
+                        onPressed: () => ref.read(nativeProvider).play(pr.str('value')),
+                        icon: const Icon(Icons.play_arrow),
+                        label: const Text('PLAY VOICE NOTE'))
                   else
                     SelectableText(pr.str('value'), style: const TextStyle(fontSize: 16)),
                 ]))),

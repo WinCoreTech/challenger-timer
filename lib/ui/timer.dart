@@ -4,9 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 import '../app/state.dart';
 import '../core/day.dart';
@@ -14,8 +11,12 @@ import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
 import '../core/tools.dart';
+import 'photo.dart';
+import 'settings.dart' show askPermission;
 import 'special.dart';
 import 'theme.dart';
+
+export 'photo.dart';
 
 const presets = [2, 5, 15, 25, 50, 90];
 
@@ -337,17 +338,6 @@ class _TimerState extends ConsumerState<TimerScreen> {
   }
 }
 
-/// Takes a compressed camera photo and returns the saved file path.
-final photoProvider = Provider<Future<String?> Function()>((ref) => () async {
-      final x = await ImagePicker().pickImage(source: ImageSource.camera, maxWidth: 1600, maxHeight: 1600, imageQuality: 70);
-      if (x == null) return null;
-      final dir = Directory(p.join((await getApplicationDocumentsDirectory()).path, 'proof'));
-      await dir.create(recursive: true);
-      final dest = p.join(dir.path, 'p${DateTime.now().millisecondsSinceEpoch}.jpg');
-      await File(x.path).copy(dest);
-      return dest;
-    });
-
 class ProofScreen extends ConsumerStatefulWidget {
   const ProofScreen({super.key});
   @override
@@ -362,18 +352,27 @@ class _ProofState extends ConsumerState<ProofScreen> {
   String? error;
   String outcome = '';
   int difficulty = 0;
+  String unit = '';
+  final units = TextEditingController();
+  bool recording = false;
+  bool first = true;
 
   @override
   void dispose() {
     value.dispose();
     note.dispose();
+    units.dispose();
     super.dispose();
   }
 
   Future<void> _save() async {
-    final v = type == 'photo' ? (photo ?? '') : value.text.trim();
+    final v = type == 'photo' || type == 'voice' ? (photo ?? '') : value.text.trim();
     if (v.isEmpty) {
-      setState(() => error = type == 'photo' ? 'Take the photo first, or switch to one line.' : 'One line is enough. Anything true.');
+      setState(() => error = type == 'photo'
+          ? 'Take the photo first, or switch to one line.'
+          : type == 'voice'
+              ? 'Record the note first, or switch to one line.'
+              : 'One line is enough. Anything true.');
       return;
     }
     if (type == 'link' && !RegExp(r'^https?://\S+\.\S+').hasMatch(v)) {
@@ -382,7 +381,9 @@ class _ProofState extends ConsumerState<ProofScreen> {
     }
     final receipt = ref.read(viewProvider).on(100);
     await ref.read(appProvider.notifier)
-        .saveProof(type: type, value: v, parkingNote: note.text, outcome: outcome, difficulty: difficulty);
+        .saveProof(
+        type: type, value: v, parkingNote: note.text, outcome: outcome, difficulty: difficulty,
+        units: int.tryParse(units.text.trim()) ?? 0, unit: unit);
     if (mounted) context.go(receipt ? '/receipt' : '/');
   }
 
@@ -395,6 +396,10 @@ class _ProofState extends ConsumerState<ProofScreen> {
           appBar: AppBar(title: const Text('PROOF')),
           body: const Center(child: Text('Nothing waiting. Start a session and the proof step follows.')));
     }
+    if (first) {
+      first = false;
+      if (v.on(127) && v.kv['cameraFirst'] == '1') type = 'photo';
+    }
     return Scaffold(
         appBar: AppBar(title: const Text('SAVE PROOF')),
         body: ListView(padding: const EdgeInsets.all(20), children: [
@@ -402,10 +407,11 @@ class _ProofState extends ConsumerState<ProofScreen> {
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
           const SizedBox(height: 16),
           SegmentedButton<String>(
-              segments: const [
-                ButtonSegment(value: 'text', label: Text('ONE LINE'), icon: Icon(Icons.notes)),
-                ButtonSegment(value: 'photo', label: Text('PHOTO'), icon: Icon(Icons.photo_camera)),
-                ButtonSegment(value: 'link', label: Text('LINK'), icon: Icon(Icons.link)),
+              segments: [
+                const ButtonSegment(value: 'text', label: Text('ONE LINE'), icon: Icon(Icons.notes)),
+                const ButtonSegment(value: 'photo', label: Text('PHOTO'), icon: Icon(Icons.photo_camera)),
+                const ButtonSegment(value: 'link', label: Text('LINK'), icon: Icon(Icons.link)),
+                if (v.on(129)) const ButtonSegment(value: 'voice', label: Text('VOICE'), icon: Icon(Icons.mic)),
               ],
               selected: {type},
               onSelectionChanged: (s) => setState(() {
@@ -424,6 +430,35 @@ class _ProofState extends ConsumerState<ProofScreen> {
                 },
                 icon: const Icon(Icons.photo_camera),
                 label: Text(photo == null ? 'PHOTOGRAPH YOUR WORK' : 'RETAKE')),
+          ] else if (type == 'voice') ...[
+            OutlinedButton.icon(
+                key: const Key('recordVoice'),
+                onPressed: () async {
+                  final native = ref.read(nativeProvider);
+                  if (recording) {
+                    await native.recStop();
+                    setState(() => recording = false);
+                    return;
+                  }
+                  if (!await askPermission(context, ref, 'mic', 'Allow the microphone',
+                      'A voice note needs the microphone. It records only between your two taps, 20 seconds at most, and stays on this phone.')) {
+                    return;
+                  }
+                  final path = await ref.read(voicePathProvider)();
+                  if (await native.recStart(path)) {
+                    setState(() {
+                      recording = true;
+                      photo = path;
+                    });
+                  } else if (context.mounted) {
+                    toast(context, 'Could not start recording. One line of text works too.');
+                  }
+                },
+                icon: Icon(recording ? Icons.stop : Icons.mic),
+                label: Text(recording ? 'STOP (20 S MAX)' : photo == null ? 'RECORD A 20-SECOND NOTE' : 'RECORD AGAIN')),
+            if (photo != null && !recording)
+              TextButton.icon(
+                  onPressed: () => ref.read(nativeProvider).play(photo!), icon: const Icon(Icons.play_arrow), label: const Text('PLAY IT BACK')),
           ] else
             TextField(
                 key: const Key('proofValue'),
@@ -442,6 +477,22 @@ class _ProofState extends ConsumerState<ProofScreen> {
               maxLength: 120,
               decoration: const InputDecoration(hintText: 'Exact next step, e.g. Open notebook to page 12')),
           const Text('This becomes the next tiny step on Home.', style: TextStyle(color: dim)),
+          if (v.on(141)) ...[
+            const SizedBox(height: 16),
+            const H('Count it (optional)'),
+            const SizedBox(height: 6),
+            Row(children: [
+              SizedBox(
+                  width: 90,
+                  child: TextField(key: const Key('units'), controller: units, keyboardType: TextInputType.number, decoration: const InputDecoration(hintText: '0'))),
+              const SizedBox(width: 8),
+              Expanded(
+                  child: Wrap(spacing: 6, children: [
+                for (final u in const ['words', 'pages', 'problems'])
+                  ChoiceChip(key: Key('unit-$u'), label: Text(u.toUpperCase()), selected: unit == u, onSelected: (_) => setState(() => unit = u)),
+              ])),
+            ]),
+          ],
           if (v.on(83)) ...[
             const SizedBox(height: 16),
             const H('How did it go?'),

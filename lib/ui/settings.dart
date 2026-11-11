@@ -172,6 +172,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> with WidgetsBindingOb
     final file = File(p.join((await getTemporaryDirectory()).path, 'challenger-timer-export.json'));
     await file.writeAsString(json);
     await ref.read(shareProvider)(filePath: file.path);
+    await ref.read(appProvider.notifier).markExported();
   }
 
   @override

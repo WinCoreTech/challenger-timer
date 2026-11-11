@@ -20,6 +20,11 @@ abstract class Native {
 
   Future<void> openUrl(String url);
 
+  /// Voice note recording (max 20 s) to [path]; false if not permitted.
+  Future<bool> recStart(String path);
+  Future<void> recStop();
+  Future<void> play(String path);
+
   /// Keeps the screen awake (hard mode).
   Future<void> keepScreenOn(bool on);
 
@@ -89,6 +94,12 @@ class ChannelNative implements Native {
   @override
   Future<void> openUrl(String url) => _call<void>('openUrl', url);
   @override
+  Future<bool> recStart(String path) async => await _call<bool>('recStart', path) ?? false;
+  @override
+  Future<void> recStop() => _call<void>('recStop');
+  @override
+  Future<void> play(String path) => _call<void>('play', path);
+  @override
   Future<void> keepScreenOn(bool on) => _call<void>('keepScreenOn', on);
   @override
   Future<bool> leftWithScreenOn() async => await _call<bool>('leftWithScreenOn') ?? true;
@@ -156,6 +167,16 @@ class FakeNative implements Native {
   bool screenOnAtPause = true;
   @override
   Future<void> openUrl(String url) async => calls.add('url:$url');
+  @override
+  Future<bool> recStart(String path) async {
+    calls.add('rec:$path');
+    return permissions['mic'] == true;
+  }
+
+  @override
+  Future<void> recStop() async => calls.add('recStop');
+  @override
+  Future<void> play(String path) async => calls.add('play:$path');
   @override
   Future<void> keepScreenOn(bool on) async => calls.add('keepOn:$on');
   @override

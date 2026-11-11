@@ -547,5 +547,91 @@
 "When did I finish?",
 "One lesson"
 ]
+},
+{
+"n": 127,
+"kind": "toggle",
+"title": "Camera-first capture",
+"intro": "Open the proof screen on the camera option, so a notebook page is one tap away.",
+"setKey": "cameraFirst",
+"setLabel": "Proof screen opens on PHOTO"
+},
+{
+"n": 131,
+"kind": "special",
+"title": "GitHub sync"
+},
+{
+"n": 134,
+"kind": "special",
+"title": "Before and after pairs"
+},
+{
+"n": 135,
+"kind": "special",
+"title": "Daily page",
+"intro": "Today, assembled."
+},
+{
+"n": 136,
+"kind": "special",
+"title": "Weekly digest",
+"intro": "This week in six lines, ready to share."
+},
+{
+"n": 138,
+"kind": "special",
+"title": "Done list",
+"intro": "The opposite of a to-do list: things that are finished."
+},
+{
+"n": 139,
+"kind": "special",
+"title": "Evidence wall",
+"intro": "Proof that I can do hard things."
+},
+{
+"n": 142,
+"kind": "special",
+"title": "Lifetime counters"
+},
+{
+"n": 143,
+"kind": "special",
+"title": "Portfolio export",
+"intro": "Your pinned items as a text block for a resume or portfolio."
+},
+{
+"n": 144,
+"kind": "special",
+"title": "Share card",
+"intro": "A picture sized for a WhatsApp status."
+},
+{
+"n": 147,
+"kind": "special",
+"title": "Backup status"
+},
+{
+"n": 148,
+"kind": "special",
+"title": "On this day"
+},
+{
+"n": 149,
+"kind": "special",
+"title": "Progress photos",
+"intro": "One photo a week for long projects. Small changes become visible."
+},
+{
+"n": 150,
+"kind": "log",
+"title": "Small wins journal",
+"intro": "Three small wins. Small on purpose.",
+"prompts": [
+"Win 1",
+"Win 2",
+"Win 3"
+]
 }
 ]

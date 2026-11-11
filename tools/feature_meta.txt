@@ -126,3 +126,28 @@
 123|partial|1|Sends the due date to your buddy through the share sheet. The buddy cannot follow it live without a server.
 124|done|1|Three-line post-mortem entries.
 125|done|1|Latest start date at your 14-day pace. Tested.
+126|done||Proof at session end: one line, camera photo or link, stored on the phone. "File" attachments are not built. Tested; camera built, untested on device.
+127|done|2|Option to open the proof screen on the camera. Camera built, untested on device.
+128|done|2|One-line text proof (Version 1). Tested.
+129|done|2|20-second voice note as proof with playback in the Vault. Recording built in Kotlin, untested on device.
+130|done|2|Link proof with a basic http check (Version 1). Tested.
+131|needs-backend|2|Screen explains it is not connected and nothing is fetched. Manual path: paste a commit link as proof. See BACKEND.md.
+132|done|2|Vault tab: all proof on a timeline grouped by day. Widget test.
+133|done|2|Vault filter chips by project.
+134|done|2|First and latest photo of each project side by side. Tested.
+135|done|2|Today's sessions, proof, habits and parking notes on one page. Tested.
+136|done|2|Six-line weekly summary shared as text. Tested.
+137|done|2|Habits can require a line of proof before a tick counts. Tested.
+138|done|2|Finished tasks and text proofs, newest first. Tested.
+139|done|2|Pin any vault item; pinned items collect on the evidence wall. Tested.
+140|done|2|Vault search over text, task, project and tag. Tested.
+141|done|2|Optional count of words, pages or problems on each proof. Tested.
+142|done|2|Lifetime totals per unit. Tested.
+143|done|2|Pinned items exported as a Markdown text block through the share sheet. Tested.
+144|done|2|9:16 status card rendered to PNG and shared. Card layout tested; PNG capture and sharing untested on device.
+145|done|2|Nothing leaves the phone: the release manifest has no internet permission and there is no account.
+146|needs-backend|2|Local-first and offline is done. Cloud backup is not connected; the manual backup is the JSON export. See BACKEND.md.
+147|done|2|Warning icon in the Vault when no export happened in the last 7 days. Tested.
+148|done|2|Shows proof from the same date a month and a year ago. Tested.
+149|done|2|Weekly progress photos kept by week. Camera untested on device.
+150|done|2|Three wins a day as dated entries.

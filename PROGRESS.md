@@ -52,3 +52,10 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
 - Batch 5 (features 101 to 125): task screen with deadline maths (personal due date,
   sessions left, quota, start-by, panic simulator, pace, backward plan), neck-level alarm,
   early-bird XP, postpone friction and limit, load calendar, delay debt, buddy share.
+- Batch 6 (features 126 to 150): voice proof, camera-first, unit counters, vault search and
+  pins, evidence wall, daily page, weekly digest, done list, before/after, on this day,
+  backup status, portfolio export, share card, progress photos, small wins. Backend
+  interface and BACKEND.md started (GitHub sync, cloud backup marked needs-backend).
+  Note: one push in batch 5 went out with a failing widget test and was fixed in the next
+  commit. Commits now go through tools/ship.sh, which refuses to push unless analyze and
+  all tests pass.

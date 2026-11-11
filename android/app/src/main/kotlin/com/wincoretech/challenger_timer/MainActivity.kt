@@ -9,6 +9,8 @@ import android.speech.RecognizerIntent
 import android.view.WindowManager
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.media.ToneGenerator
 import android.net.Uri
 import android.os.Build
@@ -27,6 +29,8 @@ class MainActivity : FlutterActivity() {
     private var pendingPermission: MethodChannel.Result? = null
     private var pendingSpeech: MethodChannel.Result? = null
     private var screenOnAtPause = true
+    private var recorder: MediaRecorder? = null
+    private var player: MediaPlayer? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -128,6 +132,15 @@ class MainActivity : FlutterActivity() {
                 "sendSms" -> result.success(
                     Core.sendSms(this, call.argument<String>("phone") ?: "", call.argument<String>("text") ?: "")
                 )
+                "recStart" -> result.success(recStart(call.arguments as String))
+                "recStop" -> {
+                    recStop()
+                    result.success(null)
+                }
+                "play" -> {
+                    play(call.arguments as String)
+                    result.success(null)
+                }
                 "keepScreenOn" -> {
                     if (call.arguments == true) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                     else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -214,6 +227,7 @@ class MainActivity : FlutterActivity() {
         val permission = when (name) {
             "notifications" -> if (Build.VERSION.SDK_INT >= 33) android.Manifest.permission.POST_NOTIFICATIONS else null
             "sms" -> android.Manifest.permission.SEND_SMS
+            "mic" -> android.Manifest.permission.RECORD_AUDIO
             else -> null
         }
         if (permission == null || checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
@@ -238,6 +252,7 @@ class MainActivity : FlutterActivity() {
         return mapOf(
             "notifications" to nm.areNotificationsEnabled(),
             "sms" to Core.canSms(this),
+            "mic" to (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED),
             "usage" to Core.hasUsageAccess(this),
             "overlay" to Settings.canDrawOverlays(this),
             "exactAlarm" to (Build.VERSION.SDK_INT < 31 || getSystemService(AlarmManager::class.java).canScheduleExactAlarms()),
@@ -272,6 +287,55 @@ class MainActivity : FlutterActivity() {
             .distinctBy { it.first }
             .sortedBy { it.second.lowercase() }
             .map { mapOf("package" to it.first, "label" to it.second) }
+    }
+
+    /** Feature 129: a voice note of at most 20 seconds, AAC in an .m4a file. */
+    private fun recStart(path: String): Boolean {
+        recStop()
+        if (checkSelfPermission(android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) return false
+        return try {
+            @Suppress("DEPRECATION")
+            val r = if (Build.VERSION.SDK_INT >= 31) MediaRecorder(this) else MediaRecorder()
+            r.setAudioSource(MediaRecorder.AudioSource.MIC)
+            r.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+            r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            r.setAudioEncodingBitRate(64000)
+            r.setAudioSamplingRate(22050)
+            r.setMaxDuration(20000)
+            r.setOutputFile(path)
+            r.prepare()
+            r.start()
+            recorder = r
+            true
+        } catch (e: Exception) {
+            recorder = null
+            false
+        }
+    }
+
+    private fun recStop() {
+        val r = recorder ?: return
+        recorder = null
+        try {
+            r.stop()
+        } catch (e: Exception) {
+            // Stopped before any audio was captured.
+        }
+        r.release()
+    }
+
+    private fun play(path: String) {
+        try {
+            player?.release()
+            player = MediaPlayer().apply {
+                setDataSource(path)
+                setOnCompletionListener { it.release() }
+                prepare()
+                start()
+            }
+        } catch (e: Exception) {
+            player = null
+        }
     }
 
     private fun tone() {
