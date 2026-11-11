@@ -29,6 +29,7 @@ jobs:
         if: steps.project.outputs.exists == 'true'
         with:
           channel: stable
+          flutter-version: 3.47.9
           cache: true
 
       - name: Get packages

@@ -1,0 +1,14 @@
+[
+  {"name": "Professional Postponer", "xp": 0, "blurb": "Certified expert in doing it later. Today you opened the app anyway."},
+  {"name": "Tab Hoarder", "xp": 300, "blurb": "Forty tabs open, one of them is now actual work."},
+  {"name": "Reluctant Starter", "xp": 800, "blurb": "You grumbled, and then you started. That counts double in spirit."},
+  {"name": "Two-Minute Tourist", "xp": 1600, "blurb": "You keep visiting work for two minutes. Work is starting to recognise you."},
+  {"name": "Accidental Worker", "xp": 3000, "blurb": "You sat down for two minutes and somehow stayed."},
+  {"name": "Daily Shower-Upper", "xp": 5000, "blurb": "You show up. Rain, mood or cricket match."},
+  {"name": "Deadline Dodger", "xp": 8000, "blurb": "Deadlines used to chase you. Now they have to book in advance."},
+  {"name": "Proof Collector", "xp": 12000, "blurb": "Your vault is getting heavy. Your excuses are getting light."},
+  {"name": "Habit Mechanic", "xp": 18000, "blurb": "You keep small routines running like a well-oiled scooter."},
+  {"name": "Early Finisher", "xp": 26000, "blurb": "Submitting before the last hour. Friends are suspicious."},
+  {"name": "Streak Engineer", "xp": 36000, "blurb": "You build days on top of days and they hold."},
+  {"name": "Momentum Machine", "xp": 50000, "blurb": "Starting is no longer an event. It is just what you do."}
+]
