@@ -14,6 +14,7 @@ const int xpPerMinute = 2;
 const int xpProof = 20;
 const int xpHabitTick = 10;
 const int xpDailyBonus = 100;
+const int xpStackBonus = 30;
 
 /// Starts beyond this many per day pay no start XP, so start-and-cancel loops
 /// are pointless.
@@ -27,7 +28,8 @@ class XpBreakdown {
 
 /// XP is recomputed from the whole log every time. The daily bonus is granted
 /// for today in advance and for each past day only if that day had a session.
-XpBreakdown computeXp(List<Event> events, int today, {bool bonusOn = true}) {
+XpBreakdown computeXp(List<Event> events, int today, {bool bonusOn = true, bool stackBonus = false}) {
+  final ticksPerDay = <int, Set<String>>{};
   var starts = 0, minutes = 0, proof = 0, habits = 0, extra = 0;
   final startsPerDay = <int, int>{};
   final sessionDays = <int>{};
@@ -45,6 +47,7 @@ XpBreakdown computeXp(List<Event> events, int today, {bool bonusOn = true}) {
         proof += xpProof;
       case Ev.habitTick:
         habits += xpHabitTick;
+        (ticksPerDay[e.day] ??= {}).add(e.get<String>('habitId') ?? '');
     }
     extra += (e.get<num>('xp') ?? 0).toInt();
   }
@@ -52,6 +55,12 @@ XpBreakdown computeXp(List<Event> events, int today, {bool bonusOn = true}) {
   if (bonusOn && first != null) {
     bonus = sessionDays.where((d) => d < today && d >= first!).length * xpDailyBonus;
     bonus += xpDailyBonus; // today's bonus is already in the pocket
+  }
+  if (stackBonus) {
+    // Feature 43: three or more streaks fed on the same day.
+    for (final e in ticksPerDay.entries) {
+      if (e.value.length + (sessionDays.contains(e.key) ? 1 : 0) >= 3) extra += xpStackBonus;
+    }
   }
   return XpBreakdown(starts, minutes, proof, habits, bonus, extra);
 }

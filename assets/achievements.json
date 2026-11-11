@@ -1,32 +1,238 @@
 [
-  {"id": "first_start", "name": "The Door Opens", "desc": "Start your first session.", "metric": "starts", "gte": 1},
-  {"id": "first_done", "name": "Two Whole Minutes", "desc": "Finish your first session.", "metric": "sessions", "gte": 1},
-  {"id": "first_proof", "name": "Exhibit A", "desc": "Save your first proof.", "metric": "proofs", "gte": 1},
-  {"id": "first_photo", "name": "Pics Or It Did Not Happen", "desc": "Save a photo as proof.", "metric": "photos", "gte": 1},
-  {"id": "first_link", "name": "Link In Bio", "desc": "Save a link as proof.", "metric": "links", "gte": 1},
-  {"id": "first_tick", "name": "Tiny Tick", "desc": "Tick a habit for the first time.", "metric": "habitTicks", "gte": 1},
-  {"id": "starts_10", "name": "Ten Starts", "desc": "Start 10 sessions.", "metric": "starts", "gte": 10},
-  {"id": "starts_50", "name": "Fifty Starts", "desc": "Start 50 sessions.", "metric": "starts", "gte": 50},
-  {"id": "starts_100", "name": "Starter Motor", "desc": "Start 100 sessions.", "metric": "starts", "gte": 100},
-  {"id": "starts_500", "name": "Five Hundred Doors", "desc": "Start 500 sessions.", "metric": "starts", "gte": 500},
-  {"id": "streak_3", "name": "Three In A Row", "desc": "Reach a 3-day master streak.", "metric": "longest", "gte": 3},
-  {"id": "streak_7", "name": "A Full Week", "desc": "Reach a 7-day master streak.", "metric": "longest", "gte": 7},
-  {"id": "streak_14", "name": "Fortnight", "desc": "Reach a 14-day master streak.", "metric": "longest", "gte": 14},
-  {"id": "streak_30", "name": "Thirty Days", "desc": "Reach a 30-day master streak.", "metric": "longest", "gte": 30},
-  {"id": "streak_66", "name": "Sixty-Six", "desc": "Reach a 66-day master streak.", "metric": "longest", "gte": 66},
-  {"id": "streak_100", "name": "Hundred Club", "desc": "Reach a 100-day master streak.", "metric": "longest", "gte": 100},
-  {"id": "days_30", "name": "Thirty Days Total", "desc": "Show up on 30 different days.", "metric": "totalDays", "gte": 30},
-  {"id": "days_100", "name": "Hundred Days Total", "desc": "Show up on 100 different days.", "metric": "totalDays", "gte": 100},
-  {"id": "comeback_1", "name": "Came Back", "desc": "Return after a missed day.", "metric": "comebacks", "gte": 1},
-  {"id": "comeback_5", "name": "Boomerang", "desc": "Return after a miss five times.", "metric": "comebacks", "gte": 5},
-  {"id": "minutes_60", "name": "First Hour", "desc": "Log 60 minutes of work.", "metric": "minutes", "gte": 60},
-  {"id": "minutes_600", "name": "Ten Hours", "desc": "Log 10 hours of work.", "metric": "minutes", "gte": 600},
-  {"id": "minutes_6000", "name": "Hundred Hours", "desc": "Log 100 hours of work.", "metric": "minutes", "gte": 6000},
-  {"id": "proofs_10", "name": "Ten Receipts", "desc": "Save 10 pieces of proof.", "metric": "proofs", "gte": 10},
-  {"id": "proofs_100", "name": "Evidence Locker", "desc": "Save 100 pieces of proof.", "metric": "proofs", "gte": 100},
-  {"id": "plans_1", "name": "Tomorrow Is Booked", "desc": "Lock tomorrow's first task.", "metric": "plans", "gte": 1},
-  {"id": "plans_7", "name": "Seven Evenings", "desc": "Lock a first task seven times.", "metric": "plans", "gte": 7},
-  {"id": "long_25", "name": "Stayed A While", "desc": "Finish a 25-minute session.", "metric": "longestSession", "gte": 25},
-  {"id": "long_90", "name": "Deep End", "desc": "Finish a 90-minute session.", "metric": "longestSession", "gte": 90, "hidden": true},
-  {"id": "day_3", "name": "Hat Trick", "desc": "Finish three sessions in one day.", "metric": "bestDaySessions", "gte": 3, "hidden": true}
+ {
+  "id": "first_start",
+  "name": "The Door Opens",
+  "desc": "Start your first session.",
+  "metric": "starts",
+  "gte": 1
+ },
+ {
+  "id": "first_done",
+  "name": "Two Whole Minutes",
+  "desc": "Finish your first session.",
+  "metric": "sessions",
+  "gte": 1
+ },
+ {
+  "id": "first_proof",
+  "name": "Exhibit A",
+  "desc": "Save your first proof.",
+  "metric": "proofs",
+  "gte": 1
+ },
+ {
+  "id": "first_photo",
+  "name": "Pics Or It Did Not Happen",
+  "desc": "Save a photo as proof.",
+  "metric": "photos",
+  "gte": 1
+ },
+ {
+  "id": "first_link",
+  "name": "Link In Bio",
+  "desc": "Save a link as proof.",
+  "metric": "links",
+  "gte": 1
+ },
+ {
+  "id": "first_tick",
+  "name": "Tiny Tick",
+  "desc": "Tick a habit for the first time.",
+  "metric": "habitTicks",
+  "gte": 1
+ },
+ {
+  "id": "starts_10",
+  "name": "Ten Starts",
+  "desc": "Start 10 sessions.",
+  "metric": "starts",
+  "gte": 10
+ },
+ {
+  "id": "starts_50",
+  "name": "Fifty Starts",
+  "desc": "Start 50 sessions.",
+  "metric": "starts",
+  "gte": 50
+ },
+ {
+  "id": "starts_100",
+  "name": "Starter Motor",
+  "desc": "Start 100 sessions.",
+  "metric": "starts",
+  "gte": 100
+ },
+ {
+  "id": "starts_500",
+  "name": "Five Hundred Doors",
+  "desc": "Start 500 sessions.",
+  "metric": "starts",
+  "gte": 500
+ },
+ {
+  "id": "streak_3",
+  "name": "Three In A Row",
+  "desc": "Reach a 3-day master streak.",
+  "metric": "longest",
+  "gte": 3
+ },
+ {
+  "id": "streak_7",
+  "name": "A Full Week",
+  "desc": "Reach a 7-day master streak.",
+  "metric": "longest",
+  "gte": 7
+ },
+ {
+  "id": "streak_14",
+  "name": "Fortnight",
+  "desc": "Reach a 14-day master streak.",
+  "metric": "longest",
+  "gte": 14
+ },
+ {
+  "id": "streak_30",
+  "name": "Thirty Days",
+  "desc": "Reach a 30-day master streak.",
+  "metric": "longest",
+  "gte": 30
+ },
+ {
+  "id": "streak_66",
+  "name": "Sixty-Six",
+  "desc": "Reach a 66-day master streak.",
+  "metric": "longest",
+  "gte": 66
+ },
+ {
+  "id": "streak_100",
+  "name": "Hundred Club",
+  "desc": "Reach a 100-day master streak.",
+  "metric": "longest",
+  "gte": 100
+ },
+ {
+  "id": "days_30",
+  "name": "Thirty Days Total",
+  "desc": "Show up on 30 different days.",
+  "metric": "totalDays",
+  "gte": 30
+ },
+ {
+  "id": "days_100",
+  "name": "Hundred Days Total",
+  "desc": "Show up on 100 different days.",
+  "metric": "totalDays",
+  "gte": 100
+ },
+ {
+  "id": "comeback_1",
+  "name": "Came Back",
+  "desc": "Return after a missed day.",
+  "metric": "comebacks",
+  "gte": 1
+ },
+ {
+  "id": "comeback_5",
+  "name": "Boomerang",
+  "desc": "Return after a miss five times.",
+  "metric": "comebacks",
+  "gte": 5
+ },
+ {
+  "id": "minutes_60",
+  "name": "First Hour",
+  "desc": "Log 60 minutes of work.",
+  "metric": "minutes",
+  "gte": 60
+ },
+ {
+  "id": "minutes_600",
+  "name": "Ten Hours",
+  "desc": "Log 10 hours of work.",
+  "metric": "minutes",
+  "gte": 600
+ },
+ {
+  "id": "minutes_6000",
+  "name": "Hundred Hours",
+  "desc": "Log 100 hours of work.",
+  "metric": "minutes",
+  "gte": 6000
+ },
+ {
+  "id": "proofs_10",
+  "name": "Ten Receipts",
+  "desc": "Save 10 pieces of proof.",
+  "metric": "proofs",
+  "gte": 10
+ },
+ {
+  "id": "proofs_100",
+  "name": "Evidence Locker",
+  "desc": "Save 100 pieces of proof.",
+  "metric": "proofs",
+  "gte": 100
+ },
+ {
+  "id": "plans_1",
+  "name": "Tomorrow Is Booked",
+  "desc": "Lock tomorrow's first task.",
+  "metric": "plans",
+  "gte": 1
+ },
+ {
+  "id": "plans_7",
+  "name": "Seven Evenings",
+  "desc": "Lock a first task seven times.",
+  "metric": "plans",
+  "gte": 7
+ },
+ {
+  "id": "long_25",
+  "name": "Stayed A While",
+  "desc": "Finish a 25-minute session.",
+  "metric": "longestSession",
+  "gte": 25
+ },
+ {
+  "id": "long_90",
+  "name": "Deep End",
+  "desc": "Finish a 90-minute session.",
+  "metric": "longestSession",
+  "gte": 90,
+  "hidden": true
+ },
+ {
+  "id": "day_3",
+  "name": "Hat Trick",
+  "desc": "Finish three sessions in one day.",
+  "metric": "bestDaySessions",
+  "gte": 3,
+  "hidden": true
+ },
+ {
+  "id": "odd_11",
+  "name": "Eleven, For No Reason",
+  "desc": "A surprise at 11 days in a row.",
+  "metric": "longest",
+  "gte": 11,
+  "hidden": true
+ },
+ {
+  "id": "odd_23",
+  "name": "Twenty-Three Skidoo",
+  "desc": "A surprise at 23 days in a row.",
+  "metric": "longest",
+  "gte": 23,
+  "hidden": true
+ },
+ {
+  "id": "odd_47",
+  "name": "Forty-Seven",
+  "desc": "A surprise at 47 days in a row.",
+  "metric": "longest",
+  "gte": 47,
+  "hidden": true
+ }
 ]

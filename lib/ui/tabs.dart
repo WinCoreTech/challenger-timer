@@ -8,6 +8,7 @@ import '../app/state.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
+import '../core/extras.dart';
 import '../core/rules.dart';
 import '../core/streak_engine.dart';
 import 'home.dart';
@@ -64,6 +65,54 @@ class StreaksScreen extends ConsumerWidget {
                 Text(streakLine(s), style: const TextStyle(color: dim)),
               ])));
 
+  Widget _habitCard(BuildContext context, DayView v, App app, Rec h) {
+    final days = v.habitDays(h.id);
+    final s = v.habitStreak(h.id);
+    final weekly = v.on(29) ? h.integer('weekly') : 0;
+    final open = !v.on(49) || inWindow(h, v.now.minuteOfDay);
+    final tiny = v.on(28) ? h.str('tiny') : '';
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 14),
+        child: Panel(
+            key: Key('habit-${h.id}'),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Expanded(
+                    child: InkWell(
+                        onTap: () => context.push('/habit/${h.id}'),
+                        child: Text(h.str('name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)))),
+                if (v.tickedToday(h.id))
+                  const Icon(Icons.check_circle, color: cyan, size: 36)
+                else if (open)
+                  FilledButton(key: Key('tick-${h.id}'), onPressed: () => app.tickHabit(h.id), child: const Text('DONE'))
+                else
+                  const Icon(Icons.schedule, color: dim),
+              ]),
+              if (!v.tickedToday(h.id) && open && tiny.isNotEmpty)
+                Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                        key: Key('tiny-${h.id}'),
+                        onPressed: () => app.tickHabit(h.id, tiny: true),
+                        child: Text('TINY VERSION: ${tiny.toUpperCase()}'))),
+              if (!open)
+                Text('Counts between ${hhmm(h.integer('from'))} and ${hhmm(h.integer('to'))}.', style: const TextStyle(color: dim)),
+              const SizedBox(height: 12),
+              Row(children: [
+                if (weekly > 0) ...[
+                  _stat('Weeks', '${weeklyStreak(days, v.today, weekly)}', color: cyan),
+                  _stat('This week', '${doneThisWeek(days, v.today)}/$weekly'),
+                ] else ...[
+                  _stat('Current', '${s.current}', color: s.state == StreakState.paused ? dim : cyan),
+                  _stat('Longest', '${s.longest}'),
+                ],
+                _stat('Total days', '${s.totalDays}'),
+              ]),
+              const SizedBox(height: 12),
+              Heatmap(today: v.today, level: (d) => days.contains(d) ? 3 : s.frozenDays.contains(d) ? -1 : 0),
+            ])));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final v = ref.watch(viewProvider);
@@ -85,13 +134,30 @@ class StreaksScreen extends ConsumerWidget {
       ])),
       const SizedBox(height: 14),
       _card(context, 'SHOWED UP (master)', v.master, v.today, v.showedUpDays, key: const Key('masterCard')),
-      for (final h in v.habits)
-        _card(context, h.str('name'), v.habitStreak(h.id), v.today, v.habitDays(h.id),
-            key: Key('habit-${h.id}'),
-            trailing: v.tickedToday(h.id)
-                ? const Icon(Icons.check_circle, color: cyan, size: 36)
-                : FilledButton(
-                    key: Key('tick-${h.id}'), onPressed: () => app.tickHabit(h.id), child: const Text('DONE'))),
+      if (v.on(34))
+        Padding(
+            padding: const EdgeInsets.only(bottom: 14),
+            child: Panel(
+                key: const Key('track66'),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  H('66-day track · ${v.master.current.clamp(0, 66)} of 66'),
+                  const SizedBox(height: 8),
+                  Bar(v.master.current / 66),
+                  const SizedBox(height: 6),
+                  const Text('In one UCL study, 66 days was the median time for a habit to become automatic. It varied a lot between people.',
+                      style: TextStyle(color: dim, fontSize: 12)),
+                ]))),
+      for (final h in v.habits) _habitCard(context, v, app, h),
+      if (v.maintained.isNotEmpty) ...[
+        const Padding(padding: EdgeInsets.only(top: 8, bottom: 6), child: H('Maintained (runs on its own now)')),
+        for (final h in v.maintained)
+          ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.verified, color: cyan),
+              title: Text(h.str('name')),
+              subtitle: Text('${v.habitDays(h.id).length} days done', style: const TextStyle(color: dim)),
+              onTap: () => context.push('/habit/${h.id}')),
+      ],
       if (v.habits.isEmpty)
         const Padding(
             padding: EdgeInsets.all(12),
@@ -298,6 +364,20 @@ class _PlanState extends ConsumerState<PlanScreen> {
                             value: t.flag('done'),
                             onChanged: (_) => app.toggleTask(t),
                             controlAffinity: ListTileControlAffinity.leading,
+                            subtitle: t.data['due'] is int ? Text('Due ${dayLabel(t.integer('due'))}', style: const TextStyle(color: dim, fontSize: 12)) : null,
+                            secondary: IconButton(
+                                key: Key('due-${t.id}'),
+                                tooltip: 'Set due date',
+                                icon: const Icon(Icons.event, color: dim),
+                                onPressed: () async {
+                                  final base = dateOfDay(t.data['due'] is int ? t.integer('due') : v.today + 7);
+                                  final d = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime(base.year, base.month, base.day),
+                                      firstDate: DateTime(2020),
+                                      lastDate: DateTime(2100));
+                                  if (d != null) await app.putRec(t.copy({'due': dayOfDate(d.year, d.month, d.day)}));
+                                }),
                             title: Text(t.str('title'),
                                 style: TextStyle(
                                     decoration: t.flag('done') ? TextDecoration.lineThrough : null,
@@ -348,13 +428,13 @@ class MeScreen extends ConsumerWidget {
             Text(r.rank.blurb, style: const TextStyle(color: dim)),
             const SizedBox(height: 14),
             Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Big('${v.xp.total}', size: 44, key: const Key('xpTotal')),
+              Big('${v.xpTotal}', size: 44, key: const Key('xpTotal')),
               const Padding(padding: EdgeInsets.only(left: 6, bottom: 6), child: H('XP')),
             ]),
             const SizedBox(height: 8),
             Bar(r.progress),
             const SizedBox(height: 6),
-            Text(r.next == null ? 'Top of the ladder. Keep showing up.' : '${r.next!.xp - v.xp.total} XP to the next rank.',
+            Text(r.next == null ? 'Top of the ladder. Keep showing up.' : '${r.next!.xp - v.xpTotal} XP to the next rank.',
                 style: const TextStyle(color: dim)),
           ])),
       const SizedBox(height: 14),
@@ -369,6 +449,7 @@ class MeScreen extends ConsumerWidget {
           ('Habit ticks ($xpHabitTick each)', v.xp.habits),
           ('Daily bonus kept', v.xp.bonus),
           if (v.xp.extra != 0) ('Extras', v.xp.extra),
+          ...v.xpExtras,
         ])
           Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),

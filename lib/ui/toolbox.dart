@@ -186,6 +186,13 @@ class _ToolState extends ConsumerState<ToolScreen> {
       Big(lines.first, size: 48, color: cyan, key: const Key('stat-value')),
       const SizedBox(height: 8),
       for (final l in lines.skip(1)) Padding(padding: const EdgeInsets.only(bottom: 6), child: Text(l, style: const TextStyle(fontSize: 16))),
+      if (t.action.isNotEmpty) ...[
+        const SizedBox(height: 16),
+        FilledButton(
+            key: const Key('tool-action'),
+            onPressed: () => ref.read(appProvider.notifier).log(Ev.tool, {'n': t.n}),
+            child: Text(t.action.toUpperCase())),
+      ],
     ];
   }
 

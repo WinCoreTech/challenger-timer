@@ -175,16 +175,16 @@ class App extends Notifier<AppData> {
   }
 
   // ---- habits, projects, tasks, plan
-  Future<void> tickHabit(String habitId) async {
+  Future<void> tickHabit(String habitId, {bool tiny = false}) async {
     if (view.tickedToday(habitId)) return;
-    await log(Ev.habitTick, {'habitId': habitId});
+    await log(Ev.habitTick, {'habitId': habitId, if (tiny) 'tiny': true});
     celebrate();
     await syncNative();
   }
 
   Future<void> toggleTask(Rec task) async {
     final done = !task.flag('done');
-    await putRec(task.copy({'done': done}));
+    await putRec(task.copy({'done': done, 'doneTs': done ? _now.ms : null}));
     if (done) {
       await log(Ev.taskDone, {'taskId': task.id});
       celebrate();

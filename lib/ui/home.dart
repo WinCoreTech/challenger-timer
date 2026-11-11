@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../app/state.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
+import '../core/extras.dart';
 import '../core/rules.dart';
 import '../core/streak_engine.dart';
 import 'theme.dart';
@@ -42,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
               child: Row(children: [
                 Poster(PosterArt.flame,
                     size: 44,
-                    level: (v.master.current / 30).clamp(0.0, 1.0),
+                    level: v.on(33) ? flameLevel(v.master.current) : (v.master.current / 30).clamp(0.0, 1.0),
                     color: v.master.state == StreakState.paused ? dim : cyan),
                 const SizedBox(width: 6),
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [

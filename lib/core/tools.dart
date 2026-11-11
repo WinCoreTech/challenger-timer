@@ -31,6 +31,7 @@ class ToolDef {
     this.setKey = '',
     this.setLabel = '',
     this.setOptions = const [],
+    this.action = '',
   });
   factory ToolDef.fromJson(Map<String, Object?> j) => ToolDef(
         n: j['n'] as int,
@@ -52,6 +53,7 @@ class ToolDef {
         setKey: j['setKey'] as String? ?? '',
         setLabel: j['setLabel'] as String? ?? '',
         setOptions: (j['setOptions'] as List?)?.cast<int>() ?? const [],
+        action: j['action'] as String? ?? '',
       );
 
   /// Feature number this tool implements.
@@ -75,6 +77,9 @@ class ToolDef {
   /// For kind "toggle" the key holds '1' or '0'; for "dayflag" it holds a day.
   final String setKey, setLabel;
   final List<int> setOptions;
+
+  /// Stat tools may carry one button that logs a plain tool event.
+  final String action;
 
   String get recKind => 't$n';
   String get kvKey => 't.$n';

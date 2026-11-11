@@ -5,6 +5,7 @@ library;
 import 'day.dart';
 import 'engine.dart';
 import 'events.dart';
+import 'extras.dart';
 import 'streak_engine.dart';
 
 typedef Stat = List<String> Function(DayView v);
@@ -66,7 +67,50 @@ int consistency(DayView v, {int days = 30}) {
   return (n * 100 / days).round();
 }
 
+List<String> _streakLines(DayView v, Set<int> days, String what) {
+  final s = computeStreak(days, v.today, rules: v.streakRules);
+  return ['${s.current}', 'days in a row $what', 'Longest: ${s.longest}. Total: ${s.totalDays}.'];
+}
+
+/// Feature 35: days with a session started before noon.
+Set<int> beforeNoonDays(DayView v) => {
+      for (final e in v.type(Ev.sessionStart))
+        if (e.moment.minuteOfDay < 12 * 60 && e.moment.minuteOfDay >= v.dayEndHour * 60) e.day
+    };
+
+/// Feature 36: tasks finished 24 hours or more before their due day ends.
+List<Rec> earlySubmissions(DayView v) => [
+      for (final t in v.of(Kind.task))
+        if (t.flag('done') && t.data['due'] is int && t.data['doneTs'] is int)
+          if (dayEndWallMs(t.integer('due'), v.dayEndHour) - (t.integer('doneTs') + v.now.offsetMin * msPerMinute) >= msPerDay) t
+    ];
+
+/// Feature 37: days that had a locked first task and a finished session.
+Set<int> planKeptDays(DayView v) => {
+      for (final e in v.type(Ev.planSet))
+        if (v.sessionDays.contains(e.get<int>('forDay'))) e.get<int>('forDay')!
+    };
+
+/// Feature 38: days the "I am up" tap came no later than 30 minutes after target.
+Set<int> wakeOnTimeDays(DayView v) {
+  final target = v.settingInt('wakeTarget', 7) * 60;
+  return {
+    for (final e in v.type(Ev.tool))
+      if (e.get<int>('n') == 38 && e.moment.minuteOfDay <= target + 30 && e.moment.minuteOfDay >= v.dayEndHour * 60) e.day
+  };
+}
+
 final Map<String, Stat> stats = {
+  'beforeNoon': (v) => _streakLines(v, beforeNoonDays(v), 'with a session started before noon'),
+  'earlySubmit': (v) {
+    final n = earlySubmissions(v).length;
+    return ['$n', 'tasks finished a full day or more before they were due', 'Give a task a due date by long-pressing it on the Plan tab.'];
+  },
+  'planKept': (v) => _streakLines(v, planKeptDays(v), 'with the planned first task followed by a session'),
+  'wake': (v) => _streakLines(v, wakeOnTimeDays(v), 'up within 30 minutes of your target'),
+  'review': (v) => _streakLines(v, {for (final e in v.type(Ev.tool)) if (e.get<int>('n') == 426) e.day}, 'with the evening reflection done'),
+  'upload': (v) => _streakLines(v, {for (final e in v.type(Ev.proof)) e.day}, 'with proof saved'),
+  'chain': (v) => ['${inDayChain(v)}', 'sessions back to back today', 'A new session within 15 minutes of the last one extends the chain.'],
   'openStreak': (v) {
     final s = computeStreak(openedEarlyDays(v), v.today);
     return [

@@ -24,3 +24,29 @@
 23|done|0|Lifetime starts as the biggest number on Home (hidden in Simple mode).
 24|done|0|Average gap between cue time and first start, last 14 days. Tested.
 25|done|0|Any logged action makes the day non-zero. Tested.
+26|done||User-created habits, each with its own streak and heatmap. Tested.
+27|done||Master streak fed by any finished session or habit tick. Tested.
+28|done|0|Habits can have a tiny version; the TINY button keeps the streak. Tested.
+29|done|0|"N of 7 days" habits with a week-based streak. Tested.
+30|done|0|Sessions started within 15 minutes of the last one form a chain. Tested.
+31|done|0|Year heatmap on every streak card (Version 1 Streaks tab).
+32|done|0|Month grid with crossed-off days.
+33|done|0|Flame grows one step at 3, 7, 14, 30, 66 and 100 days. Tested.
+34|done|0|66-day bar on the Streaks tab.
+35|done|0|Streak of days with a session started before noon. Tested.
+36|done|0|Counts tasks finished 24 hours or more before their due date. Tested.
+37|done|0|Streak of days with a locked first task and a session. Tested.
+38|done|0|"I am up" tap within 30 minutes of the target hour. Self-reported. Tested.
+39|done|0|Preset habit with its own streak. Self-reported.
+40|done|0|Streak of days with the three daily questions answered.
+41|done|0|Streak of days with proof saved.
+42|partial|0|Preset self-reported habit. Not detected automatically from task order.
+43|done|0|Three streaks fed on one day pays +30 XP. Tested.
+44|done|0|Current and longest side by side on every streak card.
+45|done|0|Lifetime "total days" next to each streak; never resets.
+46|done|0|Hidden bonus XP and hidden badges at 11, 23 and 47 days. Tested.
+47|done|0|Bet 50/100/200 XP on a 7-day run; resolved from the event log. Tested.
+48|done|0|Up to three rest weekdays that never count as a miss. Tested.
+49|done|0|Per-habit time window; the tick is refused outside it. Tested.
+50|done|0|Graduate a habit to "Maintained". Tested.
+426|done||Three evening questions saved as dated entries.

@@ -5,6 +5,7 @@ library;
 import 'dart:convert';
 import 'day.dart';
 import 'events.dart';
+import 'extras.dart';
 import 'flags.dart';
 import 'rules.dart';
 import 'streak_engine.dart';
@@ -82,6 +83,9 @@ class DayView {
 
   /// True when feature [n] is switched on, built and unlocked by rank.
   bool on(int n) => featureLive(catalog, n, kv: kv, rankIndex: rank.index, simpleMode: simpleMode);
+  /// Flag check without the rank gate. Used by XP rules, which must not
+  /// depend on rank (rank depends on XP).
+  bool flagOn(int n) => featureLive(catalog, n, kv: kv, rankIndex: 1 << 20, simpleMode: simpleMode);
   String setting(String key, [String or = '']) => kv[key] ?? or;
   int settingInt(String key, int or) => int.tryParse(kv[key] ?? '') ?? or;
 
@@ -92,7 +96,11 @@ class DayView {
   // ---- records
   List<Rec> of(String kind) => recs.where((r) => r.kind == kind).toList()
     ..sort((a, b) => a.created.compareTo(b.created));
-  late final List<Rec> habits = of(Kind.habit).where((h) => !h.flag('archived')).toList();
+  late final List<Rec> allHabits = of(Kind.habit).where((h) => !h.flag('archived')).toList();
+
+  /// Active habits. Graduated ones (feature 50) move to "maintained".
+  late final List<Rec> habits = allHabits.where((h) => !h.flag('maintained')).toList();
+  late final List<Rec> maintained = allHabits.where((h) => h.flag('maintained')).toList();
   late final List<Rec> projects = of(Kind.project).where((p) => !p.flag('archived')).toList();
   late final List<Rec> proofs = of(Kind.proof).reversed.toList();
   List<Rec> tasksOf(String projectId) =>
@@ -123,15 +131,27 @@ class DayView {
     ...sessionDays,
     for (final e in type(Ev.habitTick)) e.day
   };
-  late final StreakResult master = computeStreak(showedUpDays, today);
+  /// Feature 48: weekdays that never count as a miss.
+  Set<int> get restWeekdays => flagOn(48)
+      ? {for (final c in (kv['restDays'] ?? '').split('')) if (int.tryParse(c) != null) int.parse(c)}
+      : const {};
+  late final StreakRules streakRules = StreakRules(restWeekdays: restWeekdays);
+  late final StreakResult master = computeStreak(showedUpDays, today, rules: streakRules);
   Set<int> habitDays(String habitId) =>
       {for (final e in type(Ev.habitTick)) if (e.get<String>('habitId') == habitId) e.day};
-  StreakResult habitStreak(String habitId) => computeStreak(habitDays(habitId), today);
+  StreakResult habitStreak(String habitId) => computeStreak(habitDays(habitId), today, rules: streakRules);
   bool tickedToday(String habitId) => habitDays(habitId).contains(today);
 
   // ---- XP, rank, bonus
-  late final XpBreakdown xp = computeXp(events, today, bonusOn: isOn(K.swBonus));
-  late final RankView rank = rankFor(xp.total, ranks);
+  late final XpBreakdown xp = computeXp(events, today, bonusOn: isOn(K.swBonus), stackBonus: flagOn(43));
+
+  /// Feature XP on top of the base rules, as (label, amount) lines.
+  late final List<(String, int)> xpExtras = featureXp(this);
+  late final int xpTotal = () {
+    final t = xp.total + xpExtras.fold<int>(0, (a, e) => a + e.$2);
+    return t < 0 ? 0 : t;
+  }();
+  late final RankView rank = rankFor(xpTotal, ranks);
 
   /// Today's 100 XP: held until the first session, then kept for good.
   bool get bonusAtRisk => isOn(K.swBonus) && !workedToday;
@@ -185,7 +205,7 @@ class DayView {
       'plans': type(Ev.planSet).length,
       'longestSession': longestSession,
       'bestDaySessions': perDay.values.fold(0, (a, b) => a > b ? a : b),
-      'xp': xp.total,
+      'xp': xpTotal,
     };
   }();
 

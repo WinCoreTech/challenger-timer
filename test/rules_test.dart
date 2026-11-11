@@ -69,8 +69,8 @@ void main() {
       expect(top.next, isNull);
     });
     test('30 achievements defined in JSON with unique ids', () {
-      expect(achievements.length, 30);
-      expect(achievements.map((a) => a.id).toSet().length, 30);
+      expect(achievements.length, greaterThanOrEqualTo(30));
+      expect(achievements.map((a) => a.id).toSet().length, achievements.length);
       expect(achievements.first.earned({'starts': 1}), isTrue);
       expect(achievements.first.earned({}), isFalse);
     });
