@@ -8,9 +8,11 @@ import '../app/state.dart';
 import '../core/events.dart';
 import 'home.dart';
 import 'settings.dart';
+import 'special.dart';
 import 'tabs.dart';
 import 'theme.dart';
 import 'timer.dart';
+import 'toolbox.dart';
 
 const _tabs = [
   ('/', 'HOME', Icons.play_circle_fill),
@@ -54,6 +56,10 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
         GoRoute(path: '/proof', builder: (c, s) => const ProofScreen()),
         GoRoute(path: '/settings', builder: (c, s) => const SettingsScreen()),
         GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
+        GoRoute(path: '/ritual', builder: (c, s) => const RitualScreen()),
+        GoRoute(path: '/toolbox', builder: (c, s) => const ToolboxScreen()),
+        GoRoute(path: '/features', builder: (c, s) => const FeaturesScreen()),
+        GoRoute(path: '/tool/:n', builder: (c, s) => ToolScreen(int.parse(s.pathParameters['n']!))),
       ],
     ));
 

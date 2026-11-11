@@ -5,6 +5,7 @@ library;
 import 'dart:convert';
 import 'day.dart';
 import 'events.dart';
+import 'flags.dart';
 import 'rules.dart';
 import 'streak_engine.dart';
 
@@ -53,13 +54,15 @@ class ActiveSession {
 }
 
 class DayView {
-  DayView({required this.events, required this.recs, required this.kv, required this.now, required this.ranks});
+  DayView({required this.events, required this.recs, required this.kv, required this.now, required this.ranks, Catalog? catalog})
+      : catalog = catalog ?? Catalog.empty;
 
   final List<Event> events;
   final List<Rec> recs;
   final Map<String, String> kv;
   final Moment now;
   final List<Rank> ranks;
+  final Catalog catalog;
 
   // ---- settings
   int get dayEndHour => int.tryParse(kv[K.dayEndHour] ?? '') ?? 3;
@@ -72,6 +75,19 @@ class DayView {
       kv[K.blockedApps] == null ? const [] : (jsonDecode(kv[K.blockedApps]!) as List).cast<String>();
 
   late final int today = now.day(dayEndHour);
+
+  // ---- feature flags
+  /// Simple mode hides everything outside Version 1.
+  bool get simpleMode => kv[K.simpleMode] == '1';
+
+  /// True when feature [n] is switched on, built and unlocked by rank.
+  bool on(int n) => featureLive(catalog, n, kv: kv, rankIndex: rank.index, simpleMode: simpleMode);
+  String setting(String key, [String or = '']) => kv[key] ?? or;
+  int settingInt(String key, int or) => int.tryParse(kv[key] ?? '') ?? or;
+
+  /// Feature 15: on a declared rough day the door shrinks to one minute.
+  bool get badDay => on(15) && kv['badDay'] == '$today';
+  int get doorMinutes => badDay ? 1 : 2;
 
   // ---- records
   List<Rec> of(String kind) => recs.where((r) => r.kind == kind).toList()

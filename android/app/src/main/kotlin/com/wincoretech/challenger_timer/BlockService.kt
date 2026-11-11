@@ -5,6 +5,7 @@ import android.app.Service
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Intent
+import android.telecom.TelecomManager
 import android.content.pm.ServiceInfo
 import android.graphics.Color
 import android.graphics.PixelFormat
@@ -32,6 +33,7 @@ class BlockService : Service() {
     private var overlay: View? = null
     private var current = ""
     private var last = 0L
+    private var allow: Set<String> = emptySet()
     private val tick = object : Runnable {
         override fun run() {
             poll()
@@ -60,6 +62,7 @@ class BlockService : Service() {
             stopSelf()
             return START_NOT_STICKY
         }
+        allow = allowList()
         if (last == 0L) {
             last = System.currentTimeMillis() - 60000L
             handler.post(tick)
@@ -88,7 +91,20 @@ class BlockService : Service() {
             return
         }
         last = now
-        if (Core.blockedApps(this).contains(current)) show() else hide()
+        if (Core.isBlocked(this, current, allow)) show() else hide()
+    }
+
+    /** Never blocked, even in block-all mode: launcher, dialer, system UI, settings, user picks. */
+    private fun allowList(): Set<String> {
+        val set = HashSet<String>()
+        set.add("com.android.systemui")
+        set.add("com.android.settings")
+        set.add("android")
+        val home = packageManager.resolveActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME), 0)
+        home?.activityInfo?.packageName?.let { set.add(it) }
+        getSystemService(TelecomManager::class.java)?.defaultDialerPackage?.let { set.add(it) }
+        set.addAll(Core.prefs(this).getStringSet("allowApps", emptySet()) ?: emptySet())
+        return set
     }
 
     private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
@@ -110,12 +126,15 @@ class BlockService : Service() {
             gravity = Gravity.CENTER
             setPadding(0, dp(8), 0, dp(8))
         }
-        root.addView(text("EARN YOUR PHONE", 28f, cyan, true))
-        root.addView(text("This app opens after today's first session. Two minutes does it.", 18f, Color.WHITE, false))
+        val inSession = Core.timerRunning(this)
+        root.addView(text(if (inSession) "SESSION RUNNING" else "EARN YOUR PHONE", 28f, cyan, true))
+        root.addView(text(
+            if (inSession) "This app is parked until the timer ends. Back to it."
+            else "This app opens after today's first session. Two minutes does it.", 18f, Color.WHITE, false))
         val task = Core.prefs(this).getString("task", "") ?: ""
         if (task.isNotBlank()) root.addView(text(task, 20f, Color.LTGRAY, true))
         val start = Button(this).apply {
-            text = "START 2 MIN"
+            text = if (inSession) "BACK TO MY SESSION" else "START 2 MIN"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)
             typeface = Typeface.DEFAULT_BOLD
             setTextColor(Color.BLACK)

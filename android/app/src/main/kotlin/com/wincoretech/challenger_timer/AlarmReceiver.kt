@@ -19,6 +19,7 @@ class AlarmReceiver : BroadcastReceiver() {
             "cue" -> if (Core.switchOn(c, "cue") && !Core.workedToday(c)) alarm(c, "cue")
             "rescue" -> if (Core.switchOn(c, "rescue") && !Core.workedToday(c)) alarm(c, "rescue")
             "buddy" -> if (Core.switchOn(c, "buddy")) report(c)
+            "rem" -> Extras.fireDue(c)
             else -> {
                 // Boot, package replaced, clock or zone changed, or day roll.
                 if (p.getLong("timerEnd", 0L) > System.currentTimeMillis()) {

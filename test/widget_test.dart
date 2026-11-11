@@ -195,6 +195,8 @@ void main() {
     await t.pumpAndSettle();
     final off = find.byKey(const Key('off-${K.swRescue}'));
     await t.scrollUntilVisible(off, 200, scrollable: find.byType(Scrollable).last);
+    await t.ensureVisible(off);
+    await t.pumpAndSettle();
     await t.tap(off);
     await t.pumpAndSettle();
     await t.tap(find.text('START 24H COUNTDOWN'));
@@ -220,6 +222,8 @@ void main() {
     await t.pumpAndSettle();
     final send = find.byKey(const Key('sendReport'));
     await t.scrollUntilVisible(send, 200, scrollable: find.byType(Scrollable).last);
+    await t.ensureVisible(send);
+    await t.pumpAndSettle();
     await t.tap(send);
     await t.pumpAndSettle();
     expect(r.native.sms, isEmpty);
@@ -236,6 +240,8 @@ void main() {
     await t.pumpAndSettle();
     final on = find.byKey(const Key('on-${K.swBlock}'));
     await t.scrollUntilVisible(on, 200, scrollable: find.byType(Scrollable).last);
+    await t.ensureVisible(on);
+    await t.pumpAndSettle();
     await t.tap(on);
     await t.pumpAndSettle();
     await t.tap(find.text('Reels'));

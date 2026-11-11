@@ -11,6 +11,9 @@ import 'package:path_provider/path_provider.dart';
 import '../app/state.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
+import '../core/extras.dart';
+import '../core/tools.dart';
+import 'special.dart';
 import 'theme.dart';
 
 const presets = [2, 5, 15, 25, 50, 90];
@@ -82,6 +85,15 @@ class _TimerState extends ConsumerState<TimerScreen> {
       const SizedBox(height: 8),
       Center(child: H('${s.minutes} minute session', size: 12)),
       const Spacer(),
+      if (v.on(8) && (v.kv['t.8'] ?? '').contains('http'))
+        Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: TextButton.icon(
+                key: const Key('playlist'),
+                onPressed: () => ref.read(nativeProvider).openUrl(
+                    v.single(ref.read(toolsProvider)[8] ?? const ToolDef(n: 8, kind: 'single', title: '', prompts: [''])).first),
+                icon: const Icon(Icons.music_note),
+                label: const Text('PLAY MY SESSION-ONLY PLAYLIST'))),
       OutlinedButton(
           key: const Key('stop'),
           onPressed: () async {
@@ -154,10 +166,38 @@ class _TimerState extends ConsumerState<TimerScreen> {
       const Spacer(),
       Center(child: Big('${two(minutes)}:00', size: 96)),
       const Spacer(),
-      FilledButton(
-          key: const Key('timerStart'),
-          onPressed: () => app.startSession(minutes: minutes, projectId: pid),
-          child: const Text('START')),
+      Row(children: [
+        if (v.on(18))
+          Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: IconButton.outlined(
+                  key: const Key('voiceStart'),
+                  tooltip: 'Voice start',
+                  onPressed: () async {
+                    final heard = await ref.read(nativeProvider).listen();
+                    final cmd = heard == null ? null : parseVoice(heard, v.projects);
+                    if (cmd == null) {
+                      if (context.mounted) toast(context, 'Did not catch a start. Try "start five minutes on DSA".');
+                      return;
+                    }
+                    await app.startSession(minutes: cmd.minutes, projectId: cmd.projectId ?? pid, source: 'voice');
+                  },
+                  icon: const Icon(Icons.mic))),
+        if (v.on(4))
+          Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: OutlinedButton(
+                  key: const Key('launch5'),
+                  onPressed: () async {
+                    if (await fiveSecondLaunch(context)) await app.startSession(minutes: minutes, projectId: pid, source: 'launch5');
+                  },
+                  child: const Text('5·4·3·2·1'))),
+        Expanded(
+            child: FilledButton(
+                key: const Key('timerStart'),
+                onPressed: () => app.startSession(minutes: minutes, projectId: pid),
+                child: const Text('START'))),
+      ]),
     ]);
   }
 }

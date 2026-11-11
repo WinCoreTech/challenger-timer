@@ -386,6 +386,18 @@ class MeScreen extends ConsumerWidget {
                     : 'Buddy: ${v.kv[K.buddyName] ?? ''} ${v.kv[K.buddyPhone]}')),
             const Icon(Icons.chevron_right),
           ])),
+      if (!v.simpleMode) ...[
+        const SizedBox(height: 14),
+        Panel(
+            key: const Key('openToolbox'),
+            onTap: () => context.push('/toolbox'),
+            child: const Row(children: [
+              Icon(Icons.handyman_outlined, color: cyan),
+              SizedBox(width: 12),
+              Expanded(child: Text('Toolbox: optional extras that unlock as you rank up.')),
+              Icon(Icons.chevron_right),
+            ])),
+      ],
       const SizedBox(height: 20),
       H('Achievements · $earned of ${ach.length}'),
       const SizedBox(height: 8),

@@ -234,6 +234,22 @@ class _SettingsState extends ConsumerState<SettingsScreen> with WidgetsBindingOb
                     context: context, initialTime: TimeOfDay(hour: v.cueMinute ~/ 60, minute: v.cueMinute % 60));
                 if (t != null) await app.setSetting(K.cueMinute, '${t.hour * 60 + t.minute}');
               }),
+          SwitchListTile(
+              key: const Key('simpleMode'),
+              contentPadding: EdgeInsets.zero,
+              title: const Text('Simple mode'),
+              subtitle: const Text('Hide everything outside the core app: Start, timer, proof, streaks, plan.',
+                  style: TextStyle(color: dim, fontSize: 12)),
+              value: v.simpleMode,
+              onChanged: (x) => app.setSetting(K.simpleMode, x ? '1' : '0')),
+          if (!v.simpleMode)
+            ListTile(
+                key: const Key('openFeatures'),
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Features'),
+                subtitle: const Text('Every built feature with its own switch.', style: TextStyle(color: dim, fontSize: 12)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push('/features')),
           const SizedBox(height: 16),
           const H('Force stack'),
           const Padding(

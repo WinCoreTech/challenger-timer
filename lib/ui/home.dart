@@ -71,15 +71,23 @@ class HomeScreen extends ConsumerWidget {
                     key: const Key('start'),
                     style: FilledButton.styleFrom(shape: const CircleBorder(), padding: EdgeInsets.zero),
                     onPressed: () async {
+                      if (active == null && v.on(9) && v.kv['ritual'] == '1') return context.push<void>('/ritual');
                       if (active == null) await app.startSession();
                       if (context.mounted) context.go('/timer');
                     },
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
                       Text(active == null ? 'START' : 'RUNNING',
                           style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900, letterSpacing: 3)),
-                      Text(active == null ? '2 MINUTES. THAT IS THE WHOLE JOB.' : 'TAP TO SEE THE TIMER',
+                      Text(active != null ? 'TAP TO SEE THE TIMER' : v.badDay ? '1 MINUTE. ROUGH-DAY RULES.' : '2 MINUTES. THAT IS THE WHOLE JOB.',
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),
                     ])))),
+        if (v.on(23))
+          Padding(
+              padding: const EdgeInsets.only(top: 14),
+              child: Column(children: [
+                Big('${v.starts}', size: 64, key: const Key('startCount')),
+                const H('Times started', size: 10),
+              ])),
         const SizedBox(height: 28),
         if (v.pendingProof != null && active == null) ...[
           Panel(

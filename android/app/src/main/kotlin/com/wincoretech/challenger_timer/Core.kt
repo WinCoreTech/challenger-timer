@@ -38,7 +38,7 @@ object Core {
     const val N_ALARM = 3
     const val N_DONE = 4
     const val N_REPORT = 5
-    val KINDS = listOf("cue", "buddy", "rescue", "dayroll", "timer_done")
+    val KINDS = listOf("cue", "buddy", "rescue", "dayroll", "timer_done", "rem")
 
     fun prefs(c: Context): SharedPreferences = c.getSharedPreferences("pct", Context.MODE_PRIVATE)
 
@@ -139,7 +139,7 @@ object Core {
     fun scheduleAll(c: Context) {
         val p = prefs(c)
         if (!p.getBoolean("onboarded", false)) {
-            listOf("cue", "buddy", "rescue", "dayroll").forEach { cancel(c, it) }
+            listOf("cue", "buddy", "rescue", "dayroll", "rem").forEach { cancel(c, it) }
             return
         }
         val cueToday = at(p.getInt("cueMinute", 540), 0)
@@ -148,6 +148,8 @@ object Core {
         if (switchOn(c, "buddy")) schedule(c, "buddy", next(20 * 60), false) else cancel(c, "buddy")
         if (switchOn(c, "rescue")) schedule(c, "rescue", next(21 * 60), true) else cancel(c, "rescue")
         schedule(c, "dayroll", next(p.getInt("dayEndHour", 3) * 60 + 1), false)
+        Extras.scheduleNext(c)
+        Extras.updateWidgets(c)
     }
 
     // ---- timer -----------------------------------------------------------
@@ -159,6 +161,7 @@ object Core {
         } catch (e: Exception) {
             // The alarm above still ends the session on time.
         }
+        ensureBlocker(c)
     }
 
     fun stopTimer(c: Context) {
@@ -184,6 +187,7 @@ object Core {
             .setContentIntent(activityPending(c, Intent.ACTION_MAIN, "done", 2))
             .build()
         notify(c, N_DONE, n)
+        Extras.updateWidgets(c)
     }
 
     fun notify(c: Context, id: Int, n: Notification) {
@@ -219,9 +223,27 @@ object Core {
 
     fun blockedApps(c: Context): Set<String> = prefs(c).getStringSet("blockedApps", emptySet()) ?: emptySet()
 
-    fun shouldBlock(c: Context): Boolean =
-        prefs(c).getBoolean("onboarded", false) && switchOn(c, "block") && blockedApps(c).isNotEmpty() &&
-            !workedToday(c) && Settings.canDrawOverlays(c) && hasUsageAccess(c)
+    fun timerRunning(c: Context): Boolean = prefs(c).getLong("timerEnd", 0L) > System.currentTimeMillis()
+
+    /** Blocking during a running session (feature 201). */
+    fun sessionBlock(c: Context): Boolean = prefs(c).getBoolean("blockInSession", false) && timerRunning(c)
+
+    /** Earn your phone: until today's first session is finished. */
+    fun earnBlock(c: Context): Boolean = switchOn(c, "block") && !workedToday(c)
+
+    fun shouldBlock(c: Context): Boolean {
+        val p = prefs(c)
+        if (!p.getBoolean("onboarded", false) || !Settings.canDrawOverlays(c) || !hasUsageAccess(c)) return false
+        if (blockedApps(c).isEmpty() && !p.getBoolean("blockAll", false)) return false
+        return earnBlock(c) || sessionBlock(c)
+    }
+
+    /** Is [pkg] blocked right now? Block-all mode (feature 22) spares an allow-list. */
+    fun isBlocked(c: Context, pkg: String, allow: Set<String>): Boolean {
+        if (pkg.isEmpty() || pkg == c.packageName) return false
+        if (blockedApps(c).contains(pkg)) return true
+        return prefs(c).getBoolean("blockAll", false) && earnBlock(c) && !allow.contains(pkg)
+    }
 
     fun ensureBlocker(c: Context) {
         if (!shouldBlock(c)) return

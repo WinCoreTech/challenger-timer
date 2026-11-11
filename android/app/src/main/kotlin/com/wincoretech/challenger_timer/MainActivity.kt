@@ -2,7 +2,10 @@ package com.wincoretech.challenger_timer
 
 import android.app.AlarmManager
 import android.app.NotificationManager
+import android.app.Activity
 import android.content.Intent
+import android.content.IntentFilter
+import android.speech.RecognizerIntent
 import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -21,6 +24,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
     private var pendingPermission: MethodChannel.Result? = null
+    private var pendingSpeech: MethodChannel.Result? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -33,6 +37,24 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         handle(intent)
+        if (!powerRegistered) {
+            // Feature 21: only possible while the app process is alive.
+            applicationContext.registerReceiver(PowerReceiver(), IntentFilter(Intent.ACTION_POWER_CONNECTED))
+            powerRegistered = true
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 78) {
+            val heard = if (resultCode == Activity.RESULT_OK) data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull() else null
+            pendingSpeech?.success(heard)
+            pendingSpeech = null
+        }
+    }
+
+    companion object {
+        private var powerRegistered = false
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -46,6 +68,7 @@ class MainActivity : FlutterActivity() {
     private fun handle(intent: Intent?) {
         when (intent?.action) {
             Core.ACTION_START2 -> Core.nativeStart(this, intent.getStringExtra("source") ?: "alarm")
+            Intent.ACTION_VIEW -> if (intent.data?.scheme == "challengertimer") Core.nativeStart(this, "tag")
             Core.ACTION_REPORT -> Core.prefs(this).edit().putString("pendingAction", "report").apply()
         }
         intent?.action = Intent.ACTION_MAIN
@@ -92,6 +115,23 @@ class MainActivity : FlutterActivity() {
                 "sendSms" -> result.success(
                     Core.sendSms(this, call.argument<String>("phone") ?: "", call.argument<String>("text") ?: "")
                 )
+                "openUrl" -> {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(call.arguments as String)))
+                    result.success(null)
+                }
+                "listen" -> {
+                    pendingSpeech?.success(null)
+                    pendingSpeech = result
+                    val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                        .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+                        .putExtra(RecognizerIntent.EXTRA_PROMPT, "Say: start five minutes on DSA")
+                    try {
+                        startActivityForResult(i, 78)
+                    } catch (e: Exception) {
+                        pendingSpeech = null
+                        result.success(null)
+                    }
+                }
                 "tone" -> {
                     tone()
                     result.success(null)
@@ -126,6 +166,21 @@ class MainActivity : FlutterActivity() {
             e.putBoolean("$key.on", s?.get("on") == true)
             e.putLong("$key.offAt", num(s?.get("offAt")))
         }
+        e.putInt("streak", num(m["streak"]).toInt())
+        e.putBoolean("widgetSinceZero", m["widgetSinceZero"] == true)
+        e.putBoolean("chargeCue", m["chargeCue"] == true)
+        e.putBoolean("blockAll", m["blockAll"] == true)
+        e.putBoolean("blockInSession", m["blockInSession"] == true)
+        e.putStringSet("allowApps", (m["allowApps"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet())
+        e.putInt("quietFrom", num(m["quietFrom"]).toInt())
+        e.putInt("quietTo", num(m["quietTo"]).toInt())
+        e.putInt("remCap", if (m["remCap"] == null) 3 else num(m["remCap"]).toInt())
+        val rem = org.json.JSONArray()
+        for (r in (m["reminders"] as? List<*>) ?: emptyList<Any>()) {
+            val map = r as? Map<*, *> ?: continue
+            rem.put(org.json.JSONObject(map.mapKeys { it.key.toString() }))
+        }
+        e.putString("reminders", rem.toString())
         e.apply()
         Core.scheduleAll(this)
         Core.ensureBlocker(this)

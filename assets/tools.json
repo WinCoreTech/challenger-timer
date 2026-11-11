@@ -1,0 +1,21 @@
+[
+{"n":3,"kind":"stat","title":"Just-open streak","stat":"openStreak","intro":"Opening the app before your chosen hour is a streak of its own.","setKey":"openBy","setLabel":"Open before (hour)","setOptions":[7,8,9,10,11,12]},
+{"n":6,"kind":"log","title":"If-then plans","intro":"Decide in advance. The app reminds you at the time you pick, with a Start button.","prompts":["When (the cue)","Then I will"],"time":true},
+{"n":7,"kind":"log","title":"Habit stacking","intro":"Attach a session to something you already do every day, like morning tea or the college bus.","prompts":["After I (existing routine)","I will (tiny action)"]},
+{"n":8,"kind":"single","title":"Temptation bundling","intro":"Save a link to a favourite playlist. The play button shows only on the running timer, so the music belongs to work.","prompts":["Playlist link (https://...)"]},
+{"n":9,"kind":"card","title":"Start ritual","body":"Sound, one breath, tap."},
+{"n":12,"kind":"session","title":"Ugly first draft","intro":"Perfectionism cannot survive this goal.","minutes":5,"task":"Make it bad on purpose. Ugly counts."},
+{"n":13,"kind":"session","title":"Setup-only session","intro":"No work required. Only get ready to work.","minutes":2,"task":"Open the files and clear the desk. Nothing else."},
+{"n":14,"kind":"special","title":"Dice start","intro":"Cannot choose? Let the dice pick among up to three of your tasks."},
+{"n":15,"kind":"dayflag","title":"Bad-day bar","intro":"Rough day? Drop today's door to one minute. One minute still counts as a full win and keeps every streak.","setKey":"badDay","setLabel":"Today is a rough day: 1 minute is enough"},
+{"n":16,"kind":"card","title":"Home-screen widget","body":"Long-press your home screen, choose Widgets, find Challenger Timer and drop \"Start 2 min\" anywhere. It shows your streak and starts a session without opening the app. It turns from red to green once you have worked today."},
+{"n":17,"kind":"card","title":"Quick-settings tile","body":"Pull down the notification shade twice, tap the pencil, and drag \"Start 2 min\" into your tiles. One tap there starts a session."},
+{"n":18,"kind":"card","title":"Voice start","body":"On the Timer tab, tap the microphone and say \"Start five minutes on DSA\". It understands a number of minutes and a project name. Needs the phone's speech recogniser."},
+{"n":19,"kind":"card","title":"NFC desk tag","body":"Write the link challengertimer://start to an NFC sticker with any free NFC writer app, and stick it on your desk. Tapping the phone on it starts a 2-minute session."},
+{"n":20,"kind":"session","title":"Arrived at my study place","intro":"Automatic location detection is not built. This is the manual version: tap when you sit down at the library, lab or desk.","minutes":2,"task":"I just sat down. Open the first thing."},
+{"n":21,"kind":"toggle","title":"Charger cue","intro":"Plugging the phone in offers a start. Android only allows this while the app is still alive in the background, so it will not fire if the app was closed long ago.","setKey":"chargeCue","setLabel":"Offer a start when I plug in"},
+{"n":22,"kind":"toggle","title":"Morning first win","intro":"Blocks every app (except phone, launcher and settings) until today's first session is finished. Needs Earn your phone switched on in Settings.","setKey":"blockAll","setLabel":"Block all apps until the first session"},
+{"n":23,"kind":"stat","title":"Start count","stat":"startCount","intro":"Also shown as the biggest number on Home."},
+{"n":24,"kind":"stat","title":"Starting-delay meter","stat":"startDelay"},
+{"n":25,"kind":"stat","title":"No-zero day","stat":"noZero"}
+]

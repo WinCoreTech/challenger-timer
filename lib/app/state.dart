@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
+import '../core/flags.dart';
+import '../core/reminders.dart';
 import '../core/rules.dart';
+import '../core/tools.dart';
 import '../data/store.dart';
 import 'native.dart';
 
@@ -23,6 +26,8 @@ final storeProvider = Provider<Store>((ref) => throw UnimplementedError('overrid
 final nativeProvider = Provider<Native>((ref) => FakeNative());
 final clockProvider = Provider<Clock>((ref) => systemClock);
 final ranksProvider = Provider<List<Rank>>((ref) => const [Rank('Professional Postponer', 0, '')]);
+final catalogProvider = Provider<Catalog>((ref) => Catalog.empty);
+final toolsProvider = Provider<Map<int, ToolDef>>((ref) => const {});
 final achievementsProvider = Provider<List<Achievement>>((ref) => const []);
 
 /// Bumped by a timer so time-dependent views (bonus drain, locks) refresh.
@@ -39,7 +44,8 @@ final viewProvider = Provider<DayView>((ref) {
   ref.watch(tickProvider);
   final d = ref.watch(appProvider);
   return DayView(
-      events: d.events, recs: d.recs, kv: d.kv, now: ref.watch(clockProvider)(), ranks: ref.watch(ranksProvider));
+      events: d.events, recs: d.recs, kv: d.kv, now: ref.watch(clockProvider)(), ranks: ref.watch(ranksProvider),
+      catalog: ref.watch(catalogProvider));
 });
 
 class App extends Notifier<AppData> {
@@ -50,7 +56,8 @@ class App extends Notifier<AppData> {
   Native get native => ref.read(nativeProvider);
   Moment get _now => ref.read(clockProvider)();
   DayView get view => DayView(
-      events: state.events, recs: state.recs, kv: state.kv, now: _now, ranks: ref.read(ranksProvider));
+      events: state.events, recs: state.recs, kv: state.kv, now: _now, ranks: ref.read(ranksProvider),
+      catalog: ref.read(catalogProvider));
   int _seq = 0;
   String newId() => '${_now.ms.toRadixString(36)}-${_seq++}';
 
@@ -96,11 +103,12 @@ class App extends Notifier<AppData> {
 
   // ---- sessions
   Future<void> startSession(
-      {int minutes = 2, String? projectId, String? title, String source = 'app', int? startMs}) async {
+      {int? minutes, String? projectId, String? title, String source = 'app', int? startMs}) async {
     final v = view;
     if (v.active != null) return;
     final now = _now;
     final begin = startMs ?? now.ms;
+    minutes ??= v.doorMinutes;
     final pid = projectId ?? state.kv[K.lastProject];
     final s = ActiveSession(newId(), begin, minutes, pid, title ?? v.nextStep, source);
     await setKv(K.active, s.encode());
@@ -193,6 +201,13 @@ class App extends Notifier<AppData> {
     return true;
   }
 
+  // ---- data-driven tools
+  Future<void> toolTick(ToolDef t, int item) async {
+    if (view.checked(t.n, view.today).contains(item)) return;
+    await log(Ev.tool, {'n': t.n, 'item': item});
+    if (view.checked(t.n, view.today).length >= t.items.length) celebrate();
+  }
+
   // ---- delayed off switch
   Future<void> switchOn(String key) => _setSwitch(key, view.sw(key).turnOn());
   Future<void> switchRequestOff(String key) => _setSwitch(key, view.sw(key).requestOff(_now.ms));
@@ -249,6 +264,15 @@ class App extends Notifier<AppData> {
       'buddy': sw(K.swBuddy),
       'rescue': sw(K.swRescue),
       'onboarded': v.onboarded,
+      'streak': v.master.current,
+      'chargeCue': v.on(21) && v.kv['chargeCue'] == '1',
+      'blockAll': v.on(22) && v.kv['blockAll'] == '1',
+      'blockInSession': v.on(201) && v.kv['blockInSession'] == '1',
+      'allowApps': v.kv['allowApps'] == null ? const <String>[] : (jsonDecode(v.kv['allowApps']!) as List).cast<String>(),
+      'quietFrom': v.on(455) ? v.settingInt('quietFrom', 0) : 0,
+      'quietTo': v.on(455) ? v.settingInt('quietTo', 0) : 0,
+      'remCap': v.on(454) ? v.settingInt('remCap', 3) : 99,
+      'reminders': [for (final r in buildReminders(v, ref.read(toolsProvider))) r.toJson()],
     });
   }
 

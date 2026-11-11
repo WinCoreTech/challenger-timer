@@ -1,0 +1,26 @@
+# number|status|rank (empty = by section)|note
+1|done||Home opens on START; one tap starts a session. Widget test.
+2|done||Default session is 2 minutes and counts as a full win. Tested.
+3|done|0|Streak of days the app was opened before a chosen hour. Tested.
+4|done|0|5-4-3-2-1 button on the Timer tab, then auto-start. Widget test.
+5|done||One card on Home. Tested.
+6|partial|0|If-then entries with a daily reminder time. Reminder delivery is native: device.
+7|done|0|"After I..., I will..." entries. No reminder, the existing routine is the cue.
+8|partial|0|Saved playlist link shown only on the running timer. Android cannot stop the playlist being played at other times.
+9|done|0|Tone, one 8-second breath, tap. Optional before every Home start (off by default so Home stays one tap).
+10|done|0|Covered by the next-step card: Home shows the last parking note.
+11|done||Parking note at proof time becomes the next step. Tested.
+12|done|0|Preset session with the goal "make it bad on purpose".
+13|done|0|Preset 2-minute session: open files, clear desk.
+14|done|0|Rolls among up to three open tasks, then one tap to start. Tested.
+15|done|0|One-day switch that drops the door to 1 minute. Tested.
+16|partial|0|Widget with streak and start button. Built in Kotlin: device.
+17|partial|0|Quick-settings tile. Built in Kotlin: device.
+18|partial|0|Phrase parser tested; listening uses the phone's speech recogniser: device.
+19|partial|0|Link challengertimer://start starts a session; an NFC tag holding it works. Writing the tag needs a separate NFC writer app: device.
+20|partial|0|Manual "I arrived" start only. No geofence: it would need background-location permission.
+21|blocked|0|Android 8+ does not deliver charger events to closed apps. Closest version: works while the app process is alive: device.
+22|partial|0|Block-all mode for the app blocker with phone, launcher and settings always spared: device.
+23|done|0|Lifetime starts as the biggest number on Home (hidden in Simple mode).
+24|done|0|Average gap between cue time and first start, last 14 days. Tested.
+25|done|0|Any logged action makes the day non-zero. Tested.

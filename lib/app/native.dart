@@ -18,6 +18,11 @@ abstract class Native {
   Future<bool> sendSms(String phone, String text);
   Future<void> tone();
 
+  Future<void> openUrl(String url);
+
+  /// Speech to text through the phone's recogniser. Null if nothing was heard.
+  Future<String?> listen();
+
   /// Short vibration: light on start, heavy on completion.
   void haptic({bool heavy = false});
   set onAction(void Function() callback);
@@ -72,6 +77,10 @@ class ChannelNative implements Native {
       await _call<bool>('sendSms', {'phone': phone, 'text': text}) ?? false;
   @override
   Future<void> tone() => _call<void>('tone');
+  @override
+  Future<void> openUrl(String url) => _call<void>('openUrl', url);
+  @override
+  Future<String?> listen() => _call<String>('listen');
   @override
   void haptic({bool heavy = false}) =>
       heavy ? HapticFeedback.heavyImpact() : HapticFeedback.mediumImpact();
@@ -128,6 +137,11 @@ class FakeNative implements Native {
 
   @override
   Future<void> tone() async => calls.add('tone');
+  String? heard;
+  @override
+  Future<void> openUrl(String url) async => calls.add('url:$url');
+  @override
+  Future<String?> listen() async => heard;
   @override
   void haptic({bool heavy = false}) => calls.add(heavy ? 'haptic:heavy' : 'haptic');
 }

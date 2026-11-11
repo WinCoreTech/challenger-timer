@@ -4,7 +4,9 @@ import 'package:challenger_timer/app/native.dart';
 import 'package:challenger_timer/app/state.dart';
 import 'package:challenger_timer/core/day.dart';
 import 'package:challenger_timer/core/engine.dart';
+import 'package:challenger_timer/core/flags.dart';
 import 'package:challenger_timer/core/rules.dart';
+import 'package:challenger_timer/core/tools.dart';
 import 'package:challenger_timer/data/store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,6 +27,8 @@ class TestClock {
 }
 
 final ranks = parseRanks(File('assets/ranks.json').readAsStringSync());
+final catalog = Catalog.parse(File('assets/features.json').readAsStringSync());
+final tools = parseTools(File('assets/tools.json').readAsStringSync());
 final achievements = parseAchievements(File('assets/achievements.json').readAsStringSync());
 
 class Rig {
@@ -37,6 +41,8 @@ class Rig {
       clockProvider.overrideWithValue(this.clock.call),
       ranksProvider.overrideWithValue(ranks),
       achievementsProvider.overrideWithValue(achievements),
+      catalogProvider.overrideWithValue(catalog),
+      toolsProvider.overrideWithValue(tools),
     ]);
   }
   final MemoryStore store;
