@@ -153,6 +153,8 @@ void main() {
     await t.tap(find.text('PUSH 2 DAYS'));
     await t.pumpAndSettle();
     expect(r.v.rec(rec.id)!.integer('postponed'), 0, reason: 'an empty reason is refused');
+    await t.ensureVisible(find.byKey(const Key('postpone')));
+    await t.pumpAndSettle();
     await t.tap(find.byKey(const Key('postpone')));
     await t.pumpAndSettle();
     await t.enterText(find.byType(TextField), 'fest week');
@@ -160,7 +162,10 @@ void main() {
     await t.pumpAndSettle();
     expect(r.v.rec(rec.id)!.integer('postponed'), 1);
     await r.app.postponeTask(r.v.rec(rec.id)!, 2, 'again');
-    await t.pump();
+    await t.pumpAndSettle();
+    await t.scrollUntilVisible(find.byKey(const Key('postpone')), 300, scrollable: find.byType(Scrollable).first);
+    await t.ensureVisible(find.byKey(const Key('postpone')));
+    await t.pumpAndSettle();
     await t.tap(find.byKey(const Key('postpone')));
     await t.pumpAndSettle();
     expect(find.text('SPLIT IT IN TWO SMALLER TASKS'), findsOneWidget);
