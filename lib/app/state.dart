@@ -338,6 +338,12 @@ class App extends Notifier<AppData> {
     await log(Ev.tool, {'n': 120, 'taskId': task.id, 'days': days, 'reason': reason});
   }
 
+  /// Features 192 and 193: move a task to tomorrow in one tap, counted.
+  Future<void> moveToTomorrow(Rec task) async {
+    await putRec(task.copy({'due': view.today + 1, 'moved': task.integer('moved') + 1}));
+    await log(Ev.tool, {'n': 192, 'taskId': task.id});
+  }
+
   /// Returns false when the plan is locked.
   Future<bool> setPlan(String task, int cueMinute) async {
     final v = view;

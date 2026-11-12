@@ -8,6 +8,7 @@ import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'planning.dart';
 import 'projects.dart';
 import 'tools.dart';
 import 'streak_engine.dart';
@@ -136,6 +137,50 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
     ];
 
 final Map<String, Stat> stats = {
+  'confirm': (v) {
+    final ok = v.type(Ev.tool).any((e) => e.get<int>('n') == 177 && e.day == v.today);
+    return [ok ? 'Confirmed' : 'Not yet', 'First task today: ${v.nextStep}', 'Alarm at ${hhmm(v.todayPlan?.cueMinute ?? v.cueMinute)}.'];
+  },
+  'capacity': (v) {
+    final cap = dailyCapacity(v);
+    final asked = deadlines(v).fold(0, (a, t) => a + t.quota);
+    return [
+      '$cap min a day',
+      'is your real pace over the last 14 days (never shown below 25)',
+      'Your deadlines ask for $asked minutes today.',
+      asked > cap ? 'That is more than your history supports. Cut scope or start earlier, rather than promise more.' : 'That fits.',
+    ];
+  },
+  'slots': (v) {
+    final s = freeSlots(v, weekdayOf(v.today));
+    return [
+      '${s.length} free slots today',
+      for (final (a, b) in s) '${hhmm(a)} to ${hhmm(b)} (${b - a} min)',
+      'Leave the last one empty as a buffer for overruns.',
+      'Add your classes in the Timetable tool so the gaps are real.',
+    ];
+  },
+  'peak': (v) {
+    final p = peakHour(v);
+    return p == null
+        ? ['No data yet', 'After a few sessions this shows the hour you get the most done.']
+        : ['${two(p)}:00', 'is the hour you have done the most work in', 'Put the hardest task there. Keep easy admin for the slow hours.'];
+  },
+  'targets': (v) {
+    final t = weeklyTargets(v);
+    return t.isEmpty
+        ? ['No targets', 'Set sessions per week for a project in the Weekly targets tool.']
+        : ['${t.where((x) => x.$2 >= x.$3).length} of ${t.length} hit', for (final (n, have, need) in t) '$n: $have of $need sessions this week'];
+  },
+  'scoreboard': (v) {
+    final s = scoreboard(v);
+    return ['${s['Minutes']} min', 'of work this week', for (final e in s.entries) '${e.key}: ${e.value}'];
+  },
+  'planActual': (v) => [
+        'Last 7 days',
+        for (final (d, p, a) in planVsActual(v))
+          '${dayLabel(d)}: planned ${p == null ? '-' : hhmm(p)}, started ${a == null ? '-' : hhmm(a)}',
+      ],
   'estRatio': (v) {
     final r = estimateRatio(v);
     return [

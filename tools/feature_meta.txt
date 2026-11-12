@@ -176,3 +176,28 @@
 173|done|2|A task can wait for another; blocked tasks show a lock and are skipped as next action. Tested.
 174|done|2|Daily or weekly repeat: finishing creates the next copy. Tested.
 175|done|2|Three-question retro entries.
+176|done|2|Three-item evening checklist with its own completion streak.
+177|done|2|One tap confirms today's plan. Tested.
+178|done|2|Blocks with a time and a reminder. A list, not a drawn timeline. Reminder delivery untested on device.
+179|partial|2|Classes are typed in by hand (name, day, from, to). No file or calendar import.
+180|done|2|Gaps of 30+ minutes between classes from 08:00 to 21:00. Tested.
+181|done|2|Shows your 14-day pace against what deadlines ask today. Tested.
+182|done|2|Three dated fields.
+183|done|2|One theme per weekday, saved once.
+184|done|2|Four guided questions as dated entries.
+185|done|2|Sessions-per-week target per project with progress. Tested.
+186|done|2|Four WOOP prompts.
+187|done|2|Two pre-mortem prompts.
+188|done||Tomorrow's first task locks at 10 pm. Tested.
+189|done|2|Four-item checklist ending in "shutdown complete".
+190|partial|2|The free-slot finder tells you to keep the last slot empty. There is no separate buffer block object.
+191|done|2|Planned cue time against real first start for the last 7 days. Tested.
+192|done|2|"Move to tomorrow" button on a task; nothing carries over silently. Tested.
+193|done|2|Tasks moved three or more times are marked on the Plan tab. Tested.
+194|done|2|Checklist.
+195|done|2|Shows your most productive hour and says to put hard tasks there. Tested.
+196|done|2|Checklist.
+197|done|2|Checklist.
+198|done|2|Three prompts per goal.
+199|done|2|Explainer card; the app itself only counts inputs.
+200|done|2|One screen with the week's numbers. Tested.

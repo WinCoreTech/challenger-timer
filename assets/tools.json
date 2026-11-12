@@ -720,5 +720,189 @@
 "What was hard?",
 "What would I do differently?"
 ]
+},
+{
+"n": 176,
+"kind": "check",
+"title": "Evening plan",
+"intro": "Three minutes tonight saves the argument tomorrow.",
+"items": [
+"Set tomorrow's first task on the Plan tab",
+"Pick tomorrow's one big thing",
+"Put what I need on the desk"
+]
+},
+{
+"n": 177,
+"kind": "stat",
+"title": "Morning confirm",
+"stat": "confirm",
+"action": "Yes, this is the plan"
+},
+{
+"n": 178,
+"kind": "log",
+"title": "Time blocks",
+"intro": "Put a task on the clock. You get a reminder with a Start button at that time.",
+"prompts": [
+"What goes in this block"
+],
+"time": true
+},
+{
+"n": 179,
+"kind": "special",
+"title": "Timetable"
+},
+{
+"n": 180,
+"kind": "stat",
+"title": "Free-slot finder",
+"stat": "slots"
+},
+{
+"n": 181,
+"kind": "stat",
+"title": "Realistic capacity",
+"stat": "capacity"
+},
+{
+"n": 182,
+"kind": "log",
+"title": "Big rocks first",
+"intro": "The three that matter go in before anything else.",
+"prompts": [
+"Rock 1",
+"Rock 2",
+"Rock 3"
+]
+},
+{
+"n": 183,
+"kind": "single",
+"title": "Theme days",
+"intro": "Give days a theme, for example Saturday is project day.",
+"prompts": [
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday",
+"Saturday",
+"Sunday"
+]
+},
+{
+"n": 184,
+"kind": "log",
+"title": "Weekly review",
+"intro": "Ten minutes on Sunday.",
+"prompts": [
+"What went well this week?",
+"What got in the way?",
+"What will I change?",
+"Next week's one focus"
+]
+},
+{
+"n": 185,
+"kind": "special",
+"title": "Weekly targets",
+"intro": "Sessions per project per week."
+},
+{
+"n": 186,
+"kind": "log",
+"title": "WOOP",
+"intro": "Wish, outcome, obstacle, plan. Picturing the obstacle is what makes it work.",
+"prompts": [
+"Wish",
+"Best outcome",
+"Main obstacle inside me",
+"If that obstacle shows up, then I will"
+]
+},
+{
+"n": 187,
+"kind": "log",
+"title": "Obstacle pre-mortem",
+"intro": "Tomorrow has not gone wrong yet. Guess how it would.",
+"prompts": [
+"What will stop me tomorrow?",
+"What I will do about it now"
+]
+},
+{
+"n": 189,
+"kind": "check",
+"title": "Shutdown ritual",
+"intro": "End the work day on purpose.",
+"items": [
+"Wrote the parking note",
+"Checked tomorrow's first task",
+"Cleared the desk",
+"Said it: shutdown complete"
+]
+},
+{
+"n": 191,
+"kind": "stat",
+"title": "Plan versus actual",
+"stat": "planActual"
+},
+{
+"n": 194,
+"kind": "list",
+"title": "Not-to-do list",
+"prompts": [
+"Something I will stop doing"
+]
+},
+{
+"n": 195,
+"kind": "stat",
+"title": "Energy matching",
+"stat": "peak"
+},
+{
+"n": 196,
+"kind": "list",
+"title": "Commute list",
+"intro": "Small tasks for the bus.",
+"prompts": [
+"A task I can do on the bus"
+]
+},
+{
+"n": 197,
+"kind": "list",
+"title": "Dead-time list",
+"intro": "Five-minute tasks for gaps.",
+"prompts": [
+"A five-minute task"
+]
+},
+{
+"n": 198,
+"kind": "log",
+"title": "12-week goals",
+"intro": "A quarter is short enough to feel. A year is not.",
+"prompts": [
+"Goal for the next 12 weeks",
+"How I will know it is done",
+"Weekly action that gets me there"
+]
+},
+{
+"n": 199,
+"kind": "card",
+"title": "Inputs over outcomes",
+"body": "You cannot do \"get good marks\". You can do \"one session\". This app counts only the inputs you control: starts, sessions, proof. Marks follow those with a delay."
+},
+{
+"n": 200,
+"kind": "stat",
+"title": "Weekly scoreboard",
+"stat": "scoreboard"
 }
 ]

@@ -16,6 +16,7 @@ import '../core/deadlines.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/planning.dart';
 import '../core/projects.dart';
 import '../core/tools.dart';
 import '../core/vault.dart';
@@ -187,7 +188,7 @@ Widget specialTool(int n, DayView v) => switch (n) {
       59 || 60 => ModeTool(n),
       70 => const GiftTool(),
       74 => const ArchiveTool(),
-      153 || 154 || 159 || 168 => ProjectTool(n),
+      153 || 154 || 159 || 168 || 179 || 185 => ProjectTool(n),
       131 || 134 || 135 || 136 || 138 || 139 || 142 || 143 || 144 || 146 || 147 || 148 || 149 => VaultTool(n),
       _ => const Text('Not available.'),
     };
@@ -667,6 +668,8 @@ class TaskScreen extends ConsumerWidget {
           if (m.hasDue)
             Wrap(spacing: 8, children: [
               OutlinedButton(key: const Key('postpone'), onPressed: postpone, child: const Text('POSTPONE')),
+              if (v.on(192))
+                OutlinedButton(key: const Key('moveTomorrow'), onPressed: () => app.moveToTomorrow(t), child: const Text('MOVE TO TOMORROW')),
               if (v.on(123))
                 OutlinedButton(
                     key: const Key('shareDue'),
@@ -863,6 +866,7 @@ class ProjectTool extends ConsumerStatefulWidget {
 class _ProjectToolState extends ConsumerState<ProjectTool> {
   final c = TextEditingController();
   String? pid;
+  int wd = 1, from = 9 * 60, to = 10 * 60;
   @override
   void dispose() {
     c.dispose();
@@ -935,6 +939,56 @@ class _ProjectToolState extends ConsumerState<ProjectTool> {
             for (final t in open.where((t) => quadrant(t) == q))
               InkWell(onTap: () => context.push('/task/${t.id}'), child: Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Text('• ${t.str('title')}'))),
           ],
+        ]);
+      case 185:
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          for (final p in v.projects) ...[
+            H(p.str('name')),
+            Wrap(spacing: 6, children: [
+              for (final n in const [0, 3, 5, 7, 10])
+                ChoiceChip(
+                    key: Key('target-${p.id}-$n'),
+                    label: Text(n == 0 ? 'NONE' : '$n A WEEK'),
+                    selected: p.integer('weekly') == n,
+                    onSelected: (_) => app.putRec(p.copy({'weekly': n}))),
+            ]),
+            const SizedBox(height: 10),
+          ],
+          for (final (n, have, need) in weeklyTargets(v)) Text('$n: $have of $need sessions this week'),
+        ]);
+      case 179:
+        const names = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          const Text('There is no file import. Add each class once: name, day, start and end.', style: TextStyle(color: dim)),
+          const SizedBox(height: 8),
+          TextField(key: const Key('className'), controller: c, decoration: const InputDecoration(hintText: 'Class name')),
+          Wrap(spacing: 6, children: [
+            for (var d = 1; d <= 7; d++) ChoiceChip(key: Key('wd-$d'), label: Text(names[d - 1]), selected: wd == d, onSelected: (_) => setState(() => wd = d)),
+          ]),
+          Wrap(spacing: 8, crossAxisAlignment: WrapCrossAlignment.center, children: [
+            for (final (label, cur, set) in [('FROM', from, (int x) => from = x), ('TO', to, (int x) => to = x)])
+              TextButton(
+                  onPressed: () async {
+                    final t = await showTimePicker(context: context, initialTime: TimeOfDay(hour: cur ~/ 60, minute: cur % 60));
+                    if (t != null) setState(() => set(t.hour * 60 + t.minute));
+                  },
+                  child: Text('$label ${hhmm(cur)}')),
+            FilledButton(
+                key: const Key('classAdd'),
+                onPressed: () async {
+                  if (c.text.trim().isEmpty || to <= from) return;
+                  await app.addRec('class', {'name': c.text.trim(), 'wd': wd, 'from': from, 'to': to});
+                  c.clear();
+                },
+                child: const Text('ADD')),
+          ]),
+          for (var d = 1; d <= 7; d++)
+            for (final k in classesOn(v, d))
+              ListTile(
+                  dense: true,
+                  contentPadding: EdgeInsets.zero,
+                  title: Text('${names[d - 1]} ${hhmm(k.integer('from'))} to ${hhmm(k.integer('to'))} · ${k.str('name')}'),
+                  trailing: IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(k.id))),
         ]);
       case 168:
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

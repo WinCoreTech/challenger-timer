@@ -462,7 +462,8 @@ class _PlanState extends ConsumerState<PlanScreen> {
                                 onPressed: () => context.push('/task/${t.id}')),
                             title: Text(
                                 '${v.on(162) && t.flag('frog') ? '🐸 ' : ''}${v.on(173) && blocked(v, t) ? '🔒 ' : ''}${t.str('title')}'
-                                '${v.on(167) && vague(t) ? '  (verb?)' : ''}',
+                                '${v.on(167) && vague(t) ? '  (verb?)' : ''}'
+                                '${v.on(193) && t.integer('moved') >= 3 ? '  (moved ${t.integer('moved')} times)' : ''}',
                                 style: TextStyle(
                                     decoration: t.flag('done') ? TextDecoration.lineThrough : null,
                                     color: t.flag('done') ? dim : null))),

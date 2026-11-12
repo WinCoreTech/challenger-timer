@@ -62,3 +62,6 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
 - Batch 7 (features 151 to 175): why line, breakdown wizard, local task splitter, next action,
   estimate correction, urgent-important matrix, frog flag, WIP limit, dread XP, vague-task
   check, templates, head-start bar, almost-there, open loops, dependencies, recurring tasks.
+- Batch 8 (features 176 to 200): evening plan, morning confirm, time blocks, timetable and
+  free slots, realistic capacity, weekly review and targets, WOOP, shutdown ritual, plan
+  versus actual, move to tomorrow, energy matching, scoreboard, planning lists.
