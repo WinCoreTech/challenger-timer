@@ -6,6 +6,7 @@ import 'dart:math';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'pressure.dart';
 import 'rules.dart';
 
 /// 229: a slow, steady curve. Level 2 at 100 XP, 3 at 400, 4 at 900...
@@ -24,8 +25,10 @@ RankView shownRank(DayView v) {
   final top = v.ranks.last.xp;
   final lap = prestige(v) > 0 ? v.xpTotal % top : v.xpTotal;
   final base = rankFor(lap, v.ranks);
-  final i = (base.index - idleSteps(v)).clamp(0, v.ranks.length - 1);
-  return i == base.index ? base : RankView(i, v.ranks[i], v.ranks[i + 1], 0);
+  // 603: during an intact trial the next rank is worn early.
+  final trial = v.flagOn(603) && rankTrialLive(v) ? 1 : 0;
+  final i = (base.index + trial - idleSteps(v)).clamp(0, v.ranks.length - 1);
+  return i == base.index ? base : RankView(i, v.ranks[i], i + 1 < v.ranks.length ? v.ranks[i + 1] : null, 0);
 }
 
 int _hash(String s) => s.codeUnits.fold(7, (h, c) => (h * 31 + c) & 0x7fffffff);
@@ -67,7 +70,10 @@ int coinsEarned(DayView v) {
   return v.type(Ev.sessionDone).length + full * 5;
 }
 
-int coinsSpent(DayView v) => v.type(Ev.tool).where((e) => e.get<int>('n') == 239).fold(0, (a, e) => a + (e.get<int>('coins') ?? 0));
+int coinsSpent(DayView v) => v
+    .type(Ev.tool)
+    .where((e) => e.get<int>('n') == 239 || e.get<int>('n') == 624)
+    .fold(0, (a, e) => a + (e.get<int>('coins') ?? 0));
 int coins(DayView v) => coinsEarned(v) - coinsSpent(v);
 
 /// 240: rupees saved, at the amount per session you chose.

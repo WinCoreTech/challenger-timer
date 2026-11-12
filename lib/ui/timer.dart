@@ -10,6 +10,7 @@ import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/pressure.dart';
 import '../core/tools.dart';
 import 'photo.dart';
 import 'settings.dart' show askPermission;
@@ -43,6 +44,7 @@ class TimerScreen extends ConsumerStatefulWidget {
 
 class _TimerState extends ConsumerState<TimerScreen> {
   Timer? _t;
+  int _lastPulse = -1;
   int minutes = 2;
   String? projectId;
   String tag = '';
@@ -56,6 +58,15 @@ class _TimerState extends ConsumerState<TimerScreen> {
     super.initState();
     _t = Timer.periodic(const Duration(milliseconds: 250), (_) async {
       if (!mounted) return;
+      final a = ref.read(viewProvider).active;
+      // 693: a soft pulse every ten seconds while a session runs.
+      if (a != null && !a.isBreak && !a.paused && ref.read(viewProvider).on(693) && ref.read(viewProvider).kv['heartbeat'] == '1') {
+        final sec = a.elapsedMs(ref.read(clockProvider)().ms) ~/ 1000;
+        if (sec != _lastPulse && sec % 10 == 0) {
+          _lastPulse = sec;
+          ref.read(nativeProvider).haptic();
+        }
+      }
       if (ref.read(viewProvider).active != null) {
         await ref.read(appProvider.notifier).completeIfDue();
         if (mounted) setState(() {});
@@ -114,6 +125,10 @@ class _TimerState extends ConsumerState<TimerScreen> {
       if (!s.flow) Bar(1 - left / (s.minutes * msPerMinute), height: 6),
       const SizedBox(height: 8),
       Center(child: H(s.flow ? 'Flowtime: stop when focus fades' : '${s.minutes} minute session', size: 12)),
+      if (v.on(676) && (v.on(677) ? s.elapsedMs(now) >= 2 * msPerMinute : true))
+        Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Center(child: Text(hiddenLine(s.sid), key: const Key('hiddenLine'), textAlign: TextAlign.center, style: const TextStyle(color: dim, fontStyle: FontStyle.italic)))),
       if (bodyPrompt(v, s.elapsedMs(now) ~/ msPerMinute) case final String tip)
         Padding(padding: const EdgeInsets.only(top: 10), child: Center(child: Text(tip, key: const Key('bodyPrompt'), style: const TextStyle(color: gold)))),
       const Spacer(),
@@ -149,18 +164,7 @@ class _TimerState extends ConsumerState<TimerScreen> {
           Expanded(
               child: OutlinedButton(
                   key: const Key('stop'),
-                  onPressed: () async {
-                    final early = s.elapsedMs(ref.read(clockProvider)().ms) < 2 * msPerMinute;
-                    final ok = await confirm(
-                        context,
-                        'Stop here?',
-                        early
-                            ? 'Under two minutes will not count as a session. No drama, the timer can keep going.'
-                            : 'You passed two minutes, so this counts as a finished session.',
-                        ok: 'STOP',
-                        cancel: 'KEEP GOING');
-                    if (ok) await app.stopSession();
-                  },
+                  onPressed: () => stopFlow(context, ref, s),
                   child: const Text('STOP'))),
       ]),
     ]);
@@ -597,4 +601,71 @@ class ReceiptScreen extends ConsumerWidget {
                   FilledButton(key: const Key('receiptDone'), onPressed: () => context.go('/'), child: const Text('DONE')),
                 ]))));
   }
+}
+
+
+/// Stopping a session. Past two minutes it simply counts. Before that, the
+/// pressure features may add an honest label (636), a 30-second wait (635),
+/// a typed sentence (634), the hours invested (604) and your reasons (643).
+Future<void> stopFlow(BuildContext context, WidgetRef ref, ActiveSession s) async {
+  final v = ref.read(viewProvider);
+  final app = ref.read(appProvider.notifier);
+  final early = s.elapsedMs(ref.read(clockProvider)().ms) < 2 * msPerMinute;
+  final invested = s.projectId == null
+      ? 0
+      : v.type(Ev.sessionDone).where((e) => e.get<String>('projectId') == s.projectId).fold(0, (a, e) => a + (e.get<num>('minutes') ?? 0).toInt());
+  final why = v.rec(s.projectId)?.str('why') ?? '';
+  final body = [
+    early ? 'Under two minutes will not count as a session. No drama, the timer can keep going.' : 'You passed two minutes, so this counts as a finished session.',
+    if (early && v.on(604) && invested >= 60) 'You have put ${(invested / 60).toStringAsFixed(1)} hours into this project so far.',
+    if (early && v.on(643) && why.isNotEmpty) 'Your reason for it: "$why"',
+  ].join('\n\n');
+  final ok = await confirm(context, 'Stop here?', body,
+      ok: early && v.on(636) ? 'I CHOOSE TO DELAY MY GOAL' : 'STOP', cancel: 'KEEP GOING');
+  if (!ok || !context.mounted) return;
+  if (early && v.on(635)) {
+    final waited = await showDialog<bool>(context: context, barrierDismissible: false, builder: (_) => const _SkipWait()) ?? false;
+    if (!waited || !context.mounted) return;
+  }
+  if (early && v.on(634)) {
+    const sentence = 'I am choosing to skip my work today';
+    final typed = await askText(context, 'Type it to stop', hint: sentence, ok: 'STOP');
+    if (typed == null || typed.trim().toLowerCase() != sentence.toLowerCase()) {
+      if (context.mounted && typed != null) toast(context, 'The sentence has to match. Or keep going: the timer is still running.');
+      return;
+    }
+  }
+  await app.stopSession();
+}
+
+class _SkipWait extends StatefulWidget {
+  const _SkipWait();
+  @override
+  State<_SkipWait> createState() => _SkipWaitState();
+}
+
+class _SkipWaitState extends State<_SkipWait> {
+  int left = 30;
+  Timer? t;
+  @override
+  void initState() {
+    super.initState();
+    t = Timer.periodic(const Duration(seconds: 1), (_) => setState(() => left = left > 0 ? left - 1 : 0));
+  }
+
+  @override
+  void dispose() {
+    t?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+          backgroundColor: panel,
+          title: const H('Thirty seconds first', color: Colors.white, size: 16),
+          content: Text(left > 0 ? 'The timer is still running. $left' : 'Still want to stop?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('KEEP GOING')),
+            FilledButton(key: const Key('skipConfirm'), onPressed: left > 0 ? null : () => Navigator.pop(context, true), child: const Text('STOP')),
+          ]);
 }

@@ -7,6 +7,8 @@ import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/coach.dart';
 import '../core/flags.dart';
+import '../core/pressure.dart';
+import '../core/wellbeing.dart';
 import '../core/reminders.dart';
 import '../core/rules.dart';
 import '../core/tools.dart';
@@ -368,6 +370,32 @@ class App extends Notifier<AppData> {
     if (view.checked(t.n, view.today).length >= t.items.length) celebrate();
   }
 
+  // ---- pressure dial (701): up is instant, down takes 24 hours
+  Future<void> setPressure(int level) async {
+    await setKv('pressure', dialOf(view).set(level, _now.ms).encode());
+    await log(Ev.setting, {'key': 'pressure', 'value': level});
+    await syncNative();
+  }
+
+  Future<void> cancelPressureChange() async {
+    await setKv('pressure', dialOf(view).cancel(_now.ms).encode());
+    await syncNative();
+  }
+
+  /// 638: tells the buddy when a permission the locks depend on was removed.
+  Future<void> permissionGuard() async {
+    final v = view;
+    if (!v.on(638)) return;
+    final st = await native.status();
+    for (final p in const ['usage', 'overlay', 'notifications']) {
+      final had = state.kv['perm.$p'] == '1';
+      if (had && st[p] == false && (state.kv[K.buddyPhone] ?? '').isNotEmpty) {
+        await native.sendSms(state.kv[K.buddyPhone]!, '${v.name.isEmpty ? 'Your buddy' : v.name} switched off a permission that Challenger Timer needs ($p). Worth a kind check-in.');
+      }
+      if (st[p] != null) await setKv('perm.$p', st[p]! ? '1' : '0');
+    }
+  }
+
   // ---- delayed off switch
   Future<void> switchOn(String key) => _setSwitch(key, view.sw(key).turnOn());
   Future<void> switchRequestOff(String key) => _setSwitch(key, view.sw(key).requestOff(_now.ms));
@@ -426,11 +454,20 @@ class App extends Notifier<AppData> {
       'buddy': sw(K.swBuddy),
       'rescue': sw(K.swRescue),
       'onboarded': v.onboarded,
-      'streak': v.master.current,
+      'streak': v.on(646) && v.kv['widgetSinceZero'] == '1' ? daysSinceZero(v) : v.master.current,
       'chargeCue': v.on(21) && v.kv['chargeCue'] == '1',
       'blockAll': v.on(22) && v.kv['blockAll'] == '1',
       'blockInSession': v.on(201) && v.kv['blockInSession'] == '1',
       'allowApps': v.kv['allowApps'] == null ? const <String>[] : (jsonDecode(v.kv['allowApps']!) as List).cast<String>(),
+      'sticky': v.on(697) && v.kv['sticky'] == '1',
+      // 633 never auto-starts inside the protected sleep window.
+      'autoStart': v.on(633) && v.kv['autoStart'] == '1' && !inSleepWindow(v, v.cueMinute),
+      'alarmImage': v.on(630) ? v.kv['alarmImage'] ?? '' : '',
+      'alarmVoice': v.on(629) ? v.kv['alarmVoice'] ?? '' : '',
+      'lockFrom': v.on(637) && v.isOn('sw.ulysses') ? v.settingInt('lockFromHour', 22) * 60 : null,
+      'lockTo': v.on(637) && v.isOn('sw.ulysses') ? v.settingInt('lockToHour', 6) * 60 : null,
+      'vaultUntil': v.on(641) ? v.settingInt('vaultUntil', 0) : 0,
+      'widgetSinceZero': v.on(646) && v.kv['widgetSinceZero'] == '1',
       'unlockFriction': v.on(211) && v.kv['unlockFriction'] == '1',
       'scrollFrom': v.on(212) && v.settingInt('scrollHour', 0) > 0 ? v.settingInt('scrollHour', 0) * 60 : null,
       'quietFrom': v.on(455) ? v.settingInt('quietFrom', 0) : 0,

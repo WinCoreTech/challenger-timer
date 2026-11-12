@@ -599,3 +599,105 @@
 598|done|8|Checklist.
 599|done|8|Dated entries.
 600|done|8|Reminders off for seven days, then a count of days shown up. Tested.
+601|done|8|Firm. Points drain until the first start; XP adjusted from the log. Tested.
+602|done|8|Ice block on Home shrinks with the day. Tested.
+603|done|8|Firm. Three-day trial of the next rank, 100 XP if kept. Tested.
+604|done|8|Hours in the project shown when stopping early. Tested.
+605|done|8|Minutes worked across the current streak. Tested.
+606|done|8|Lists exactly what day end removes. Tested.
+607|partial|8|Month grid with blanks; no collectible card art.
+608|done|8|Plant droops after idle days and recovers on return. Tested.
+609|done|8|Cracks on workshop bricks after idle days.
+610|partial|8|Not built: the app has one theme.
+611|partial|8|Shows what tomorrow holds; nothing extra is removed by a skip.
+612|partial|8|A record only. No money is held.
+613|partial|8|A record only. No money is held.
+614|partial|8|A record only. No money is sent.
+615|partial|8|Firm. Coins show zero after 7 idle days and return with a session, instead of vanishing for good. Tested.
+616|done|8|Firm. First start pays up to 3x, falling hourly from the wake hour. Tested.
+617|partial|8|A list of half-done tasks, not a drawn object on Home.
+618|done|8|Names for the streak and the plant.
+619|done|8|A card.
+620|done|8|Firm. Reminder on idle day six. Tested.
+621|done|8|Firm. Stand-in funny title after three idle days.
+622|done|8|Last 14 days with blank pages for zero days. Tested.
+623|done|8|Days with three or more sessions. Tested.
+624|done|8|Firm. 20 coins buys one extra freeze. Tested.
+625|done|8|Hearts on the Streaks tab. Widget test.
+626|done|8|Two minutes, then one offer of five more.
+627|done|8|Nightly typed oath, checked against the next day. Tested.
+628|done|8|Finger signature on tomorrow's plan; the stroke count is logged, the drawing is not kept.
+629|done|8|Firm. Recorded promise played by the cue alarm. Built, untested on device.
+630|done|8|Desk photo shown on the cue alarm. Built, untested on device.
+631|done|8|Identity statement quoted on Home on alternate days.
+632|done|8|Three yes taps, then start. Widget test.
+633|done|8|Relentless. Session auto-starts at cue time; never inside the sleep window. Sync tested; alarm side built, untested on device.
+634|done|8|Firm. Early stop needs the typed sentence. Widget test.
+635|done|8|Firm. 30-second wait before an early stop. Widget test.
+636|done|8|Firm. Honest label on the early-stop button. Widget test.
+637|done|8|Relentless. Daily lock window for blocked apps; off takes 24 hours. Sync tested; blocking built, untested on device.
+638|done|8|SMS to your buddy when a needed permission disappears. Tested with a fake; untested on device.
+639|done|8|Booked sessions with a reminder.
+640|done|8|Share of booked days that had a session. Tested.
+641|done|8|Relentless. Blocked apps locked all day until a date; cannot be shortened. Built, untested on device.
+642|partial|8|Not built: needs a safe design with a server.
+643|done|8|Project "why" shown when stopping early. Tested.
+644|done|8|Each kept promise raises the next by a minute. Tested.
+645|done|8|"Early Starter" label and badge after five on-cue starts. Tested.
+646|blocked|8|Android removed lock-screen widgets for phones. Closest version: the home-screen widget can show days since a zero. Built, untested on device.
+647|partial|8|The share card saved as an image; you set it as wallpaper yourself. It shows the streak, not the first task.
+648|partial|8|The cue alarm plays this role. The first unlock of the day cannot be intercepted.
+649|done|8|Home has one step and one button.
+650|done|8|Kept out of made. Tested.
+651|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+652|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+653|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+654|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+655|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+656|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+657|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+658|partial|8|Not built: needs background camera recording.
+659|partial|8|A timestamped line through the share sheet; the photo is attached by hand.
+660|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+661|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+662|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+663|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+664|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+665|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+666|partial|8|Sent by hand through the share sheet.
+667|partial|8|A dedication note; it is not attached to the session.
+668|done|8|Streak card as a shareable image.
+669|done|8|Gold frame on the rank card from rank 9.
+670|done|8|Hundred Club badge at a 100-day streak.
+671|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+672|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+673|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+674|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+675|needs-backend|8|Needs a server. The screen says not connected and shows no numbers.
+676|done|8|One hidden line per session, shown only on the running timer. Tested.
+677|done|8|The line appears after two minutes when both are on. Tested.
+678|done|8|A 12-part original story, one part per finished session. Tested.
+679|done|8|Counts down to a guaranteed chest every fifth session. Tested.
+680|done|8|5 to 25 XP per saved proof, fixed per session. Tested.
+681|done|8|About 1 in 100 sessions earns a hidden legendary badge. Tested.
+682|done|8|Firm. One hour a day pays double start XP, announced by a reminder. Tested.
+683|partial|8|Firm. The double hour stands in for the one-hour quest.
+684|done|8|Firm. +10 XP for starting within five minutes of opening. Tested.
+685|done|8|Grows 10 a day, pays 70 on each seventh day, empties on a zero day. Tested.
+686|partial|8|Shows today's open challenge; yesterday's ring is not carried over.
+687|done|8|Seven weekday marks and a badge. Tested.
+688|done|8|30-piece picture, one piece per session. Tested.
+689|done|8|100-square fog map, one square per session.
+690|done|8|The ladder with the next rank and its XP.
+691|done|8|Ranks beyond the next show as ???. Tested.
+692|done|8|Tone only on completion. Untested on device.
+693|done|8|Haptic pulse every ten seconds while running. Untested on device.
+694|done|8|Flame steps at 3, 7, 14, 30, 66, 100. Tested.
+695|done|8|Firm. The challenge is tied to the day; missed ones are gone.
+696|partial|8|Firm. Relies on the sticky notification producing a launcher dot; depends on the launcher.
+697|done|8|Firm. Ongoing notice until the first session. Built, untested on device.
+698|done|8|Firm. Widget button red until worked, then green. Built, untested on device.
+699|partial|8|Not built: the app does not replace your wallpaper.
+700|done|8|Firm. The block overlay offers a one-tap start in place of the blocked app. Built, untested on device.
+701|done|0|Gentle, Firm, Relentless. Up is instant, down takes 24 hours, default Gentle. Tested.
+702|done|0|The whole app is built around this.

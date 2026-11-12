@@ -150,6 +150,7 @@ object Core {
         schedule(c, "dayroll", next(p.getInt("dayEndHour", 3) * 60 + 1), false)
         Extras.scheduleNext(c)
         Extras.updateWidgets(c)
+        Extras.sticky(c)
     }
 
     // ---- timer -----------------------------------------------------------
@@ -188,6 +189,7 @@ object Core {
             .build()
         notify(c, N_DONE, n)
         Extras.updateWidgets(c)
+        Extras.sticky(c)
     }
 
     fun notify(c: Context, id: Int, n: Notification) {
@@ -231,6 +233,18 @@ object Core {
     /** Blocking during a running session (feature 201). */
     fun sessionBlock(c: Context): Boolean = prefs(c).getBoolean("blockInSession", false) && timerRunning(c)
 
+    /** Features 637 and 641: lock windows set in advance, and a vault until a date. */
+    fun lockWindow(c: Context): Boolean {
+        val p = prefs(c)
+        if (System.currentTimeMillis() < p.getLong("vaultUntil", 0L)) return true
+        val from = p.getInt("lockFrom", -1)
+        val to = p.getInt("lockTo", -1)
+        if (from < 0 || to < 0 || from == to) return false
+        val cal = Calendar.getInstance()
+        val m = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+        return if (from < to) m in from until to else m >= from || m < to
+    }
+
     /** Earn your phone: until today's first session is finished. */
     fun earnBlock(c: Context): Boolean = switchOn(c, "block") && !workedToday(c)
 
@@ -238,13 +252,14 @@ object Core {
         val p = prefs(c)
         if (!p.getBoolean("onboarded", false) || !Settings.canDrawOverlays(c) || !hasUsageAccess(c)) return false
         if (blockedApps(c).isEmpty() && !p.getBoolean("blockAll", false)) return false
-        return earnBlock(c) || sessionBlock(c)
+        return earnBlock(c) || sessionBlock(c) || lockWindow(c)
     }
 
     /** Is [pkg] blocked right now? Block-all mode (feature 22) spares an allow-list. */
     fun isBlocked(c: Context, pkg: String, allow: Set<String>): Boolean {
         if (pkg.isEmpty() || pkg == c.packageName) return false
         val now = System.currentTimeMillis()
+        if (lockWindow(c) && blockedApps(c).contains(pkg)) return true
         if ((passes[pkg] ?: 0L) > now) return false
         // Feature 212: thirty guilt-free minutes a day, at a time chosen in advance.
         val scroll = prefs(c).getInt("scrollFrom", -1)

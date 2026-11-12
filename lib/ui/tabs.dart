@@ -516,7 +516,7 @@ class MeScreen extends ConsumerWidget {
       IconButton(key: const Key('openSettings'), onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings)),
     ], [
       Panel(
-          border: cyan,
+          border: v.on(669) && r.index >= 8 ? gold : cyan,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             H(v.name.isEmpty ? 'Rank' : '${v.name} · rank ${r.index + 1} of ${v.ranks.length}'),
             const SizedBox(height: 6),

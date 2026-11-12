@@ -16,7 +16,11 @@ class AlarmReceiver : BroadcastReceiver() {
                 Core.timerDone(c)
                 return
             }
-            "cue" -> if (Core.switchOn(c, "cue") && !Core.workedToday(c)) alarm(c, "cue")
+            "cue" -> if (Core.switchOn(c, "cue") && !Core.workedToday(c)) {
+                // Feature 633: the session starts by itself unless cancelled.
+                if (p.getBoolean("autoStart", false)) Core.nativeStart(c, "auto")
+                alarm(c, "cue")
+            }
             "rescue" -> if (Core.switchOn(c, "rescue") && !Core.workedToday(c)) alarm(c, "rescue")
             "buddy" -> if (Core.switchOn(c, "buddy")) report(c)
             "rem" -> Extras.fireDue(c)

@@ -91,3 +91,10 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   voice journal, routine builder with timed runs, preset routine habits, weekly spotlight,
   milestone letters, year in review, habit audit, graduation test. AI features marked
   needs-backend with no fake output.
+- Batches 25 to 28 (features 601 to 702): pressure dial (Gentle, Firm, Relentless; lowering
+  takes 24 hours; default Gentle), daily deposit, melting block, plant, loss preview,
+  insurance, rank trial, typed oath, signed plan, voice promise and desk photo on the
+  alarm, yes ladder, auto-start, cancel sentence, skip delay, honest buttons, Ulysses lock,
+  timed vault, permission guard, hidden lines, serial story, chests, spins, double hour,
+  jackpot, puzzle, fog map, sticky banner. Squad features marked needs-backend.
+- Every line in FEATURES_STATUS.md now has a status.

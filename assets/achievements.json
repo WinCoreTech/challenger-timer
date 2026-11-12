@@ -292,5 +292,27 @@
   "metric": "daysSinceFirst",
   "gte": 730,
   "hidden": true
+ },
+ {
+  "id": "legendary",
+  "name": "Legendary Drop",
+  "desc": "About one session in a hundred carries this.",
+  "metric": "legendary",
+  "gte": 1,
+  "hidden": true
+ },
+ {
+  "id": "weekday_set",
+  "name": "Full Week Set",
+  "desc": "Have a session on every day of the week.",
+  "metric": "weekdays",
+  "gte": 7
+ },
+ {
+  "id": "early_starter",
+  "name": "Early Starter",
+  "desc": "Start within ten minutes of your cue five times.",
+  "metric": "onCue",
+  "gte": 5
  }
 ]

@@ -8,6 +8,7 @@ import 'day.dart';
 import 'events.dart';
 import 'extras.dart';
 import 'flags.dart';
+import 'pressure.dart';
 import 'rules.dart';
 import 'streak_engine.dart';
 
@@ -28,7 +29,7 @@ abstract final class K {
   static const swRescue = 'sw.rescue';
   static const swLock = 'sw.lock';
   static const swBonus = 'sw.bonus';
-  static const switches = [swBlock, swCue, swBuddy, swRescue, swLock, swBonus];
+  static const switches = [swBlock, swCue, swBuddy, swRescue, swLock, swBonus, 'sw.ulysses'];
 
   /// Force-stack parts that are on unless the user switches them off.
   static const defaultOn = {swCue, swRescue, swLock, swBonus};
@@ -149,10 +150,10 @@ class DayView {
   bool get simpleMode => kv[K.simpleMode] == '1';
 
   /// True when feature [n] is switched on, built and unlocked by rank.
-  bool on(int n) => featureLive(catalog, n, kv: kv, rankIndex: rank.index, simpleMode: simpleMode);
+  bool on(int n) => featureLive(catalog, n, kv: kv, rankIndex: rank.index, simpleMode: simpleMode) && dialAllows(this, n);
   /// Flag check without the rank gate. Used by XP rules, which must not
   /// depend on rank (rank depends on XP).
-  bool flagOn(int n) => featureLive(catalog, n, kv: kv, rankIndex: 1 << 20, simpleMode: simpleMode);
+  bool flagOn(int n) => featureLive(catalog, n, kv: kv, rankIndex: 1 << 20, simpleMode: simpleMode) && dialAllows(this, n);
   String setting(String key, [String or = '']) => kv[key] ?? or;
   int settingInt(String key, int or) => int.tryParse(kv[key] ?? '') ?? or;
 
@@ -212,7 +213,7 @@ class DayView {
       earnFreezeEvery: flagOn(53) ? 7 : 0,
       decayKeepPercent: flagOn(55) && kv['decay'] == '1' ? 80 : 0,
       pausedDays: flagOn(59) ? pausedDays(this) : const {},
-      freezeGainDays: flagOn(70) ? giftDays(this) : const []);
+      freezeGainDays: [if (flagOn(70)) ...giftDays(this), if (flagOn(624)) ...insuranceDays(this)]);
   late final StreakResult master = computeStreak(showedUpDays, today, rules: streakRules);
   /// Lives shown to the user: the master streak's freezes.
   int get lives => master.freezesLeft;
@@ -297,6 +298,9 @@ class DayView {
       'longestSession': longestSession,
       'bestDaySessions': perDay.values.fold(0, (a, b) => a > b ? a : b),
       'xp': xpTotal,
+      'legendary': type(Ev.sessionDone).where((e) => legendary(e.get<String>('sid') ?? '')).length,
+      'weekdays': weekdaySet(this).length,
+      'onCue': onCueStarts(this),
       'weekOne': weekOne(this).where((m) => m.$2).length,
       'daysSinceFirst': showedUpDays.isEmpty ? 0 : today - showedUpDays.reduce((a, b) => a < b ? a : b),
       'earlyStarts': type(Ev.sessionStart).where((e) => e.moment.hour >= dayEndHour && e.moment.hour < 8).length,

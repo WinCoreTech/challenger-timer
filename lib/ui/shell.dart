@@ -119,6 +119,7 @@ class _AppState extends ConsumerState<ChallengerApp> with WidgetsBindingObserver
     if (!mounted) return;
     final app = ref.read(appProvider.notifier);
     final router = ref.read(routerProvider);
+    await app.permissionGuard();
     final finished = await app.completeIfDue();
     final action = await app.handleLaunchAction();
     if (!mounted) return;

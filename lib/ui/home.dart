@@ -32,6 +32,9 @@ String homeLine(DayView v) {
     final f = freshStart(v.today, birthday: v.kv['t.65'] == null ? '' : v.single(const ToolDef(n: 65, kind: 'single', title: '', prompts: [''])).first);
     if (f != null) return 'It is $f. A clean page, if you want one.';
   }
+  if (v.on(631) && !v.workedToday && (v.kv['t.251'] ?? '').length > 4 && v.today.isEven) {
+    return 'You said: "${v.single(const ToolDef(n: 251, kind: 'single', title: '', prompts: [''])).first}". Starting now keeps that true.';
+  }
   if (v.on(522) && dayThreeDip(v) && !v.workedToday) return 'Around day three motivation usually dips. That is normal, not a sign. Two minutes anyway.';
   if (v.on(540) && !v.workedToday && slumpWarning(v) != null) return slumpWarning(v)!;
   if (v.on(266) && v.name.isNotEmpty && !v.workedToday) return '${v.name}, start the timer. Two minutes.';
@@ -80,7 +83,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     const H('Rank'),
                     const SizedBox(height: 4),
-                    Text('${'★' * prestige(v)}${shownRank(v).rank.name.toUpperCase()}',
+                    Text(v.on(621) && daysAway(v) >= 3 && !v.workedToday ? 'PART-TIME LEGEND (ON A BREAK)' : '${'★' * prestige(v)}${shownRank(v).rank.name.toUpperCase()}',
                         key: const Key('rankTitle'),
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: cyan, letterSpacing: 1)),
                   ]))),
@@ -148,6 +151,14 @@ class HomeScreen extends ConsumerWidget {
               ])),
           const SizedBox(height: 12),
         ],
+        if (v.on(602) && !v.workedToday)
+          Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(children: [
+                Container(key: const Key('ice'), width: 24 + 56 * v.dayLeft, height: 24 + 56 * v.dayLeft, color: const Color(0xFFB3F1FF)),
+                const SizedBox(width: 12),
+                const Expanded(child: Text('This block of ice melts until you start.', style: TextStyle(color: dim))),
+              ])),
         if (v.isOn(K.swBonus)) _Bonus(v),
       ]),
     );

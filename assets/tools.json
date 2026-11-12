@@ -3600,5 +3600,664 @@
 "intro": "Turns every ordinary reminder off for seven days. The cue alarm and rescue stay under their own switches in Settings.",
 "setKey": "gradTest",
 "setLabel": "Run the 7-day test"
+},
+{
+"n": 601,
+"kind": "card",
+"title": "Daily deposit",
+"body": "With the dial on Firm, the day's 100 points drain evenly from the start of the day until your first session starts. Start at noon and you keep about 60. The Home bonus bar shows the drain."
+},
+{
+"n": 602,
+"kind": "card",
+"title": "Melting block",
+"body": "A block of ice on Home shrinks through the day until you start. It comes back whole each morning."
+},
+{
+"n": 603,
+"kind": "special",
+"title": "Rank on trial",
+"intro": ""
+},
+{
+"n": 604,
+"kind": "card",
+"title": "Invested-hours counter",
+"body": "When you try to stop a session early, the dialog shows the hours you have already put into that project."
+},
+{
+"n": 605,
+"kind": "stat",
+"title": "Streak in hours",
+"stat": "streakHours"
+},
+{
+"n": 606,
+"kind": "stat",
+"title": "Loss preview",
+"stat": "lossPreview"
+},
+{
+"n": 607,
+"kind": "special",
+"title": "Album with gaps",
+"intro": "One square per day this month. Days you showed up are filled. A missed day stays blank unless you repair it the next day."
+},
+{
+"n": 608,
+"kind": "special",
+"title": "Wilting plant",
+"intro": ""
+},
+{
+"n": 609,
+"kind": "card",
+"title": "Cracking bricks",
+"body": "In the Workshop builder, bricks show cracks after idle days. One session repairs them."
+},
+{
+"n": 610,
+"kind": "card",
+"title": "Theme on loan",
+"body": "Not built. The app has one look, so there is no favourite theme to lend and take back."
+},
+{
+"n": 611,
+"kind": "stat",
+"title": "Reward behind glass",
+"stat": "glass"
+},
+{
+"n": 612,
+"kind": "log",
+"title": "Weekly escrow",
+"intro": "Record an amount you set aside with a person you trust, to be handed back session by session. The app only keeps the tally: it holds no money.",
+"prompts": [
+"Amount",
+"Held by",
+"Released per session"
+]
+},
+{
+"n": 613,
+"kind": "log",
+"title": "Refundable 21-day deposit",
+"intro": "Record a deposit held by someone you trust, returned if you never miss twice in a row for 21 days. The app only records it.",
+"prompts": [
+"Amount",
+"Held by",
+"Start date"
+]
+},
+{
+"n": 614,
+"kind": "log",
+"title": "Disliked-cause stake",
+"intro": "Record a stake that goes to a cause you would rather not fund if you miss. The app does not collect or send money.",
+"prompts": [
+"Amount",
+"The cause",
+"What counts as a miss"
+]
+},
+{
+"n": 615,
+"kind": "card",
+"title": "Expiring coins",
+"body": "With the dial on Firm, your coins are frozen at zero after 7 idle days and return the day you do a session."
+},
+{
+"n": 616,
+"kind": "card",
+"title": "Falling multiplier",
+"body": "With the dial on Firm, the first start of the day pays up to 3 times its XP right after your wake hour, dropping a quarter each hour to normal."
+},
+{
+"n": 617,
+"kind": "stat",
+"title": "Half-built display",
+"stat": "openLoops",
+"intro": "Half-done tasks stay listed here until they are finished."
+},
+{
+"n": 618,
+"kind": "single",
+"title": "Name it",
+"intro": "Named things are harder to abandon.",
+"prompts": [
+"My streak is called",
+"My plant is called"
+]
+},
+{
+"n": 619,
+"kind": "card",
+"title": "Built by you",
+"body": "Everything at risk in this app is something you made: your habits, your plant's name, your promises, your vault. Nothing here was handed to you finished."
+},
+{
+"n": 620,
+"kind": "card",
+"title": "Demotion notice",
+"body": "After six idle days you get one reminder: the shown rank slips tomorrow unless a session happens."
+},
+{
+"n": 621,
+"kind": "card",
+"title": "Title swap",
+"body": "After three idle days, Home shows a funny stand-in title until your next session. It is a joke, not a verdict."
+},
+{
+"n": 622,
+"kind": "stat",
+"title": "Blank diary pages",
+"stat": "diary"
+},
+{
+"n": 623,
+"kind": "stat",
+"title": "Golden chain",
+"stat": "golden"
+},
+{
+"n": 624,
+"kind": "special",
+"title": "Paid insurance",
+"intro": "Spending coins on a freeze makes you value the streak it protects."
+},
+{
+"n": 625,
+"kind": "card",
+"title": "Lives display",
+"body": "Freezes are shown as hearts on the Streaks tab."
+},
+{
+"n": 626,
+"kind": "card",
+"title": "Foot in the door",
+"body": "The app only ever asks for two minutes. When they are done it offers \"just five more\", once, and takes no for an answer."
+},
+{
+"n": 627,
+"kind": "log",
+"title": "Typed oath",
+"intro": "Type it each night. Tomorrow the app checks whether a session followed.",
+"prompts": [
+"I will start at"
+]
+},
+{
+"n": 628,
+"kind": "special",
+"title": "Signed plan",
+"intro": "Sign tomorrow's plan with your finger."
+},
+{
+"n": 629,
+"kind": "special",
+"title": "Your own voice",
+"intro": "Record your promise. It plays when the cue alarm opens."
+},
+{
+"n": 630,
+"kind": "special",
+"title": "Desk selfie",
+"intro": "A photo of you at your desk becomes the picture on tomorrow's alarm."
+},
+{
+"n": 631,
+"kind": "card",
+"title": "Consistency mirror",
+"body": "On some days, before you start, Home quotes your identity statement back: \"You said you are someone who starts. Starting now keeps that true.\" Set the statement in Identity statement."
+},
+{
+"n": 632,
+"kind": "special",
+"title": "Yes ladder",
+"intro": "Three easy questions, then the real one."
+},
+{
+"n": 633,
+"kind": "toggle",
+"title": "Auto-start by default",
+"intro": "Relentless only. At cue time the 2-minute session starts by itself and the alarm tells you so. To cancel you have to stop it. It never fires inside your sleep window.",
+"setKey": "autoStart",
+"setLabel": "Start my session at cue time unless I cancel"
+},
+{
+"n": 634,
+"kind": "card",
+"title": "Cancel sentence",
+"body": "With the dial on Firm, stopping a session before two minutes means typing: I am choosing to skip my work today."
+},
+{
+"n": 635,
+"kind": "card",
+"title": "Skip delay",
+"body": "With the dial on Firm, stopping before two minutes has a 30-second wait first."
+},
+{
+"n": 636,
+"kind": "card",
+"title": "Honest buttons",
+"body": "With the dial on Firm, the early-stop button reads \"I choose to delay my goal\" instead of \"Stop\"."
+},
+{
+"n": 637,
+"kind": "special",
+"title": "Ulysses lock",
+"intro": "Relentless only. Your blocked apps are locked every day between the hours below. Switching it off takes 24 hours."
+},
+{
+"n": 638,
+"kind": "card",
+"title": "Permission guard",
+"body": "If a permission the locks depend on is switched off, your buddy gets one SMS saying so. Needs the buddy report's SMS permission."
+},
+{
+"n": 639,
+"kind": "log",
+"title": "Booked sessions",
+"intro": "An appointment with yourself, with a reminder.",
+"prompts": [
+"What I will work on"
+],
+"time": true
+},
+{
+"n": 640,
+"kind": "stat",
+"title": "No-show record",
+"stat": "noShow"
+},
+{
+"n": 641,
+"kind": "special",
+"title": "Timed vault",
+"intro": "Relentless only. For exam week."
+},
+{
+"n": 642,
+"kind": "card",
+"title": "Code with a buddy",
+"body": "Not built. An unlock code held by your buddy would let either of you bypass the 24-hour rule, so it needs a design with a server to be safe (BACKEND.md)."
+},
+{
+"n": 643,
+"kind": "card",
+"title": "Reasons archive",
+"body": "When you try to stop early, the dialog shows the \"why\" line you wrote for that project."
+},
+{
+"n": 644,
+"kind": "stat",
+"title": "Growing promises",
+"stat": "promise"
+},
+{
+"n": 645,
+"kind": "stat",
+"title": "Earned label",
+"stat": "label"
+},
+{
+"n": 646,
+"kind": "toggle",
+"title": "Days-since-zero widget",
+"intro": "The home-screen widget shows days since a zero instead of the streak. Android does not allow widgets on the lock screen any more.",
+"setKey": "widgetSinceZero",
+"setLabel": "Widget shows days since a zero"
+},
+{
+"n": 647,
+"kind": "special",
+"title": "Wallpaper maker",
+"intro": "Save the card as an image, then set it as your wallpaper from your gallery."
+},
+{
+"n": 648,
+"kind": "card",
+"title": "Morning contract",
+"body": "The cue alarm is the contract: it shows the task you locked last night and one button. The app cannot hook the very first unlock of the day."
+},
+{
+"n": 649,
+"kind": "card",
+"title": "No choices",
+"body": "Home offers exactly one next step and one button. There is nothing to deliberate."
+},
+{
+"n": 650,
+"kind": "stat",
+"title": "Promise-kept ratio",
+"stat": "promise"
+},
+{
+"n": 651,
+"kind": "card",
+"title": "Live counter",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 652,
+"kind": "card",
+"title": "Buddy-started alert",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 653,
+"kind": "card",
+"title": "Section position",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 654,
+"kind": "card",
+"title": "Just-ahead rival",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 655,
+"kind": "card",
+"title": "Anonymous rival",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 656,
+"kind": "card",
+"title": "Reliability score",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 657,
+"kind": "card",
+"title": "Witness mode",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 660,
+"kind": "card",
+"title": "Not-started list",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 661,
+"kind": "card",
+"title": "Ring-back",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 662,
+"kind": "card",
+"title": "Team quest",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 663,
+"kind": "card",
+"title": "Last one left",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 664,
+"kind": "card",
+"title": "Captain week",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 665,
+"kind": "card",
+"title": "A junior is watching",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 671,
+"kind": "card",
+"title": "Invite-only challenges",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 672,
+"kind": "card",
+"title": "Scarce cheers",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 673,
+"kind": "card",
+"title": "Favour owed",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 674,
+"kind": "card",
+"title": "Shared bonus",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 675,
+"kind": "card",
+"title": "Shared loss",
+"body": "Not connected. This needs a server that your buddy's or squad's phones also talk to (BACKEND.md). Nothing is shown, because any number here would have to be invented."
+},
+{
+"n": 658,
+"kind": "card",
+"title": "Session time-lapse",
+"body": "Not built. Recording video of a whole session needs the camera running in the background. Photo proof at the end is the supported version."
+},
+{
+"n": 659,
+"kind": "share",
+"title": "Desk check-in",
+"intro": "Take a photo as proof, then send a timestamped line to your people.",
+"prompts": [
+"Where I am working"
+],
+"body": "Desk check-in from {name}: at {0}, session {today} today, day {streak}."
+},
+{
+"n": 666,
+"kind": "share",
+"title": "Respected reader",
+"intro": "Send your week to a senior or teacher you look up to.",
+"prompts": [
+"A line for them"
+],
+"body": "Weekly digest from {name}: {streak}-day streak, {starts} starts in total. {0}"
+},
+{
+"n": 667,
+"kind": "log",
+"title": "Dedicated session",
+"intro": "Dedicate your next session to someone you care about, then start it from Home.",
+"prompts": [
+"This one is for"
+]
+},
+{
+"n": 668,
+"kind": "special",
+"title": "Status card",
+"intro": "Your streak as an image sized for a WhatsApp status."
+},
+{
+"n": 669,
+"kind": "card",
+"title": "Profile frames",
+"body": "From rank 9 upward the rank card on Me gets a gold frame."
+},
+{
+"n": 670,
+"kind": "card",
+"title": "100-day club",
+"body": "The \"Hundred Club\" badge. The only way in is a 100-day streak."
+},
+{
+"n": 676,
+"kind": "card",
+"title": "Mystery box",
+"body": "Each session carries one hidden line. It appears on the running timer, never before you start."
+},
+{
+"n": 677,
+"kind": "card",
+"title": "Hidden line",
+"body": "Today's line shows only after two minutes of work."
+},
+{
+"n": 678,
+"kind": "stat",
+"title": "Serial story",
+"stat": "story"
+},
+{
+"n": 679,
+"kind": "stat",
+"title": "Near-miss meter",
+"stat": "nearMiss"
+},
+{
+"n": 680,
+"kind": "card",
+"title": "Reward spin",
+"body": "Every saved proof spins for 5 to 25 XP. It shows under \"Reward spins\" in your XP breakdown on Me."
+},
+{
+"n": 681,
+"kind": "card",
+"title": "Rare drops",
+"body": "About one session in a hundred carries a legendary badge. You find out only by finishing it."
+},
+{
+"n": 682,
+"kind": "stat",
+"title": "Double hour",
+"stat": "doubleHour"
+},
+{
+"n": 683,
+"kind": "card",
+"title": "Sixty-minute quest",
+"body": "Today's double hour is the quest: it exists for one hour only, and a start inside it pays double."
+},
+{
+"n": 684,
+"kind": "card",
+"title": "Five-minute offer",
+"body": "Start a session within five minutes of opening the app and it pays 10 XP extra."
+},
+{
+"n": 685,
+"kind": "stat",
+"title": "Jackpot pool",
+"stat": "jackpot"
+},
+{
+"n": 686,
+"kind": "stat",
+"title": "Ring left open",
+"stat": "daily",
+"intro": "Yesterday's ring closed at day end. This is today's, still open."
+},
+{
+"n": 687,
+"kind": "stat",
+"title": "Weekday set",
+"stat": "weekdays"
+},
+{
+"n": 688,
+"kind": "special",
+"title": "Puzzle pieces",
+"intro": "A picture uncovered one piece per session."
+},
+{
+"n": 689,
+"kind": "special",
+"title": "Fog map",
+"intro": "Each session clears one square of fog."
+},
+{
+"n": 690,
+"kind": "stat",
+"title": "Next-rank preview",
+"stat": "ladder"
+},
+{
+"n": 691,
+"kind": "stat",
+"title": "Secret rank names",
+"stat": "ladder"
+},
+{
+"n": 692,
+"kind": "card",
+"title": "Completion sound",
+"body": "A short tone that plays only when a session, a proof or a habit is completed. Nowhere else."
+},
+{
+"n": 693,
+"kind": "toggle",
+"title": "Timer heartbeat",
+"intro": "A soft pulse every ten seconds while the timer runs.",
+"setKey": "heartbeat",
+"setLabel": "Pulse while the timer runs"
+},
+{
+"n": 694,
+"kind": "card",
+"title": "Escalating flame",
+"body": "The streak flame on Home grows at 3, 7, 14, 30, 66 and 100 days."
+},
+{
+"n": 695,
+"kind": "card",
+"title": "Daily rotation",
+"body": "The daily challenge changes with the day. Yesterday's is gone."
+},
+{
+"n": 696,
+"kind": "card",
+"title": "Red dot",
+"body": "Switch on the Sticky banner: on most launchers its notification puts a dot on the app icon until your first session."
+},
+{
+"n": 697,
+"kind": "toggle",
+"title": "Sticky banner",
+"intro": "A \"not started yet\" notification that stays until today's first session.",
+"setKey": "sticky",
+"setLabel": "Keep a notice up until I start"
+},
+{
+"n": 698,
+"kind": "card",
+"title": "Red-to-green widget",
+"body": "The home-screen widget's button is red until you have worked today, then green."
+},
+{
+"n": 699,
+"kind": "card",
+"title": "Wallpaper by day state",
+"body": "Not built. Replacing your phone wallpaper by itself is more than this app should do. The widget changes colour instead."
+},
+{
+"n": 700,
+"kind": "card",
+"title": "Start replaces scroll",
+"body": "Earn your phone does this: opening a blocked app before your first session shows a one-tap 2-minute start instead."
+},
+{
+"n": 701,
+"kind": "special",
+"title": "Pressure dial",
+"intro": ""
+},
+{
+"n": 702,
+"kind": "card",
+"title": "Two minutes, today",
+"body": "Open the app and start a 2-minute session every single day. If the app does only this for you, it has worked. Everything else exists to protect this."
 }
 ]

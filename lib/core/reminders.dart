@@ -4,6 +4,8 @@ library;
 import 'day.dart';
 import 'deadlines.dart';
 import 'engine.dart';
+import 'extras.dart';
+import 'pressure.dart';
 import 'planning.dart';
 import 'events.dart';
 import 'tools.dart';
@@ -106,6 +108,12 @@ List<Reminder> fixedReminders(DayView v) {
     final lines = v.of('t465').map((r) => r.str('text')).where((t) => t.isNotEmpty).toList();
     if (lines.isNotEmpty) out.add(Reminder(465, 16 * 60, 'From past you', lines[v.today % lines.length]));
   }
+  // 620: a full day of warning before the shown rank slips.
+  if (v.on(620) && daysAway(v) == 6) {
+    out.add(Reminder(620, v.cueMinute, 'Heads up', 'Your rank title slips one step tomorrow unless a session happens. Two minutes keeps it.', start: true));
+  }
+  // 682: announced as the double hour begins.
+  if (v.on(682)) out.add(Reminder(682, doubleHour(v.today) * 60, 'Double hour', 'For the next 60 minutes a start pays double XP.', start: true, skipIfWorked: false));
   // 473: Sunday evening, the week ahead.
   if (v.on(473)) {
     final n = deadlines(v).where((t) => t.due > v.today && t.due <= v.today + 7).length;

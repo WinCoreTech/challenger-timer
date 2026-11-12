@@ -3,7 +3,9 @@ package com.wincoretech.challenger_timer
 import android.app.Activity
 import android.app.KeyguardManager
 import android.app.NotificationManager
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.media.MediaPlayer
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
@@ -11,11 +13,19 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 
 /** Full-screen alarm (cue) and call-style rescue screen. Shows over the lock screen. */
 class AlarmActivity : Activity() {
+    private var player: MediaPlayer? = null
+
+    override fun onDestroy() {
+        player?.release()
+        super.onDestroy()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 27) {
@@ -50,6 +60,37 @@ class AlarmActivity : Activity() {
         root.addView(text(if (rescue) "INCOMING: TWO MINUTES" else "FIRST TASK", 16f, cyan, true))
         root.addView(text(if (rescue) "Today is still saveable." else "Your alarm, your plan.", 16f, Color.LTGRAY, false))
         root.addView(text(task, 30f, Color.WHITE, true))
+        val prefs = Core.prefs(this)
+        // Feature 630: your own desk photo as the alarm picture.
+        val image = prefs.getString("alarmImage", "") ?: ""
+        if (!rescue && image.isNotEmpty()) {
+            try {
+                BitmapFactory.decodeFile(image)?.let { bmp ->
+                    val iv = ImageView(this)
+                    iv.setImageBitmap(bmp)
+                    iv.adjustViewBounds = true
+                    root.addView(iv, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(220)))
+                }
+            } catch (e: Exception) {
+                // Picture missing or unreadable: the alarm works without it.
+            }
+        }
+        // Feature 629: your own recorded promise, played once.
+        val voice = prefs.getString("alarmVoice", "") ?: ""
+        if (!rescue && voice.isNotEmpty()) {
+            try {
+                player = MediaPlayer().apply {
+                    setDataSource(voice)
+                    prepare()
+                    start()
+                }
+            } catch (e: Exception) {
+                player = null
+            }
+        }
+        if (prefs.getLong("timerEnd", 0L) > System.currentTimeMillis()) {
+            root.addView(text("Your session has already started. Two minutes.", 16f, cyan, true))
+        }
         val start = Button(this).apply {
             text = "START 2 MIN"
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 22f)

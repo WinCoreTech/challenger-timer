@@ -5,6 +5,7 @@ import 'package:challenger_timer/core/coach.dart';
 import 'package:challenger_timer/core/engine.dart';
 import 'package:challenger_timer/core/events.dart';
 import 'package:challenger_timer/core/extras.dart';
+import 'package:challenger_timer/core/pressure.dart';
 import 'package:challenger_timer/core/reminders.dart';
 import 'package:challenger_timer/core/stats.dart';
 import 'package:challenger_timer/core/tools.dart';
@@ -49,7 +50,7 @@ void main() {
         expect(catalog[t.n]!.built, isTrue, reason: 'tool ${t.n} has no status line');
         expect(t.title, isNotEmpty);
         if (t.kind == 'stat') {
-          expect(stats.containsKey(t.stat) || analyticsStats.containsKey(t.stat) || coachStats.containsKey(t.stat), isTrue, reason: 'stat ${t.stat}');
+          expect(stats.containsKey(t.stat) || analyticsStats.containsKey(t.stat) || coachStats.containsKey(t.stat) || pressureStats.containsKey(t.stat), isTrue, reason: 'stat ${t.stat}');
         }
         if (t.kind == 'check') expect(t.items, isNotEmpty);
         if (t.kind == 'toggle' || t.kind == 'dayflag') expect(t.setKey, isNotEmpty);
@@ -60,6 +61,7 @@ void main() {
   testWidgets('every tool screen renders without errors', (t) async {
     final r = Rig();
     await r.app.setKv('unlockAll', '1');
+    await r.app.setKv('pressure', const Dial(2).encode());
     await r.session();
     for (final def in tools.values) {
       await pumpTool(t, r, ToolScreen(def.n));

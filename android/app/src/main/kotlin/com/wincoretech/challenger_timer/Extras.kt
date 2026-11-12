@@ -64,6 +64,25 @@ object Extras {
         m.updateAppWidget(ids, v)
     }
 
+    /** Feature 697: a "not started yet" notice that stays until today's first session. */
+    fun sticky(c: Context) {
+        val nm = c.getSystemService(android.app.NotificationManager::class.java)
+        if (!Core.prefs(c).getBoolean("sticky", false) || Core.workedToday(c) || !Core.prefs(c).getBoolean("onboarded", false)) {
+            nm.cancel(46)
+            return
+        }
+        Core.channels(c)
+        val n = Notification.Builder(c, Core.CH_BLOCK)
+            .setSmallIcon(R.drawable.ic_stat)
+            .setContentTitle("Not started yet today")
+            .setContentText("Two minutes clears this.")
+            .setOngoing(true)
+            .setContentIntent(Core.activityPending(c, Intent.ACTION_MAIN, "sticky", 47))
+            .addAction(Notification.Action.Builder(null, "START 2 MIN", Core.activityPending(c, Core.ACTION_START2, "sticky", 48)).build())
+            .build()
+        Core.notify(c, 46, n)
+    }
+
     /** A plain reminder notification, optionally with the Start 2 min action. */
     fun nudge(c: Context, id: Int, title: String, text: String, start: Boolean) {
         Core.channels(c)
