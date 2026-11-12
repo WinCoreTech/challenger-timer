@@ -8,6 +8,7 @@ import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'game.dart';
 import 'planning.dart';
 import 'projects.dart';
 import 'tools.dart';
@@ -137,6 +138,45 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
     ];
 
 final Map<String, Stat> stats = {
+  'level': (v) {
+    final l = levelFor(v.xpTotal);
+    return ['Level $l', '${xpForLevel(l + 1) - v.xpTotal} XP to level ${l + 1}', 'A slow curve on purpose. It rewards years, not one big week.'];
+  },
+  'quests': (v) {
+    final q = dailyQuests(v, v.today);
+    return ['${q.where((x) => x.$2).length} of 3', for (final (t, ok) in q) '${ok ? '✓' : '○'} $t', '10 XP each. All three also pay 5 coins.'];
+  },
+  'chest': (v) => [
+        '${v.type(Ev.sessionDone).where((e) => chestFor(e.get<String>('sid') ?? '') > 0).length} chests',
+        'opened so far. About one finished session in four has one.',
+        '${sinceChest(v)} sessions since the last one.',
+      ],
+  'records': (v) {
+    final r = records(v);
+    return [
+      '${r.bestDayMinutes} min',
+      r.bestDay < 0 ? 'Your best day will show here.' : 'is your best day (${dayLabel(r.bestDay)})',
+      'Best week: ${r.bestWeekMinutes} min',
+      'Longest streak: ${r.longestStreak} days',
+      'Longest session: ${r.longestSession} min',
+    ];
+  },
+  'season': (v) {
+    final s = seasons(v);
+    return ['${s.now} vs ${s.last} min', 'this 12-week season against the last one at the same point', 'The only rival is your last season.'];
+  },
+  'combo': (v) => ['x${combo(v)}', 'sessions finished today', 'Each one raises the combo. It resets when the day ends.'],
+  'skills': (v) {
+    final t = skillTrees(v);
+    return t.isEmpty
+        ? ['No projects', 'Each project is a skill. Hours in it move it up: 1, 10, 50, 100, 500, 1000.']
+        : ['${t.length} skills', for (final (n, h, tier) in t) '$n: ${h.toStringAsFixed(1)} h · tier $tier of 6'];
+  },
+  'prestige': (v) => [
+        '${'★' * prestige(v)}${prestige(v) == 0 ? 'No stars yet' : ''}',
+        'Each time you pass ${v.ranks.last.name}, you earn a star and climb the ladder again.',
+        'Everything you unlocked stays unlocked.',
+      ],
   'focus': (v) {
     final f = averageFocus(v);
     return f == null ? ['-', 'No sessions yet.'] : ['$f', 'average focus score out of 100', '100 minus 15 per pause and 5 per noticed wander.'];

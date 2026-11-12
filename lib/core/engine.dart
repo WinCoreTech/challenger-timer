@@ -296,6 +296,7 @@ class DayView {
       'longestSession': longestSession,
       'bestDaySessions': perDay.values.fold(0, (a, b) => a > b ? a : b),
       'xp': xpTotal,
+      'earlySubmits': of(Kind.task).where((t) => t.flag('done') && t.data['due'] is int && t.data['doneTs'] is int && dayOf(t.integer('doneTs'), now.offsetMin, dayEndHour) < t.integer('due')).length,
     };
   }();
 

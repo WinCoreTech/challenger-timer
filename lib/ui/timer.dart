@@ -185,6 +185,8 @@ class _TimerState extends ConsumerState<TimerScreen> {
       Center(
           child: Text('${pending['minutes']} minutes finished. That is a full win.',
               style: const TextStyle(color: ink, fontSize: 16, fontWeight: FontWeight.w700))),
+      if (v.on(249) && v.sessionsToday > 1)
+        Center(child: Text('COMBO x${v.sessionsToday}', style: const TextStyle(color: ink, fontSize: 22, fontWeight: FontWeight.w900))),
       if (v.on(300))
         const Center(
             child: Padding(

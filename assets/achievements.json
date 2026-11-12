@@ -242,5 +242,19 @@
   "metric": "bestDaySessions",
   "gte": 6,
   "hidden": true
+ },
+ {
+  "id": "early_1",
+  "name": "A Day To Spare",
+  "desc": "Finish a task before its due day.",
+  "metric": "earlySubmits",
+  "gte": 1
+ },
+ {
+  "id": "early_5",
+  "name": "Five Days To Spare",
+  "desc": "Finish five tasks before their due day.",
+  "metric": "earlySubmits",
+  "gte": 5
  }
 ]

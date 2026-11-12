@@ -9,6 +9,7 @@ import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/game.dart';
 import '../core/projects.dart';
 import '../core/rules.dart';
 import '../core/stats.dart';
@@ -502,7 +503,7 @@ class MeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final v = ref.watch(viewProvider);
     final ach = ref.watch(achievementsProvider);
-    final r = v.rank;
+    final r = shownRank(v);
     final earned = ach.where((a) => a.earned(v.metrics)).length;
     return _page('ME', actions: [
       IconButton(key: const Key('openSettings'), onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings)),
@@ -516,6 +517,10 @@ class MeScreen extends ConsumerWidget {
                 style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: cyan, height: 1.1)),
             const SizedBox(height: 6),
             Text(r.rank.blurb, style: const TextStyle(color: dim)),
+            if (idleSteps(v) > 0)
+              const Text('Your title slipped a step while you were away. One session brings it back. Nothing you unlocked is lost.',
+                  style: TextStyle(color: gold)),
+            if (v.on(229)) Text('Level ${levelFor(v.xpTotal)}', style: const TextStyle(fontWeight: FontWeight.w800)),
             const SizedBox(height: 14),
             Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Big('${v.xpTotal}', size: 44, key: const Key('xpTotal')),

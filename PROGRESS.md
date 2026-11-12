@@ -69,3 +69,6 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   Disturb, face-down start, pickup counter, screen-time and time-thief report, urge
   surfing, unlock friction, scheduled scroll time, focus score, deep work, place tags,
   message batching and night-lock reminders. Mostly native: untested on device.
+- Batch 10 (features 226 to 250): levels, gentle rank decay, early-finish badges, reward chest,
+  daily quests, coins and reward shop, savings jar, skill ladders, avatar, workshop,
+  seasons, personal records, prestige, combo.

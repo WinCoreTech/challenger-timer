@@ -226,3 +226,28 @@
 223|done|3|60-second breathing screen.
 224|done|3|Two fixed reminders at 13:00 and 19:00. Delivery untested on device.
 225|done|3|Reminder at a chosen night hour. Delivery untested on device.
+226|done||12 funny ranks from JSON, Professional Postponer to Momentum Machine. Tested.
+227|done|3|XP for starts, minutes and proof, computed from the log. Tested.
+228|done|3|A start pays 50 XP, a minute 2. Tested.
+229|done|3|Level = square-root curve of XP. Tested.
+230|done|3|Shown title slips one step per 7 idle days; XP and unlocks untouched. Tested.
+231|done|3|36 achievements defined in JSON.
+232|done|3|Hidden achievements appear only once earned.
+233|done|3|First session, first proof, first photo, first link, first early finish badges.
+234|done|3|Came Back and Boomerang badges.
+235|done|3|Early-finish badges at 1 and 5 tasks. Tested.
+236|done|3|About one session in four opens a 10 to 50 XP chest, fixed per session. Tested.
+237|done|3|Three daily quests, 10 XP each. Tested.
+238|partial|3|Coins are earned and can be spent in the reward shop. There are no themes or sounds to buy.
+239|done|3|Your own rewards priced in coins, with redeem. Tested.
+240|done|3|Rupees per session counted toward a goal. The app only counts; no real money moves. Tested.
+241|partial|3|One ladder per project by hours (6 tiers). Not a branching tree per skill.
+242|partial|3|A flame figure that grows one stage per level, not a character.
+243|done|3|One brick per finished session.
+244|done|3|12-week seasons compared with the last one at the same point. Tested.
+245|done|3|Best day, best week, longest streak, longest session. Tested.
+246|done|3|Rank title on Home and Me.
+247|done|3|A star each time the top rank is passed; the ladder restarts, unlocks stay. Tested.
+248|done||100 XP granted each day, removed at day end without a session, shown draining on Home. Tested.
+249|done|3|Combo count on the DONE screen and in the toolbox.
+250|done|3|Nothing can be bought to skip work.

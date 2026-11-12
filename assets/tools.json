@@ -1092,5 +1092,88 @@
 23
 ],
 "optKey": "nightHour"
+},
+{
+"n": 229,
+"kind": "stat",
+"title": "Levels",
+"stat": "level"
+},
+{
+"n": 236,
+"kind": "stat",
+"title": "Reward chest",
+"stat": "chest"
+},
+{
+"n": 237,
+"kind": "stat",
+"title": "Daily quests",
+"stat": "quests"
+},
+{
+"n": 239,
+"kind": "special",
+"title": "Coins and reward shop"
+},
+{
+"n": 240,
+"kind": "special",
+"title": "Savings jar",
+"setKey": "jarAmount",
+"setLabel": "Rupees per finished session",
+"setOptions": [
+0,
+5,
+10,
+20,
+50
+]
+},
+{
+"n": 241,
+"kind": "stat",
+"title": "Skill trees",
+"stat": "skills"
+},
+{
+"n": 242,
+"kind": "special",
+"title": "Avatar"
+},
+{
+"n": 243,
+"kind": "special",
+"title": "Workshop builder"
+},
+{
+"n": 244,
+"kind": "stat",
+"title": "Seasons",
+"stat": "season"
+},
+{
+"n": 245,
+"kind": "stat",
+"title": "Personal records",
+"stat": "records"
+},
+{
+"n": 247,
+"kind": "stat",
+"title": "Prestige",
+"stat": "prestige"
+},
+{
+"n": 249,
+"kind": "stat",
+"title": "Combo meter",
+"stat": "combo"
+},
+{
+"n": 250,
+"kind": "card",
+"title": "No pay-to-win",
+"body": "There is nothing to buy in this app, with money or with coins, that skips the work. XP, rank and streaks come only from sessions, proof and habits."
 }
 ]

@@ -6,6 +6,7 @@ import '../app/state.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/extras.dart';
+import '../core/game.dart';
 import '../core/rules.dart';
 import '../core/streak_engine.dart';
 import '../core/tools.dart';
@@ -73,7 +74,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     const H('Rank'),
                     const SizedBox(height: 4),
-                    Text(v.rank.rank.name.toUpperCase(),
+                    Text('${'★' * prestige(v)}${shownRank(v).rank.name.toUpperCase()}',
                         key: const Key('rankTitle'),
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: cyan, letterSpacing: 1)),
                   ]))),

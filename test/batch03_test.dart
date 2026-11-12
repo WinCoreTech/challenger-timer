@@ -44,7 +44,7 @@ void main() {
     await r.app.setKv('flag.53', '0');
     await r.session();
     r.clock.advance(const Duration(days: 4)); // 2 frozen + 1 uncovered miss
-    expect(r.v.xpExtras, isEmpty);
+    expect(r.v.xpExtras.where((e) => e.$1.startsWith('Comeback')), isEmpty);
     await r.session();
     expect(r.v.master.comebackDays, {r.v.today});
     expect(r.v.xpExtras, contains(('Comeback bonus (double XP)', 54)));
