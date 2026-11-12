@@ -7,7 +7,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.speech.RecognizerIntent
 import android.view.WindowManager
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
 import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -24,7 +30,10 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity : FlutterActivity() {
+class MainActivity : FlutterActivity(), SensorEventListener {
+    private var faceDownSince = 0L
+    private var faceDownOn = false
+
     private var channel: MethodChannel? = null
     private var pendingPermission: MethodChannel.Result? = null
     private var pendingSpeech: MethodChannel.Result? = null
@@ -50,7 +59,39 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        listenFaceDown()
+    }
+
+    /** Feature 206: phone placed face down for two seconds while the app is open. */
+    private fun listenFaceDown() {
+        val sm = getSystemService(SensorManager::class.java)
+        sm.unregisterListener(this)
+        faceDownSince = 0L
+        if (!faceDownOn) return
+        sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.let { sm.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL) }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    override fun onSensorChanged(event: SensorEvent) {
+        val now = System.currentTimeMillis()
+        if (event.values[2] < -8.5f) {
+            if (faceDownSince == 0L) faceDownSince = now
+            if (now - faceDownSince > 2000L) {
+                faceDownSince = 0L
+                getSystemService(SensorManager::class.java).unregisterListener(this)
+                Core.nativeStart(this, "facedown")
+                channel?.invokeMethod("action", null)
+            }
+        } else {
+            faceDownSince = 0L
+        }
+    }
+
     override fun onPause() {
+        getSystemService(SensorManager::class.java).unregisterListener(this)
         // Feature 90: tells "switched to another app" apart from "screen turned off".
         screenOnAtPause = getSystemService(PowerManager::class.java).isInteractive
         super.onPause()
@@ -132,6 +173,22 @@ class MainActivity : FlutterActivity() {
                 "sendSms" -> result.success(
                     Core.sendSms(this, call.argument<String>("phone") ?: "", call.argument<String>("text") ?: "")
                 )
+                "dnd" -> {
+                    val nm = getSystemService(NotificationManager::class.java)
+                    if (nm.isNotificationPolicyAccessGranted) {
+                        nm.setInterruptionFilter(
+                            if (call.arguments == true) NotificationManager.INTERRUPTION_FILTER_PRIORITY
+                            else NotificationManager.INTERRUPTION_FILTER_ALL
+                        )
+                    }
+                    result.success(null)
+                }
+                "usage" -> result.success(usage())
+                "faceDown" -> {
+                    faceDownOn = call.arguments == true
+                    listenFaceDown()
+                    result.success(null)
+                }
                 "recStart" -> result.success(recStart(call.arguments as String))
                 "recStop" -> {
                     recStop()
@@ -209,6 +266,8 @@ class MainActivity : FlutterActivity() {
         e.putBoolean("blockAll", m["blockAll"] == true)
         e.putBoolean("blockInSession", m["blockInSession"] == true)
         e.putStringSet("allowApps", (m["allowApps"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet())
+        e.putBoolean("unlockFriction", m["unlockFriction"] == true)
+        e.putInt("scrollFrom", if (m["scrollFrom"] == null) -1 else num(m["scrollFrom"]).toInt())
         e.putInt("quietFrom", num(m["quietFrom"]).toInt())
         e.putInt("quietTo", num(m["quietTo"]).toInt())
         e.putInt("remCap", if (m["remCap"] == null) 3 else num(m["remCap"]).toInt())
@@ -257,6 +316,7 @@ class MainActivity : FlutterActivity() {
             "overlay" to Settings.canDrawOverlays(this),
             "exactAlarm" to (Build.VERSION.SDK_INT < 31 || getSystemService(AlarmManager::class.java).canScheduleExactAlarms()),
             "fullScreen" to (Build.VERSION.SDK_INT < 34 || nm.canUseFullScreenIntent()),
+            "dnd" to nm.isNotificationPolicyAccessGranted,
             "battery" to getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(packageName)
         )
     }
@@ -268,6 +328,8 @@ class MainActivity : FlutterActivity() {
             "overlay" -> Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, pkg)
             "exactAlarm" -> if (Build.VERSION.SDK_INT >= 31) Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, pkg) else null
             "fullScreen" -> if (Build.VERSION.SDK_INT >= 34) Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, pkg) else null
+            "dnd" -> Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+            "display" -> Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             "battery" -> Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, pkg)
             "notifications" -> Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
             else -> null
@@ -277,6 +339,43 @@ class MainActivity : FlutterActivity() {
         } catch (e: Exception) {
             startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, pkg))
         }
+    }
+
+    /** Features 207, 214, 215: today's unlocks and minutes per app, from usage access. */
+    private fun usage(): Map<String, Any> {
+        if (!Core.hasUsageAccess(this)) return mapOf("granted" to false)
+        val usm = getSystemService(UsageStatsManager::class.java)
+        val cal = java.util.Calendar.getInstance()
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0)
+        cal.set(java.util.Calendar.MINUTE, 0)
+        cal.set(java.util.Calendar.SECOND, 0)
+        val from = cal.timeInMillis
+        val now = System.currentTimeMillis()
+        var pickups = 0
+        val fg = HashMap<String, Long>()
+        val startAt = HashMap<String, Long>()
+        val events = usm.queryEvents(from, now)
+        val e = UsageEvents.Event()
+        while (events.hasNextEvent()) {
+            events.getNextEvent(e)
+            val pkg = e.packageName ?: continue
+            @Suppress("DEPRECATION")
+            when (e.eventType) {
+                18 -> pickups++ // KEYGUARD_HIDDEN (API 28+)
+                UsageEvents.Event.MOVE_TO_FOREGROUND -> startAt[pkg] = e.timeStamp
+                UsageEvents.Event.MOVE_TO_BACKGROUND -> startAt.remove(pkg)?.let { fg[pkg] = (fg[pkg] ?: 0L) + (e.timeStamp - it) }
+            }
+        }
+        for ((pkg, st) in startAt) fg[pkg] = (fg[pkg] ?: 0L) + (now - st)
+        val apps = fg.entries.filter { it.key != packageName && it.value > 60000L }.sortedByDescending { it.value }.take(10).map {
+            val label = try {
+                packageManager.getApplicationLabel(packageManager.getApplicationInfo(it.key, 0)).toString()
+            } catch (ex: Exception) {
+                it.key
+            }
+            mapOf("label" to label, "minutes" to (it.value / 60000L).toInt())
+        }
+        return mapOf("granted" to true, "pickups" to pickups, "apps" to apps, "total" to (fg.values.sum() / 60000L).toInt())
     }
 
     private fun listApps(): List<Map<String, String>> {

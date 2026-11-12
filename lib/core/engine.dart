@@ -41,6 +41,7 @@ class ActiveSession {
       this.tag = '',
       this.chain,
       this.taskId,
+      this.meta = const {},
       this.cycleWork = 0,
       this.cycleRest = 0,
       this.cycleLeft = 0,
@@ -56,6 +57,7 @@ class ActiveSession {
         tag: j['tag'] as String? ?? '',
         chain: j['chain'] as String?,
         taskId: j['taskId'] as String?,
+        meta: (j['meta'] as Map?)?.cast<String, Object?>() ?? const {},
         cycleWork: j['cycleWork'] as int? ?? 0,
         cycleRest: j['cycleRest'] as int? ?? 0,
         cycleLeft: j['cycleLeft'] as int? ?? 0,
@@ -87,6 +89,9 @@ class ActiveSession {
   /// The task this session works on (deadline features).
   final String? taskId;
 
+  /// Extra labels copied onto the session events: place (219), deep (221).
+  final Map<String, Object?> meta;
+
   /// Feature 77: remaining automatic rounds and their lengths.
   final int cycleWork, cycleRest, cycleLeft;
 
@@ -103,14 +108,14 @@ class ActiveSession {
 
   ActiveSession copy({int? startMs, int? pausedAt, bool clearPause = false, int? pauses}) => ActiveSession(
       sid, startMs ?? this.startMs, minutes, projectId, title, source,
-      isBreak: isBreak, flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId,
+      isBreak: isBreak, flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId, meta: meta,
       cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft,
       pausedAt: clearPause ? null : pausedAt ?? this.pausedAt, pauses: pauses ?? this.pauses);
 
   String encode() => jsonEncode({
         'sid': sid, 'startMs': startMs, 'minutes': minutes, 'projectId': projectId,
         'title': title, 'source': source, 'isBreak': isBreak, 'flow': flow, 'hard': hard, 'tag': tag,
-        'chain': chain, 'taskId': taskId, 'cycleWork': cycleWork, 'cycleRest': cycleRest, 'cycleLeft': cycleLeft,
+        'chain': chain, 'taskId': taskId, 'meta': meta, 'cycleWork': cycleWork, 'cycleRest': cycleRest, 'cycleLeft': cycleLeft,
         'pausedAt': pausedAt, 'pauses': pauses,
       });
 }

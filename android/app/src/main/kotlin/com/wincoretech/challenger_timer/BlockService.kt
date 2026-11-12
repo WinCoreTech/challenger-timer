@@ -171,6 +171,35 @@ class BlockService : Service() {
         val lp2 = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         lp2.topMargin = dp(12)
         root.addView(home, lp2)
+        if (Core.prefs(this).getBoolean("unlockFriction", false) && !inSession) {
+            // Feature 211: a 10-second wait, then a 5-minute pass for this app.
+            val pkg = current
+            val wait = Button(this).apply {
+                text = "OPEN IT ANYWAY (10 SECOND WAIT)"
+                setTextColor(Color.GRAY)
+                setBackgroundColor(Color.TRANSPARENT)
+                minimumHeight = dp(56)
+            }
+            wait.setOnClickListener {
+                wait.isEnabled = false
+                var left = 10
+                val step = object : Runnable {
+                    override fun run() {
+                        if (overlay == null) return
+                        if (left <= 0) {
+                            Core.passes[pkg] = System.currentTimeMillis() + 5 * 60000L
+                            hide()
+                        } else {
+                            wait.text = "WAIT $left. YOU CAN STILL START INSTEAD."
+                            left--
+                            handler.postDelayed(this, 1000L)
+                        }
+                    }
+                }
+                handler.post(step)
+            }
+            root.addView(wait, lp2)
+        }
         val params = WindowManager.LayoutParams(
             WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,

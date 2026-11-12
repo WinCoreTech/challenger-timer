@@ -65,6 +65,9 @@ List<Reminder> fixedReminders(DayView v) {
           start: true));
     }
   }
+  add(224, 2241, 13 * 60, 'Message check', 'First of two message slots today. Reply, then close them.');
+  add(224, 2242, 19 * 60, 'Message check', 'Second message slot. After this, messages can wait until tomorrow.');
+  add(225, 225, v.settingInt('nightHour', 23) * 60, 'Screens down', 'This is the hour you chose to stop screens. Tomorrow starts with tonight.');
   add(460, 460, v.cueMinute, 'Start-by date', 'A task reaches its start-by date today. Open Plan to see which.', start: true);
   return out;
 }

@@ -65,3 +65,7 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
 - Batch 8 (features 176 to 200): evening plan, morning confirm, time blocks, timetable and
   free slots, realistic capacity, weekly review and targets, WOOP, shutdown ritual, plan
   versus actual, move to tomorrow, energy matching, scoreboard, planning lists.
+- Batch 9 (features 201 to 225): blocking during sessions, allow-list, strict lock, auto Do Not
+  Disturb, face-down start, pickup counter, screen-time and time-thief report, urge
+  surfing, unlock friction, scheduled scroll time, focus score, deep work, place tags,
+  message batching and night-lock reminders. Mostly native: untested on device.

@@ -131,8 +131,8 @@ class _ToolState extends ConsumerState<ToolScreen> {
                 ChoiceChip(
                     key: Key('tool-set-$o'),
                     label: Text('$o'),
-                    selected: v.settingInt(t.setKey, t.setOptions.first) == o,
-                    onSelected: (_) => app.setSetting(t.setKey, '$o')),
+                    selected: v.settingInt(t.optKey, t.setOptions.first) == o,
+                    onSelected: (_) => app.setSetting(t.optKey, '$o')),
             ]),
             const SizedBox(height: 16),
           ],

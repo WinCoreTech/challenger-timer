@@ -19,6 +19,8 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Auto Do Not Disturb during sessions (optional). -->
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <!-- Voice proof: a 20-second voice note, recorded only while you hold the button. -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 

@@ -201,3 +201,28 @@
 198|done|2|Three prompts per goal.
 199|done|2|Explainer card; the app itself only counts inputs.
 200|done|2|One screen with the week's numbers. Tested.
+201|done|3|Chosen apps are also blocked while a session runs. Built, untested on device.
+202|done|3|Allow-list of apps that are never blocked. Built, untested on device.
+203|partial|3|STOP is hidden for the first N minutes. Android does not let an app stop you leaving it, so the "no exit" part depends on the blocker. Tested.
+204|done|3|Do Not Disturb on at session start, off at end. Built, untested on device.
+205|done|3|A prompt with the steps. Android does not let an app switch greyscale on.
+206|done|3|Face down for two seconds with the app open starts a session. Built, untested on device.
+207|done|3|Today's unlock count from usage access (Android 9+). Built, untested on device.
+208|done|3|90-second breathing wait. Widget test.
+209|done|3|Preset 10-minute session.
+210|done|3|Checklist for distracting thoughts.
+211|partial|3|10-second wait on the block screen, then a 5-minute pass. No typed reason (a text box inside the overlay is unreliable). Built, untested on device.
+212|done|3|30 minutes a day at a chosen hour when the blocker stands down. Built, untested on device.
+213|done||Chosen apps stay blocked until the first session of the day ends. State sync tested; blocker built, untested on device.
+214|done|3|Today's screen time and per-app minutes from usage access. Built, untested on device.
+215|done|3|Top three apps by time today. Built, untested on device.
+216|blocked|3|A desktop browser extension cannot be part of an Android app. Nothing built beyond a note.
+217|done|3|Four-item checklist.
+218|done|3|One-item pledge checklist.
+219|done|3|Library, room or lab chosen on the Timer tab and stored on the session.
+220|done|3|100 minus 15 per pause and 5 per noticed wander. Pickups are not included. Tested.
+221|done|3|DEEP WORK chip on the Timer tab; deep minutes counted separately. Tested.
+222|done|3|Daily deep-work target capped at 240 minutes. Tested.
+223|done|3|60-second breathing screen.
+224|done|3|Two fixed reminders at 13:00 and 19:00. Delivery untested on device.
+225|done|3|Reminder at a chosen night hour. Delivery untested on device.

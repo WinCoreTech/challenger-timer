@@ -36,6 +36,8 @@ class _TimerState extends ConsumerState<TimerScreen> {
   int minutes = 2;
   String? projectId;
   String tag = '';
+  String place = '';
+  bool deep = false;
   bool hard = false;
   final intention = TextEditingController();
 
@@ -129,7 +131,9 @@ class _TimerState extends ConsumerState<TimerScreen> {
                   child: Text('PAUSE (${2 - s.pauses} LEFT)'))),
           const SizedBox(width: 10),
         ],
-        if (!s.paused)
+        if (!s.paused && v.on(203) && s.elapsedMs(now) < v.settingInt('strictMinutes', 0) * msPerMinute)
+          Expanded(child: Text('Strict lock: STOP appears after ${v.settingInt('strictMinutes', 0)} minutes.', key: const Key('strict'), style: const TextStyle(color: dim)))
+        else if (!s.paused)
           Expanded(
               child: OutlinedButton(
                   key: const Key('stop'),
@@ -210,7 +214,8 @@ class _TimerState extends ConsumerState<TimerScreen> {
       final noise = v.on(96) ? v.kv['noise'] ?? '' : '';
       await app.startSession(
           minutes: work > 0 ? work : m ?? minutes, projectId: pid, title: title(), tag: tag, hard: hard && v.on(90), flow: flow,
-          cycleWork: work, cycleRest: rest, cycleLeft: rounds > 0 ? rounds - 1 : 0, source: source);
+          cycleWork: work, cycleRest: rest, cycleLeft: rounds > 0 ? rounds - 1 : 0, source: source,
+          meta: {if (place.isNotEmpty) 'place': place, if (deep) 'deep': true});
       if (noise.isNotEmpty) await native.noise(noise);
     }
 
@@ -262,6 +267,13 @@ class _TimerState extends ConsumerState<TimerScreen> {
           for (final t in const ['study', 'code', 'write', 'admin'])
             ChoiceChip(key: Key('tag-$t'), label: Text(t.toUpperCase()), selected: tag == t, onSelected: (on) => setState(() => tag = on ? t : '')),
         ]),
+      if (v.on(219))
+        Wrap(spacing: 8, children: [
+          for (final t in const ['library', 'room', 'lab'])
+            ChoiceChip(key: Key('place-$t'), label: Text(t.toUpperCase()), selected: place == t, onSelected: (on) => setState(() => place = on ? t : '')),
+        ]),
+      if (v.on(221))
+        FilterChip(key: const Key('deep'), label: const Text('DEEP WORK'), selected: deep, onSelected: (x) => setState(() => deep = x)),
       const SizedBox(height: 12),
       Center(child: Big('${two(minutes)}:00', size: 96)),
       const SizedBox(height: 12),

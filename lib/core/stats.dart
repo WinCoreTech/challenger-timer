@@ -137,6 +137,15 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
     ];
 
 final Map<String, Stat> stats = {
+  'focus': (v) {
+    final f = averageFocus(v);
+    return f == null ? ['-', 'No sessions yet.'] : ['$f', 'average focus score out of 100', '100 minus 15 per pause and 5 per noticed wander.'];
+  },
+  'deep': (v) => [
+        '${deepMinutes(v, day: v.today)} / ${deepTarget(v)} min',
+        'of deep work today (sessions marked DEEP on the Timer tab)',
+        'Lifetime deep work: ${(deepMinutes(v) / 60).toStringAsFixed(1)} hours. The target stops at 4 hours a day on purpose.',
+      ],
   'confirm': (v) {
     final ok = v.type(Ev.tool).any((e) => e.get<int>('n') == 177 && e.day == v.today);
     return [ok ? 'Confirmed' : 'Not yet', 'First task today: ${v.nextStep}', 'Alarm at ${hhmm(v.todayPlan?.cueMinute ?? v.cueMinute)}.'];

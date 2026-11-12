@@ -322,3 +322,24 @@ String breakIdea(int seed) => breakIdeas[seed.abs() % breakIdeas.length];
 int wanderCount(DayView v, {String? sid}) =>
     v.type(Ev.tool).where((e) => e.get<int>('n') == 92 && (sid == null || e.get<String>('sid') == sid)).length;
 int breakOverruns(DayView v) => v.type(Ev.tool).where((e) => e.get<int>('n') == 93).length;
+
+// ---- 220. Focus score, 221/222 deep work -------------------------------------------
+/// 100 minus 15 per pause and 5 per noticed wander, never below 0.
+int focusScore(DayView v, String sid) {
+  final pauses = v.type(Ev.sessionPause).where((e) => e.get<String>('sid') == sid).length;
+  return (100 - 15 * pauses - 5 * wanderCount(v, sid: sid)).clamp(0, 100);
+}
+
+int? averageFocus(DayView v) {
+  final ids = [for (final e in v.type(Ev.sessionDone)) e.get<String>('sid') ?? ''];
+  if (ids.isEmpty) return null;
+  return (ids.fold(0, (a, s) => a + focusScore(v, s)) / ids.length).round();
+}
+
+int deepMinutes(DayView v, {int? day}) => v
+    .type(Ev.sessionDone)
+    .where((e) => e.payload['deep'] == true && (day == null || e.day == day))
+    .fold(0, (a, e) => a + (e.get<num>('minutes') ?? 0).toInt());
+
+/// 222: the daily deep-work target is capped at 4 hours.
+int deepTarget(DayView v) => v.settingInt('deepTarget', 60).clamp(15, 240);

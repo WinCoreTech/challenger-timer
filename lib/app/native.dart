@@ -25,6 +25,13 @@ abstract class Native {
   Future<void> recStop();
   Future<void> play(String path);
 
+  /// Do Not Disturb on or off (needs notification-policy access).
+  Future<void> dnd(bool on);
+
+  /// Today's phone usage: {granted, pickups, total, apps: [{label, minutes}]}.
+  Future<Map<String, Object?>> usage();
+  Future<void> faceDown(bool on);
+
   /// Keeps the screen awake (hard mode).
   Future<void> keepScreenOn(bool on);
 
@@ -99,6 +106,12 @@ class ChannelNative implements Native {
   Future<void> recStop() => _call<void>('recStop');
   @override
   Future<void> play(String path) => _call<void>('play', path);
+  @override
+  Future<void> dnd(bool on) => _call<void>('dnd', on);
+  @override
+  Future<Map<String, Object?>> usage() async => (await _call<Map>('usage'))?.cast<String, Object?>() ?? const {'granted': false};
+  @override
+  Future<void> faceDown(bool on) => _call<void>('faceDown', on);
   @override
   Future<void> keepScreenOn(bool on) => _call<void>('keepScreenOn', on);
   @override
@@ -177,6 +190,13 @@ class FakeNative implements Native {
   Future<void> recStop() async => calls.add('recStop');
   @override
   Future<void> play(String path) async => calls.add('play:$path');
+  Map<String, Object?> usageData = const {'granted': false};
+  @override
+  Future<void> dnd(bool on) async => calls.add('dnd:$on');
+  @override
+  Future<Map<String, Object?>> usage() async => usageData;
+  @override
+  Future<void> faceDown(bool on) async => calls.add('faceDown:$on');
   @override
   Future<void> keepScreenOn(bool on) async => calls.add('keepOn:$on');
   @override

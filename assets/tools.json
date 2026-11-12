@@ -904,5 +904,193 @@
 "kind": "stat",
 "title": "Weekly scoreboard",
 "stat": "scoreboard"
+},
+{
+"n": 201,
+"kind": "toggle",
+"title": "App blocker in sessions",
+"intro": "Your blocked apps (chosen in Settings) are also blocked while a session is running. Needs usage access and display-over-apps, like Earn your phone.",
+"setKey": "blockInSession",
+"setLabel": "Block my chosen apps during sessions"
+},
+{
+"n": 202,
+"kind": "special",
+"title": "Allow-list",
+"intro": "Apps that stay open even in block-all mode. Phone, launcher and settings are always allowed."
+},
+{
+"n": 203,
+"kind": "stat",
+"title": "Strict lock",
+"stat": "focus",
+"intro": "Hide the STOP button for the first minutes of every session. Android does not let an app stop you leaving, so pair this with the app blocker.",
+"setKey": "strictMinutes",
+"setLabel": "No STOP for the first N minutes (0 = off)",
+"setOptions": [
+0,
+2,
+5,
+10,
+15
+]
+},
+{
+"n": 204,
+"kind": "toggle",
+"title": "Auto Do Not Disturb",
+"intro": "Switches Do Not Disturb on when a session starts and off when it ends. Calls from starred contacts still ring if your phone is set that way. Needs \"Do Not Disturb access\" in system settings.",
+"setKey": "autoDnd",
+"setLabel": "Do Not Disturb during sessions"
+},
+{
+"n": 205,
+"kind": "card",
+"title": "Greyscale prompt",
+"body": "A grey phone is a boring phone. During work hours, turn on greyscale: Settings, Accessibility, Colour correction (or Digital Wellbeing, Bedtime mode). Android does not let an app flip this for you."
+},
+{
+"n": 206,
+"kind": "toggle",
+"title": "Face-down start",
+"intro": "With the app open, put the phone face down for two seconds and a 2-minute session starts.",
+"setKey": "faceDown",
+"setLabel": "Start when I put the phone face down"
+},
+{
+"n": 207,
+"kind": "special",
+"title": "Pickup counter"
+},
+{
+"n": 208,
+"kind": "special",
+"title": "Urge surfing",
+"intro": "Want to quit or scroll? Wait 90 seconds and breathe. The urge peaks and passes. Then choose."
+},
+{
+"n": 209,
+"kind": "session",
+"title": "Ten-minute rule",
+"intro": "Want Instagram? Allowed. After ten more minutes.",
+"minutes": 10,
+"task": "Ten more minutes, then I may choose."
+},
+{
+"n": 210,
+"kind": "list",
+"title": "Parking lot",
+"intro": "Jot the distracting thought here and go back to work. It will still be here.",
+"prompts": [
+"The thought"
+]
+},
+{
+"n": 211,
+"kind": "toggle",
+"title": "Unlock friction",
+"intro": "Adds an \"open it anyway\" button to the block screen that makes you wait 10 seconds, then lets that app through for 5 minutes.",
+"setKey": "unlockFriction",
+"setLabel": "Allow opening a blocked app after a 10-second wait"
+},
+{
+"n": 212,
+"kind": "card",
+"title": "Scheduled scroll time",
+"body": "Pick an hour below. For 30 minutes from that hour the blocker stands down, guilt-free, every day. Choosing 0 switches it off.",
+"setKey": "scrollHour",
+"setLabel": "Scroll time starts at (hour, 0 = off)",
+"setOptions": [
+0,
+13,
+17,
+19,
+21
+]
+},
+{
+"n": 214,
+"kind": "special",
+"title": "Screen-time import"
+},
+{
+"n": 215,
+"kind": "special",
+"title": "Time-thief report",
+"intro": "The three apps that took the most of today."
+},
+{
+"n": 216,
+"kind": "card",
+"title": "Website blocker",
+"body": "Not part of this app. A desktop browser extension is a separate program that would have to be built and installed on your computer."
+},
+{
+"n": 217,
+"kind": "check",
+"title": "Desk checklist",
+"items": [
+"Water on the desk",
+"Charger plugged in",
+"Extra tabs closed",
+"Phone out of reach"
+]
+},
+{
+"n": 218,
+"kind": "check",
+"title": "Single-tab pledge",
+"items": [
+"One tab for this session. I close the rest now."
+]
+},
+{
+"n": 220,
+"kind": "stat",
+"title": "Focus score",
+"stat": "focus"
+},
+{
+"n": 222,
+"kind": "stat",
+"title": "Deep-hours target",
+"stat": "deep",
+"setKey": "deepTarget",
+"setLabel": "Daily deep-work target (minutes, max 240)",
+"setOptions": [
+30,
+60,
+120,
+180,
+240
+]
+},
+{
+"n": 223,
+"kind": "special",
+"title": "Attention warm-up",
+"intro": "Sixty seconds of slow breathing before hard work."
+},
+{
+"n": 224,
+"kind": "toggle",
+"title": "Message batching",
+"intro": "Two reminders a day, at 1 pm and 7 pm, to check messages then and not in between.",
+"setKey": "rem.224",
+"setLabel": "Remind me at my two message times"
+},
+{
+"n": 225,
+"kind": "toggle",
+"title": "Night lock",
+"intro": "A nudge to put screens down at the hour you choose.",
+"setKey": "rem.225",
+"setLabel": "Nudge me at night",
+"setOptions": [
+21,
+22,
+23
+],
+"optKey": "nightHour"
 }
 ]

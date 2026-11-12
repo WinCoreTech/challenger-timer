@@ -223,6 +223,9 @@ object Core {
 
     fun blockedApps(c: Context): Set<String> = prefs(c).getStringSet("blockedApps", emptySet()) ?: emptySet()
 
+    /** Feature 211: package -> time until which it was let through after the wait. */
+    val passes = HashMap<String, Long>()
+
     fun timerRunning(c: Context): Boolean = prefs(c).getLong("timerEnd", 0L) > System.currentTimeMillis()
 
     /** Blocking during a running session (feature 201). */
@@ -241,6 +244,15 @@ object Core {
     /** Is [pkg] blocked right now? Block-all mode (feature 22) spares an allow-list. */
     fun isBlocked(c: Context, pkg: String, allow: Set<String>): Boolean {
         if (pkg.isEmpty() || pkg == c.packageName) return false
+        val now = System.currentTimeMillis()
+        if ((passes[pkg] ?: 0L) > now) return false
+        // Feature 212: thirty guilt-free minutes a day, at a time chosen in advance.
+        val scroll = prefs(c).getInt("scrollFrom", -1)
+        if (scroll >= 0 && !timerRunning(c)) {
+            val cal = Calendar.getInstance()
+            val minute = cal.get(Calendar.HOUR_OF_DAY) * 60 + cal.get(Calendar.MINUTE)
+            if (minute >= scroll && minute < scroll + 30) return false
+        }
         if (blockedApps(c).contains(pkg)) return true
         return prefs(c).getBoolean("blockAll", false) && earnBlock(c) && !allow.contains(pkg)
     }

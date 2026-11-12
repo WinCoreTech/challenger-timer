@@ -113,6 +113,7 @@ class App extends Notifier<AppData> {
       String tag = '',
       String? chain,
       String? taskId,
+      Map<String, Object?> meta = const {},
       int cycleWork = 0,
       int cycleRest = 0,
       int cycleLeft = 0}) async {
@@ -123,16 +124,17 @@ class App extends Notifier<AppData> {
     minutes ??= v.doorMinutes;
     final pid = projectId ?? state.kv[K.lastProject];
     final s = ActiveSession(newId(), begin, flow ? 0 : minutes, pid, title ?? v.nextStep, source,
-        flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId,
+        flow: flow, hard: hard, tag: tag, chain: chain, taskId: taskId, meta: meta,
         cycleWork: cycleWork, cycleRest: cycleRest, cycleLeft: cycleLeft);
     await setKv(K.active, s.encode());
     if (pid != null) await setKv(K.lastProject, pid);
     await log(Ev.sessionStart, {
       'sid': s.sid, 'minutes': s.minutes, 'projectId': pid, 'source': source, 'title': s.title,
-      if (tag.isNotEmpty) 'tag': tag, if (flow) 'flow': true, if (hard) 'hard': true, 'taskId': ?taskId,
+      if (tag.isNotEmpty) 'tag': tag, if (flow) 'flow': true, if (hard) 'hard': true, 'taskId': ?taskId, ...meta,
     }, Moment(begin, now.offsetMin));
     native.haptic();
     if (hard) await native.keepScreenOn(true);
+    if (v.on(204) && v.kv['autoDnd'] == '1') await native.dnd(true);
     if (startMs == null) await native.startTimer(s.endMs, s.title);
     await syncNative();
   }
@@ -165,7 +167,8 @@ class App extends Notifier<AppData> {
     await log(Ev.sessionDone,
         {
           'sid': s.sid, 'minutes': minutes, 'projectId': s.projectId,
-          if (s.tag.isNotEmpty) 'tag': s.tag, if (s.taskId != null) 'taskId': s.taskId,
+          if (s.tag.isNotEmpty) 'tag': s.tag, if (s.taskId != null) 'taskId': s.taskId, ...s.meta,
+          if (s.pauses > 0) 'pauses': s.pauses,
         },
         at);
     await setKv(
@@ -202,6 +205,7 @@ class App extends Notifier<AppData> {
 
   Future<void> _quiet(ActiveSession s) async {
     if (s.hard) await native.keepScreenOn(false);
+    if (view.on(204) && view.kv['autoDnd'] == '1') await native.dnd(false);
     if (view.kv['noise'] != null && view.kv['noise']!.isNotEmpty) await native.noise('');
   }
 
@@ -397,6 +401,7 @@ class App extends Notifier<AppData> {
 
   Future<void> syncNative() async {
     final v = view;
+    await native.faceDown(v.on(206) && v.kv['faceDown'] == '1' && v.active == null);
     Map<String, Object?> sw(String k) => {'on': v.sw(k).on, 'offAt': v.sw(k).offAt ?? 0};
     final lastDone = v.sessionDays.isEmpty ? -1 : v.sessionDays.reduce((a, b) => a > b ? a : b);
     await native.sync({
@@ -422,6 +427,8 @@ class App extends Notifier<AppData> {
       'blockAll': v.on(22) && v.kv['blockAll'] == '1',
       'blockInSession': v.on(201) && v.kv['blockInSession'] == '1',
       'allowApps': v.kv['allowApps'] == null ? const <String>[] : (jsonDecode(v.kv['allowApps']!) as List).cast<String>(),
+      'unlockFriction': v.on(211) && v.kv['unlockFriction'] == '1',
+      'scrollFrom': v.on(212) && v.settingInt('scrollHour', 0) > 0 ? v.settingInt('scrollHour', 0) * 60 : null,
       'quietFrom': v.on(455) ? v.settingInt('quietFrom', 0) : 0,
       'quietTo': v.on(455) ? v.settingInt('quietTo', 0) : 0,
       'remCap': v.on(454) ? v.settingInt('remCap', 3) : 99,
