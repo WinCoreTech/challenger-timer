@@ -1,8 +1,10 @@
 /// Daily reminders handed to the native scheduler. Pure Dart.
 library;
 
+import 'day.dart';
 import 'deadlines.dart';
 import 'engine.dart';
+import 'planning.dart';
 import 'events.dart';
 import 'tools.dart';
 import 'wellbeing.dart';
@@ -43,7 +45,10 @@ List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
   }
   out.addAll(fixedReminders(v));
   // 303: nothing is ever scheduled inside the protected sleep window.
-  return [for (final r in out) if (!inSleepWindow(v, r.minute)) r];
+  // 468: nothing rings during a lecture on today's timetable.
+  final wd = weekdayOf(v.today);
+  bool lecture(int m) => v.on(468) && classesOn(v, wd).any((c) => m >= c.integer('from') && m < c.integer('to'));
+  return [for (final r in out) if (!inSleepWindow(v, r.minute) && !lecture(r.minute)) r];
 }
 
 /// Reminders that come from settings rather than from user-written entries.
@@ -73,7 +78,39 @@ List<Reminder> fixedReminders(DayView v) {
   add(224, 2241, 13 * 60, 'Message check', 'First of two message slots today. Reply, then close them.');
   add(224, 2242, 19 * 60, 'Message check', 'Second message slot. After this, messages can wait until tomorrow.');
   add(225, 225, v.settingInt('nightHour', 23) * 60, 'Screens down', 'This is the hour you chose to stop screens. Tomorrow starts with tonight.');
-  add(460, 460, v.cueMinute, 'Start-by date', 'A task reaches its start-by date today. Open Plan to see which.', start: true);
+  // 460: on the start-by date itself, not the due date.
+  if (v.on(460)) {
+    final due = deadlines(v).where((t) => t.est > 0 && t.startBy <= v.today).toList();
+    if (due.isNotEmpty) {
+      out.add(Reminder(460, v.cueMinute + 5, 'Start-by date reached', '"${due.first.task.str('title')}" has to start today to finish calmly.', start: true));
+    }
+  }
+  // 453: gentle nudge half an hour after the cue, before the 9 pm rescue.
+  if (v.on(453)) out.add(Reminder(453, (v.cueMinute + 30) % 1440, 'Still there', v.nextStep, start: true, skipIfWorked: true));
+  // 456: the streak is alive and today is still open at 6 pm.
+  if (v.on(456) && v.master.current > 0) {
+    out.add(Reminder(456, 18 * 60, 'Streak still open today', '${v.master.current} days so far. Two minutes keeps it.', start: true, skipIfWorked: true));
+  }
+  // 457 and 458: one line in the morning, one in the evening.
+  if (v.on(457) && v.kv['rem.457'] == '1') out.add(Reminder(457, v.settingInt('wakeHour', 7) * 60 + 30, 'Today', 'First step: ${v.nextStep}'));
+  if (v.on(458) && v.kv['rem.458'] == '1') {
+    out.add(Reminder(458, 21 * 60 + 30, 'Today in one line',
+        v.workedToday ? '${v.sessionsToday} sessions, ${v.minutesToday} minutes. Done is done.' : 'Nothing logged yet. The day ends at ${hhmm(v.dayEndHour * 60)}.'));
+  }
+  // 459: only while tomorrow has no first task.
+  if (v.on(459) && v.tomorrowPlan == null) {
+    out.add(const Reminder(459, 21 * 60, 'Tomorrow', 'Set tomorrow\'s first task before 10 pm. It takes one line.'));
+  }
+  // 465: one of your own encouraging lines, a different one each day.
+  if (v.on(465)) {
+    final lines = v.of('t465').map((r) => r.str('text')).where((t) => t.isNotEmpty).toList();
+    if (lines.isNotEmpty) out.add(Reminder(465, 16 * 60, 'From past you', lines[v.today % lines.length]));
+  }
+  // 473: Sunday evening, the week ahead.
+  if (v.on(473)) {
+    final n = deadlines(v).where((t) => t.due > v.today && t.due <= v.today + 7).length;
+    out.add(Reminder(473, 18 * 60, 'The week ahead', n == 0 ? 'No due dates this week. Pick one thing to move forward.' : '$n due this week. Open Plan for the first one.', days: '0000001'));
+  }
   return out;
 }
 

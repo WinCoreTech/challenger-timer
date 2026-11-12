@@ -428,3 +428,4 @@ final Map<String, Stat> stats = {
         '${_plural(v.master.totalDays, 'day')} shown up',
       ],
 };
+

@@ -9,6 +9,7 @@ import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/flags.dart';
+import '../core/analytics.dart';
 import '../core/stats.dart';
 import '../core/tools.dart';
 import 'share.dart';
@@ -199,7 +200,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
   }
 
   List<Widget> _stat(DayView v, ToolDef t) {
-    final lines = (stats[t.stat] ?? (_) => const ['-'])(v);
+    final lines = (stats[t.stat] ?? analyticsStats[t.stat] ?? (_) => const ['-'])(v);
     return [
       Big(lines.first, size: 48, color: cyan, key: const Key('stat-value')),
       const SizedBox(height: 8),

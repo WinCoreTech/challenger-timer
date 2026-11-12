@@ -45,7 +45,10 @@ class AlarmReceiver : BroadcastReceiver() {
         val start = Core.activityPending(c, Core.ACTION_START2, kind, if (rescue) 31 else 30)
         val n = Notification.Builder(c, if (rescue) Core.CH_CALL else Core.CH_ALARM)
             .setSmallIcon(R.drawable.ic_stat)
-            .setContentTitle(if (rescue) "Two minutes saves today" else "Time for your first task")
+            .setContentTitle(
+                if (rescue) "Two minutes saves today"
+                else (Core.prefs(c).getString("cueTitle", "") ?: "").ifBlank { "Time for your first task" }
+            )
             .setContentText(task)
             .setStyle(Notification.BigTextStyle().bigText(task))
             .setCategory(if (rescue) Notification.CATEGORY_CALL else Notification.CATEGORY_ALARM)

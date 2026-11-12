@@ -80,3 +80,8 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   drafts and help requests; squads, rooms, leaderboards and cheers marked needs-backend
   with honest "not connected" screens; playbook prompts (WOOP-style logs, Feynman, Ivy
   Lee, stoic morning and evening); career-path trackers, 80/20 finder, compounding.
+- Batches 17 to 19 (features 401 to 475): flashcards with spaced repetition, exam plan,
+  attendance, study sessions and logs; day score, trends, insights, milestone timeline, CSV
+  export; reminder set (nudge, streak at risk, morning brief, evening wrap, night-before,
+  start-by, notes from past you, Sunday preview), class silence, tone picker, own alarm
+  words, partial Hindi and Marathi.

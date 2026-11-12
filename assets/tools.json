@@ -2440,5 +2440,541 @@
 "What changed this year",
 "Roadmap for next year"
 ]
+},
+{
+"n": 401,
+"kind": "log",
+"title": "Semester setup",
+"intro": "",
+"prompts": [
+"Subject",
+"Credits"
+]
+},
+{
+"n": 402,
+"kind": "list",
+"title": "Syllabus tracker",
+"intro": "Units as a checklist. Name them like \"OS: Unit 2\".",
+"prompts": [
+"Subject: unit"
+]
+},
+{
+"n": 403,
+"kind": "session",
+"title": "Same-day revision",
+"intro": "Ten minutes on a lecture the day it happens saves an hour later.",
+"minutes": 10,
+"task": "Re-read today's lecture notes and mark what is unclear."
+},
+{
+"n": 404,
+"kind": "special",
+"title": "Spaced repetition",
+"intro": "Add what you learned as cards. They come back after 1, 3, 7 and 21 days."
+},
+{
+"n": 405,
+"kind": "special",
+"title": "Flashcards",
+"intro": ""
+},
+{
+"n": 406,
+"kind": "session",
+"title": "Active recall",
+"intro": "Close the book. Write everything you remember. Then check.",
+"minutes": 10,
+"task": "Book closed: write what I remember."
+},
+{
+"n": 407,
+"kind": "session",
+"title": "Blurting",
+"intro": "Dump everything you know on one topic on a blank page, then mark the gaps.",
+"minutes": 10,
+"task": "Blurt one topic, then check the gaps."
+},
+{
+"n": 408,
+"kind": "log",
+"title": "Past-paper timer",
+"intro": "Run it as a 90-minute session in hard mode, then log the mark.",
+"prompts": [
+"Paper",
+"Marks I got",
+"Topics that cost me marks"
+]
+},
+{
+"n": 409,
+"kind": "stat",
+"title": "Exam countdown",
+"stat": "exam"
+},
+{
+"n": 410,
+"kind": "special",
+"title": "Exam plan generator",
+"intro": "Units spread evenly over the days you have."
+},
+{
+"n": 411,
+"kind": "list",
+"title": "Weak-topic list",
+"intro": "",
+"prompts": [
+"A topic I keep getting wrong"
+]
+},
+{
+"n": 412,
+"kind": "log",
+"title": "Error log",
+"intro": "A notebook of mistakes and fixes.",
+"prompts": [
+"The mistake",
+"Why it happened",
+"The fix"
+]
+},
+{
+"n": 413,
+"kind": "card",
+"title": "Assignment and lab-record tracker",
+"body": "Add each assignment or lab record as a task on the Plan tab and give it a due date. The task screen then tracks it with all the deadline tools."
+},
+{
+"n": 414,
+"kind": "special",
+"title": "Attendance tracker",
+"intro": "Tick present or absent after each class."
+},
+{
+"n": 415,
+"kind": "log",
+"title": "Internal marks tracker",
+"intro": "",
+"prompts": [
+"Subject and test",
+"Marks scored",
+"Out of"
+]
+},
+{
+"n": 416,
+"kind": "list",
+"title": "Doubt list",
+"intro": "Questions to ask the teacher.",
+"prompts": [
+"A doubt"
+]
+},
+{
+"n": 417,
+"kind": "card",
+"title": "Interleaving",
+"body": "In one study block, switch subject every 25 minutes: use Pomodoro on the Timer tab and pick a different project each round. Mixing feels harder and sticks better."
+},
+{
+"n": 418,
+"kind": "stat",
+"title": "Subject balance",
+"stat": "byProject"
+},
+{
+"n": 419,
+"kind": "check",
+"title": "Night-before checklist",
+"items": [
+"Hall ticket in the bag",
+"Pens, pencil, ID",
+"Alarm set",
+"In bed on time"
+]
+},
+{
+"n": 420,
+"kind": "log",
+"title": "Viva cards",
+"intro": "Likely questions with short answers. For timed review, add them as flashcards too.",
+"prompts": [
+"Likely question",
+"Short answer"
+]
+},
+{
+"n": 421,
+"kind": "card",
+"title": "Notes scanner",
+"body": "Take a photo of your notes as proof at the end of a session (PHOTO on the proof screen). It lands in the Vault under that project. There is no page-edge detection or PDF."
+},
+{
+"n": 422,
+"kind": "log",
+"title": "Formula sheet builder",
+"intro": "",
+"prompts": [
+"Formula",
+"When to use it"
+]
+},
+{
+"n": 423,
+"kind": "card",
+"title": "Group study session",
+"body": "Not connected. A timer shared across phones needs a server (BACKEND.md). Until then: start the same preset together and compare receipts."
+},
+{
+"n": 424,
+"kind": "log",
+"title": "Backlog plan",
+"intro": "Clear missed units in dated steps. Add each step as a task with a due date for reminders.",
+"prompts": [
+"Missed unit",
+"Date I will clear it"
+]
+},
+{
+"n": 425,
+"kind": "single",
+"title": "Committee bucket",
+"intro": "Cap the hours you give to committee and magazine work, so it cannot eat study time. Track it as its own project and compare in Subject balance.",
+"prompts": [
+"My weekly cap in hours"
+]
+},
+{
+"n": 427,
+"kind": "stat",
+"title": "Day score",
+"stat": "dayScore"
+},
+{
+"n": 428,
+"kind": "stat",
+"title": "Weekly report",
+"stat": "scoreboard"
+},
+{
+"n": 429,
+"kind": "log",
+"title": "Monthly review",
+"intro": "",
+"prompts": [
+"Best thing this month",
+"What slowed me down",
+"One change for next month"
+]
+},
+{
+"n": 430,
+"kind": "stat",
+"title": "Focus-hours trend",
+"stat": "trend"
+},
+{
+"n": 431,
+"kind": "stat",
+"title": "Start-time trend",
+"stat": "startTrend"
+},
+{
+"n": 432,
+"kind": "stat",
+"title": "Best hour and day",
+"stat": "bestDay"
+},
+{
+"n": 433,
+"kind": "stat",
+"title": "Streak health board",
+"stat": "health"
+},
+{
+"n": 434,
+"kind": "stat",
+"title": "Planned-versus-done ratio",
+"stat": "planRatio"
+},
+{
+"n": 435,
+"kind": "stat",
+"title": "Estimate accuracy",
+"stat": "estRatio"
+},
+{
+"n": 436,
+"kind": "stat",
+"title": "Time by project",
+"stat": "byProject"
+},
+{
+"n": 437,
+"kind": "stat",
+"title": "Deep-to-shallow ratio",
+"stat": "deepRatio"
+},
+{
+"n": 438,
+"kind": "stat",
+"title": "Procrastination index",
+"stat": "startDelay"
+},
+{
+"n": 439,
+"kind": "stat",
+"title": "Most-postponed tasks",
+"stat": "avoid"
+},
+{
+"n": 440,
+"kind": "stat",
+"title": "Mood versus output",
+"stat": "moodOutput"
+},
+{
+"n": 441,
+"kind": "stat",
+"title": "Sleep versus output",
+"stat": "sleepFocus"
+},
+{
+"n": 442,
+"kind": "stat",
+"title": "Place versus focus",
+"stat": "placeFocus"
+},
+{
+"n": 443,
+"kind": "stat",
+"title": "Consistency score",
+"stat": "consistency"
+},
+{
+"n": 444,
+"kind": "stat",
+"title": "Lifetime totals",
+"stat": "lifetime"
+},
+{
+"n": 445,
+"kind": "stat",
+"title": "Milestone timeline",
+"stat": "timeline"
+},
+{
+"n": 446,
+"kind": "stat",
+"title": "Plain-language insights",
+"stat": "insights"
+},
+{
+"n": 447,
+"kind": "log",
+"title": "Weekly experiment",
+"intro": "Test one change for a week.",
+"prompts": [
+"This week I will try",
+"What I expect"
+]
+},
+{
+"n": 448,
+"kind": "log",
+"title": "Experiment log",
+"intro": "",
+"prompts": [
+"What I tried",
+"What happened",
+"Keep it?"
+]
+},
+{
+"n": 449,
+"kind": "stat",
+"title": "Coach summary",
+"stat": "insights",
+"intro": "The AI coach is not connected (BACKEND.md). These lines are computed on the phone from your own log, with fixed rules. Nothing is guessed."
+},
+{
+"n": 450,
+"kind": "special",
+"title": "Data export (CSV)",
+"intro": ""
+},
+{
+"n": 451,
+"kind": "card",
+"title": "One smart reminder",
+"body": "Your cue alarm is the one reminder that matters. Its time is set in Settings and each evening on the Plan tab."
+},
+{
+"n": 452,
+"kind": "single",
+"title": "Your own words",
+"intro": "The cue alarm's headline, written by you.",
+"prompts": [
+"My alarm line"
+]
+},
+{
+"n": 453,
+"kind": "card",
+"title": "Escalation ladder",
+"body": "Three steps, and that is all: the cue alarm at your time, one gentle nudge 30 minutes later if you have not started, and the 9 pm rescue."
+},
+{
+"n": 454,
+"kind": "card",
+"title": "Daily cap",
+"body": "Ordinary reminders stop after this many in a day. The cue alarm and the 9 pm rescue are separate and always ring.",
+"setKey": "remCap",
+"setLabel": "Reminders per day at most",
+"setOptions": [
+1,
+2,
+3,
+5
+]
+},
+{
+"n": 455,
+"kind": "card",
+"title": "Quiet hours",
+"body": "No ordinary reminders between these hours. Pick the same hour twice to switch it off.",
+"setKey": "quietFrom",
+"setLabel": "Quiet from (minutes after midnight: 1320 = 10 pm)",
+"setOptions": [
+0,
+1260,
+1320,
+1380
+]
+},
+{
+"n": 456,
+"kind": "card",
+"title": "Streak-at-risk alert",
+"body": "At 6 pm, if the streak is alive and today is still open, one reminder with a Start button."
+},
+{
+"n": 457,
+"kind": "toggle",
+"title": "Morning brief",
+"intro": "One line after you wake: today's first step.",
+"setKey": "rem.457",
+"setLabel": "Send the morning brief"
+},
+{
+"n": 458,
+"kind": "toggle",
+"title": "Evening wrap",
+"intro": "One line at 9:30 pm: what today held.",
+"setKey": "rem.458",
+"setLabel": "Send the evening wrap"
+},
+{
+"n": 459,
+"kind": "card",
+"title": "Night-before reminder",
+"body": "At 9 pm, only if tomorrow has no first task yet."
+},
+{
+"n": 460,
+"kind": "card",
+"title": "Start-by reminders",
+"body": "A reminder on the day a task must start to finish calmly, not on the day it is due."
+},
+{
+"n": 461,
+"kind": "card",
+"title": "Humour voice",
+"body": "Dry and a little funny, never at your expense. The rank names are the proof."
+},
+{
+"n": 462,
+"kind": "card",
+"title": "Tone picker",
+"body": "Choose the voice of the line on Home before you start. 1 coach, 2 friend, 3 drill sergeant, 4 monk. None of them is allowed to blame you.",
+"setKey": "toneN",
+"setLabel": "Voice",
+"setOptions": [
+1,
+2,
+3,
+4
+]
+},
+{
+"n": 463,
+"kind": "card",
+"title": "No-guilt rule",
+"body": "No message may blame or shame. It is enforced by tests on the buddy message, the Home line and the support text."
+},
+{
+"n": 464,
+"kind": "card",
+"title": "Celebration alerts",
+"body": "Milestones and comebacks are celebrated inside the app the moment they happen: the DONE screen, badges and bonus XP. There is no separate notification for them."
+},
+{
+"n": 465,
+"kind": "list",
+"title": "Notes from past you",
+"intro": "Write encouraging lines to yourself. One comes back as a notification at 4 pm each day.",
+"prompts": [
+"A line future me should hear"
+]
+},
+{
+"n": 466,
+"kind": "card",
+"title": "Buddy nudges",
+"body": "Not connected. A nudge from your buddy's phone to yours needs a server (BACKEND.md)."
+},
+{
+"n": 467,
+"kind": "card",
+"title": "Place reminders",
+"body": "Not built. Reminders triggered by arriving somewhere need background location, which this app does not ask for. Closest version: \"Arrived at my study place\" in the toolbox, tapped by hand."
+},
+{
+"n": 468,
+"kind": "card",
+"title": "Class silence",
+"body": "Reminders that would ring during a lecture on your Timetable are dropped for that day."
+},
+{
+"n": 469,
+"kind": "card",
+"title": "Costly snooze",
+"body": "The alarm has no snooze button. To delay, you have to open Settings and pick an exact new cue time."
+},
+{
+"n": 473,
+"kind": "card",
+"title": "Sunday preview",
+"body": "On Sunday at 6 pm, one message with how many due dates the week holds."
+},
+{
+"n": 474,
+"kind": "card",
+"title": "Fatigue monitor",
+"body": "Not automatic yet. If you notice you are ignoring the alarm, change its time or its words (Your own words) so it is new again."
+},
+{
+"n": 475,
+"kind": "card",
+"title": "Languages",
+"body": "1 English, 2 Hindi, 3 Marathi. Only the main words on Home and the timer are translated so far. Everything else stays in English.",
+"setKey": "langN",
+"setLabel": "Language",
+"setOptions": [
+1,
+2,
+3
+]
 }
 ]

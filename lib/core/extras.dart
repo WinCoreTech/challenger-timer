@@ -345,3 +345,27 @@ int deepMinutes(DayView v, {int? day}) => v
 
 /// 222: the daily deep-work target is capped at 4 hours.
 int deepTarget(DayView v) => v.settingInt('deepTarget', 60).clamp(15, 240);
+
+// ---- 462. Tone picker, 475. Languages --------------------------------------------------
+/// The "not started yet" line in four voices. None of them blames.
+const toneLines = {
+  'coach': 'One start today keeps it going. You know the drill.',
+  'friend': 'Hey. Two minutes, then you are free. I will wait.',
+  'sergeant': 'Two minutes. On your feet. You have done harder.',
+  'monk': 'Begin. The rest follows by itself.',
+};
+
+/// Core words in English, Hindi and Marathi. Only the main Home and timer
+/// words are translated so far.
+const words = {
+  'START': {'hi': 'शुरू करें', 'mr': 'सुरू करा'},
+  'NEXT TINY STEP': {'hi': 'अगला छोटा कदम', 'mr': 'पुढचे छोटे पाऊल'},
+  'DAY STREAK': {'hi': 'दिनों की लड़ी', 'mr': 'दिवसांची साखळी'},
+  'DONE.': {'hi': 'हो गया.', 'mr': 'झाले.'},
+  'SAVE PROOF': {'hi': 'सबूत सहेजें', 'mr': 'पुरावा जतन करा'},
+  'JUST FIVE MORE': {'hi': 'बस पाँच मिनट और', 'mr': 'अजून फक्त पाच मिनिटे'},
+};
+
+String langOf(DayView v) => const ['', 'en', 'hi', 'mr'][v.settingInt('langN', 1).clamp(1, 3)];
+String toneOf(DayView v) => const ['', 'coach', 'friend', 'sergeant', 'monk'][v.settingInt('toneN', 0).clamp(0, 4)];
+String tr(DayView v, String s) => v.on(475) ? ((words[s] ?? const <String, String>{})[langOf(v)] ?? s) : s;

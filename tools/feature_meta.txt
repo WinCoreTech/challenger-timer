@@ -400,3 +400,77 @@
 398|done|6|Prompted entries, list, counter, habit, session or card as described.
 399|done|6|Prompted entries, list, counter, habit, session or card as described.
 400|done|6|Prompted entries, list, counter, habit, session or card as described.
+401|done|6|Prompted entries, list, checklist, session, stat or card as described.
+402|partial|6|A checklist of units, without per-subject progress bars.
+403|done|6|Prompted entries, list, checklist, session, stat or card as described.
+404|done|6|Cards return after 1, 3, 7 and 21 days; a miss returns tomorrow. Tested.
+405|done|6|Front and back cards on the same review ladder. Widget test.
+406|done|6|Prompted entries, list, checklist, session, stat or card as described.
+407|done|6|Prompted entries, list, checklist, session, stat or card as described.
+408|partial|6|A log for marks; timing uses a normal session.
+409|done|6|Open syllabus units and exam tasks left.
+410|done|6|Units spread evenly over the chosen days. Tested.
+411|done|6|Prompted entries, list, checklist, session, stat or card as described.
+412|done|6|Prompted entries, list, checklist, session, stat or card as described.
+413|partial|6|Uses tasks with due dates on the Plan tab; no separate tracker.
+414|done|6|Present and absent taps with percent and how many can be missed at 75%. Tested.
+415|partial|6|Entries only; no totals or averages.
+416|done|6|Prompted entries, list, checklist, session, stat or card as described.
+417|partial|6|A guide: Pomodoro with a different project each round.
+418|done|6|Minutes per project. Tested.
+419|done|6|Prompted entries, list, checklist, session, stat or card as described.
+420|done|6|Prompted entries, list, checklist, session, stat or card as described.
+421|partial|6|Photo proof of notes. No scanning or PDF.
+422|done|6|Prompted entries, list, checklist, session, stat or card as described.
+423|needs-backend|6|Shared timer needs a server. Screen says not connected.
+424|partial|6|Entries only; dates are not turned into reminders.
+425|partial|6|Saves your cap. It does not stop a timer when the cap is reached.
+427|done|7|0 to 100 from starting, minutes and proof. Tested.
+428|partial|7|The weekly scoreboard. Not a formatted report.
+429|done|7|Prompted entries, list, checklist, session, stat or card as described.
+430|done|7|Minutes per week for four weeks. Tested.
+431|done|7|Average first start per week. Tested.
+432|done|7|Best weekday and hour. Tested.
+433|done|7|Habits listed with those at risk first. Tested.
+434|done|7|Planned days followed by a session. Tested.
+435|done|7|Prompted entries, list, checklist, session, stat or card as described.
+436|done|7|Prompted entries, list, checklist, session, stat or card as described.
+437|done|7|Prompted entries, list, checklist, session, stat or card as described.
+438|done|7|Prompted entries, list, checklist, session, stat or card as described.
+439|done|7|Prompted entries, list, checklist, session, stat or card as described.
+440|partial|7|Average minutes by mood band, not a chart.
+441|partial|7|Same numbers as sleep versus focus.
+442|partial|7|Average session length per place.
+443|done|7|Prompted entries, list, checklist, session, stat or card as described.
+444|done|7|Prompted entries, list, checklist, session, stat or card as described.
+445|done|7|Dated firsts and totals. Tested.
+446|done|7|Sentences generated only when the log supports them. Tested.
+447|partial|7|Entries only.
+448|done|7|Prompted entries, list, checklist, session, stat or card as described.
+449|needs-backend|7|AI summary not connected. Shows rule-based insights from your own log instead.
+450|done|7|Whole event log as a CSV file through the share sheet. Tested.
+451|partial|7|The cue alarm is the reminder; it is not adaptive.
+452|done|7|Your line becomes the alarm headline. Built, untested on device.
+453|done|7|Cue alarm, one nudge 30 minutes later, 9 pm rescue. Tested.
+454|done|7|Cap applied on the native side. Built, untested on device.
+455|done|7|Quiet window applied on the native side. Built, untested on device.
+456|done|7|6 pm reminder while the streak is open. Tested.
+457|done|7|Morning line with the first step. Tested.
+458|done|7|Evening line with the day's numbers. Tested.
+459|done|7|9 pm reminder only when tomorrow has no first task. Tested.
+460|done|7|Reminder on the start-by date. Tested.
+461|done|7|Prompted entries, list, checklist, session, stat or card as described.
+462|partial|7|Four voices for the Home line only.
+463|done|7|Prompted entries, list, checklist, session, stat or card as described.
+464|partial|7|In-app celebration only; no notification.
+465|done|7|Your lines rotate daily at 4 pm, not at random times. Tested.
+466|needs-backend|7|Needs a server. Screen says not connected.
+467|blocked|7|Needs background location, which the app does not request. Manual check-in exists instead.
+468|done|7|Reminders inside a lecture on the timetable are dropped. Tested.
+469|partial|7|No snooze exists; delaying means choosing a new cue time in Settings.
+470|done||"Start 2 min" on the alarm, notification and overlay starts the session natively. Hand-over tested; buttons built, untested on device.
+471|done|7|Full-screen cue alarm over the lock screen. Built, untested on device.
+472|done|7|Call-style 9 pm rescue with ringtone channel. Built, untested on device.
+473|done|7|Sunday 6 pm message with the week's due count. Tested.
+474|partial|7|A note only. Ignored alerts are not counted.
+475|partial|7|Six core words in Hindi and Marathi; the rest of the app is English.

@@ -192,7 +192,7 @@ class _TimerState extends ConsumerState<TimerScreen> {
       const Spacer(),
       const Center(child: Poster(PosterArt.shield, size: 120, color: ink)),
       const SizedBox(height: 16),
-      const Center(child: Big('DONE.', size: 72, color: ink)),
+      Center(child: Big(tr(v, 'DONE.'), size: 72, color: ink)),
       const SizedBox(height: 8),
       Center(
           child: Text('${pending['minutes']} minutes finished. That is a full win.',
@@ -206,7 +206,7 @@ class _TimerState extends ConsumerState<TimerScreen> {
                 child: Text('Fist pump. Out loud if nobody is looking.', style: TextStyle(color: ink)))),
       const Spacer(),
       FilledButton(
-          key: const Key('saveProof'), onPressed: () => context.push('/proof'), child: const Text('SAVE PROOF')),
+          key: const Key('saveProof'), onPressed: () => context.push('/proof'), child: Text(tr(v, 'SAVE PROOF'))),
       const SizedBox(height: 12),
       OutlinedButton(
           key: const Key('fiveMore'),

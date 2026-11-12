@@ -32,6 +32,7 @@ String homeLine(DayView v) {
     if (f != null) return 'It is $f. A clean page, if you want one.';
   }
   if (v.on(266) && v.name.isNotEmpty && !v.workedToday) return '${v.name}, start the timer. Two minutes.';
+  if (v.on(462) && !v.workedToday && toneLines.containsKey(toneOf(v))) return toneLines[toneOf(v)]!;
   return streakLine(v.master);
 }
 
@@ -90,7 +91,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(width: 6),
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Big('${v.master.current}', size: 40, key: const Key('masterStreak')),
-                  const H('Day streak', size: 10),
+                  H(tr(v, 'DAY STREAK'), size: 10),
                 ]),
               ])),
         ]),
@@ -100,7 +101,7 @@ class HomeScreen extends ConsumerWidget {
         Panel(
             border: cyan,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const H('Next tiny step', color: cyan),
+              H(tr(v, 'NEXT TINY STEP'), color: cyan),
               const SizedBox(height: 8),
               Text(v.nextStep,
                   key: const Key('nextStep'),
@@ -119,7 +120,7 @@ class HomeScreen extends ConsumerWidget {
                       if (context.mounted) context.go('/timer');
                     },
                     child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Text(active == null ? 'START' : 'RUNNING',
+                      Text(active == null ? tr(v, 'START') : 'RUNNING',
                           style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w900, letterSpacing: 3)),
                       Text(active != null ? 'TAP TO SEE THE TIMER' : v.badDay ? '1 MINUTE. ROUGH-DAY RULES.' : '2 MINUTES. THAT IS THE WHOLE JOB.',
                           style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 1)),

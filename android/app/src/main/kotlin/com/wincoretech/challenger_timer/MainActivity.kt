@@ -245,6 +245,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         e.putInt("nextCueMinute", num(m["nextCueMinute"]).toInt())
         e.putString("task", m["task"] as? String ?: "")
         e.putString("name", m["name"] as? String ?: "")
+        e.putString("cueTitle", m["cueTitle"] as? String ?: "")
         e.putString("buddyPhone", m["buddyPhone"] as? String ?: "")
         e.putString("msgDone", m["msgDone"] as? String ?: "")
         e.putInt("msgDoneDay", num(m["msgDoneDay"]).toInt())

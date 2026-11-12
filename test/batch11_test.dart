@@ -64,7 +64,8 @@ void main() {
     await r.app.addRec('t6', {'a': ['Evening', 'study'], 'minute': 20 * 60, 'day': r.v.today});
     await r.app.setKv('rem.302', '1');
     final rem = buildReminders(r.v, tools);
-    expect(rem.map((x) => x.minute), unorderedEquals([20 * 60, 22 * 60 + 15]));
+    expect(rem.map((x) => x.minute), containsAll([20 * 60, 22 * 60 + 15]));
+    expect(rem.map((x) => x.minute), isNot(contains(30)), reason: 'the 00:30 if-then plan is inside the sleep window');
     expect(rem.any((x) => inSleepWindow(r.v, x.minute)), isFalse);
   });
 

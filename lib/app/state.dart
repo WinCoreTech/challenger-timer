@@ -411,6 +411,7 @@ class App extends Notifier<AppData> {
       'cueMinute': v.todayPlan?.cueMinute ?? v.cueMinute,
       'nextCueMinute': v.tomorrowPlan?.cueMinute ?? v.cueMinute,
       'task': v.nextStep,
+      'cueTitle': v.on(452) && (v.kv['t.452'] ?? '').length > 4 ? v.single(const ToolDef(n: 452, kind: 'single', title: '', prompts: [''])).first : '',
       'tomorrowTask': v.tomorrowPlan?.task ?? '',
       'lastSessionDay': lastDone,
       'name': v.name,
