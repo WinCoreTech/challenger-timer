@@ -325,3 +325,78 @@
 323|done|5|Four-item checklist.
 324|partial|5|Three-item checklist. It does not lock sprint mode.
 325|done|5|Flags more minutes with fewer finished tasks than last week. Tested.
+326|partial|5|One buddy contact with a daily SMS. Two-way pairing inside the app needs a server.
+327|done||8 pm SMS with the day's result, zero days included; share-sheet fallback. Message and fallback tested; sending built, untested on device.
+328|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+329|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+330|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+331|partial|5|A saved call link to open. No video inside the app.
+332|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+333|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+334|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+335|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+336|done|5|Promise, deadline and stake written by you and sent through the share sheet. Tested.
+337|partial|5|Records the stake only. No money is moved or held.
+338|partial|5|Asks your buddy by message to choose a forfeit. Their answer is not tracked.
+339|partial|5|Sends proof to your buddy through the share sheet. Their verdict is not recorded.
+340|partial|5|You send the weekly update by hand. No standing mentor access.
+341|partial|5|You send it by hand; not automatic.
+342|done|5|Pledge text shared through the share sheet.
+343|done|5|Daily post draft from today's numbers. Tested.
+344|needs-backend|5|Screen says it is not connected and shows no data. See BACKEND.md.
+345|partial|5|Help request through the share sheet, not a squad feed.
+346|done|5|Preset 15-minute teaching session.
+347|done|5|Call time with a reminder. Delivery untested on device.
+348|needs-backend|5|Local list only. Teammates cannot see it without a server.
+349|done|5|Entries of part and owner.
+350|partial|5|Explains what is shared. Per-person visibility needs a server.
+351|done|5|Timed blocks with reminders. Delivery untested on device.
+352|done|5|Four prompts.
+353|partial|5|A guide. No automatic targets or recovery week.
+354|partial|5|Saves the chosen gear. It changes nothing else.
+355|done|5|Prompted entries, list, counter, habit, session or card as described.
+356|done|5|Prompted entries, list, counter, habit, session or card as described.
+357|done|5|Prompted entries, list, counter, habit, session or card as described.
+358|partial|5|One preset habit. No chart of virtues.
+359|done|5|Badges for sessions started before 8 am. Tested.
+360|done|5|Prompted entries, list, counter, habit, session or card as described.
+361|done|5|Prompted entries, list, counter, habit, session or card as described.
+362|done|5|Deep-work flag, long presets, blocking and Do Not Disturb together.
+363|done|5|Prompted entries, list, counter, habit, session or card as described.
+364|done|5|Prompted entries, list, counter, habit, session or card as described.
+365|done|5|Projects ranked by results per hour. Tested.
+366|done|5|Prompted entries, list, counter, habit, session or card as described.
+367|done|5|Prompted entries, list, counter, habit, session or card as described.
+368|done|5|Prompted entries, list, counter, habit, session or card as described.
+369|done|5|Prompted entries, list, counter, habit, session or card as described.
+370|done|5|Prompted entries, list, counter, habit, session or card as described.
+371|done|5|Prompted entries, list, counter, habit, session or card as described.
+372|done|5|Prompted entries, list, counter, habit, session or card as described.
+373|done|5|Prompted entries, list, counter, habit, session or card as described.
+374|partial|5|A guide pointing at 90/20. No half-day calendar block.
+375|done|5|Prompted entries, list, counter, habit, session or card as described.
+376|done|6|Prompted entries, list, counter, habit, session or card as described.
+377|done|6|Prompted entries, list, counter, habit, session or card as described.
+378|done|6|Prompted entries, list, counter, habit, session or card as described.
+379|done|6|Prompted entries, list, counter, habit, session or card as described.
+380|partial|6|Manual counter. No sync from coding sites.
+381|done|6|Prompted entries, list, counter, habit, session or card as described.
+382|done|6|Prompted entries, list, counter, habit, session or card as described.
+383|needs-backend|6|Screen says it is not connected and shows no data. See BACKEND.md.
+384|done|6|Prompted entries, list, counter, habit, session or card as described.
+385|done|6|Prompted entries, list, counter, habit, session or card as described.
+386|done|6|Prompted entries, list, counter, habit, session or card as described.
+387|done|6|Prompted entries, list, counter, habit, session or card as described.
+388|done|6|Prompted entries, list, counter, habit, session or card as described.
+389|done|6|Prompted entries, list, counter, habit, session or card as described.
+390|done|6|Pinned vault items exported as text.
+391|done|6|Prompted entries, list, counter, habit, session or card as described.
+392|done|6|Prompted entries, list, counter, habit, session or card as described.
+393|done|6|Prompted entries, list, counter, habit, session or card as described.
+394|partial|6|Hours per project with marks at 1, 10, 50, 100, 500, 1000.
+395|done|6|Projected hours by graduation at your pace. Numbers, not a chart. Tested.
+396|done|6|Prompted entries, list, counter, habit, session or card as described.
+397|done|6|Prompted entries, list, counter, habit, session or card as described.
+398|done|6|Prompted entries, list, counter, habit, session or card as described.
+399|done|6|Prompted entries, list, counter, habit, session or card as described.
+400|done|6|Prompted entries, list, counter, habit, session or card as described.

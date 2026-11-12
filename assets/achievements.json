@@ -256,5 +256,19 @@
   "desc": "Finish five tasks before their due day.",
   "metric": "earlySubmits",
   "gte": 5
+ },
+ {
+  "id": "early_bird",
+  "name": "Before The Bell",
+  "desc": "Start a session before 8 am.",
+  "metric": "earlyStarts",
+  "gte": 1
+ },
+ {
+  "id": "early_bird_20",
+  "name": "Dawn Shift",
+  "desc": "Start 20 sessions before 8 am.",
+  "metric": "earlyStarts",
+  "gte": 20
  }
 ]

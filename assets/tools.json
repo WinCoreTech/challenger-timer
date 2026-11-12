@@ -1767,5 +1767,678 @@
 "intro": "Five minutes with nothing: no phone, no music. Sit. It builds the tolerance that study needs.",
 "minutes": 5,
 "task": "Sit with nothing for five minutes."
+},
+{
+"n": 326,
+"kind": "card",
+"title": "Buddy pairing",
+"body": "One buddy is saved in Settings and gets your daily result by SMS. A two-way pairing, where you also see their result inside the app, needs a server (BACKEND.md)."
+},
+{
+"n": 328,
+"kind": "card",
+"title": "Shared session room",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 329,
+"kind": "card",
+"title": "Fail-together mode",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 330,
+"kind": "card",
+"title": "Who is working now",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 331,
+"kind": "single",
+"title": "Body doubling",
+"intro": "Save a video-call link (Meet, Zoom, Jitsi) you and a friend use to work side by side. Open it from here before you start.",
+"prompts": [
+"Call link (https://...)"
+]
+},
+{
+"n": 332,
+"kind": "card",
+"title": "Class squad",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 333,
+"kind": "card",
+"title": "Squad streak",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 334,
+"kind": "card",
+"title": "Consistency leaderboard",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 335,
+"kind": "card",
+"title": "Seven-day duel",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 336,
+"kind": "share",
+"title": "Commitment contract",
+"intro": "A promise in your own words, sent to a real person.",
+"prompts": [
+"I promise to",
+"By (date)",
+"If I miss, I will"
+],
+"body": "Commitment from {name}: I promise to {0} by {1}. If I miss, I will {2}. Please hold me to it."
+},
+{
+"n": 337,
+"kind": "log",
+"title": "Small money stake",
+"intro": "Optional. The app records the stake and does not move any money: paying is between you and your friend or the charity.",
+"prompts": [
+"Amount",
+"Paid to (friend or charity) if I miss",
+"What counts as a miss"
+]
+},
+{
+"n": 338,
+"kind": "share",
+"title": "Forfeit",
+"intro": "Ask your buddy to choose a harmless penalty for a missed week.",
+"prompts": [
+"My weekly target"
+],
+"body": "{name} here. My target this week: {0}. If I miss it, you pick a harmless forfeit for me. What will it be?"
+},
+{
+"n": 339,
+"kind": "share",
+"title": "Buddy-verified proof",
+"intro": "Send what you did to your buddy and ask for a thumbs up. The app cannot record their reply without a server.",
+"prompts": [
+"What I did"
+],
+"body": "Proof from {name}: {0}. Today: {today} sessions, {minutes} min. Does this count? Reply yes or no."
+},
+{
+"n": 340,
+"kind": "share",
+"title": "Mentor view",
+"intro": "Send your week to a senior or teacher. They see it only when you send it.",
+"prompts": [
+"A note for them (optional)"
+],
+"body": "Weekly update from {name}: streak {streak} days, {starts} starts so far, rank {rank}. {0}"
+},
+{
+"n": 341,
+"kind": "share",
+"title": "Family report",
+"intro": "An optional weekly summary for home.",
+"prompts": [
+"A line for them (optional)"
+],
+"body": "This week from {name}: showing up {streak} days in a row. {0}"
+},
+{
+"n": 342,
+"kind": "share",
+"title": "Public pledge card",
+"intro": "Say it where people can see it.",
+"prompts": [
+"My pledge"
+],
+"body": "I pledge: {0}. Day {streak} of showing up. Ask me about it."
+},
+{
+"n": 343,
+"kind": "share",
+"title": "Build in public",
+"intro": "A draft of today's progress post. Edit before posting.",
+"prompts": [
+"What I worked on today"
+],
+"body": "Day {streak}: {0}. {today} sessions, {minutes} minutes. Next: {step}"
+},
+{
+"n": 344,
+"kind": "card",
+"title": "Cheers",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 345,
+"kind": "share",
+"title": "Help request",
+"intro": "Stuck? Ask a person. Through the share sheet for now: a squad feed needs a server.",
+"prompts": [
+"What I am stuck on",
+"What I already tried"
+],
+"body": "Stuck on: {0}. Tried: {1}. Ten minutes of your help would unblock me."
+},
+{
+"n": 346,
+"kind": "session",
+"title": "Teaching credit",
+"intro": "Explaining a topic to someone counts as a session. Proof afterwards: what you explained.",
+"minutes": 15,
+"task": "Explain one topic to a buddy, out loud."
+},
+{
+"n": 347,
+"kind": "log",
+"title": "Check-in call scheduler",
+"intro": "A fixed time to call your buddy, with a reminder.",
+"prompts": [
+"Who and about what"
+],
+"time": true
+},
+{
+"n": 348,
+"kind": "list",
+"title": "Group deadline board",
+"intro": "A local list for your team's due dates. Teammates do not see it without a server.",
+"prompts": [
+"Task, owner, due date"
+]
+},
+{
+"n": 349,
+"kind": "log",
+"title": "Team roles",
+"intro": "Who owns what in a group project.",
+"prompts": [
+"Part of the project",
+"Owner"
+]
+},
+{
+"n": 350,
+"kind": "card",
+"title": "Privacy controls",
+"body": "Nothing is shared by itself except one thing you switch on: the 8 pm buddy SMS, which carries sessions, minutes and streak. Everything else (digest, pledge, proof) leaves the phone only when you tap SHARE and choose who gets it. Per-person visibility rules need a server."
+},
+{
+"n": 351,
+"kind": "log",
+"title": "Five-minute blocks",
+"intro": "Plan a stretch of the day in very small blocks. Each block gets a reminder.",
+"prompts": [
+"What happens in this block"
+],
+"time": true
+},
+{
+"n": 352,
+"kind": "log",
+"title": "First-principles card",
+"intro": "Break it down to what is certainly true, then rebuild.",
+"prompts": [
+"The problem",
+"What I know is certainly true",
+"What I only assumed",
+"Rebuilt from the true parts"
+]
+},
+{
+"n": 353,
+"kind": "card",
+"title": "Sprint week",
+"body": "One week of long hours, sleep untouched, then a lighter week. Before starting, pass the Basics check. Use Marathon day or 90/20 on the Timer tab for the long blocks. The app does not raise any target for you, and never schedules inside your sleep window."
+},
+{
+"n": 354,
+"kind": "card",
+"title": "Intensity dial",
+"body": "Pick this week's gear. It is a note to yourself: the app keeps asking for two minutes either way.",
+"setKey": "intensity",
+"setLabel": "1 Normal, 2 Push, 3 Sprint",
+"setOptions": [
+1,
+2,
+3
+]
+},
+{
+"n": 355,
+"kind": "log",
+"title": "Regret test",
+"intro": "",
+"prompts": [
+"At 80, will I regret skipping this?",
+"So what do I do today?"
+]
+},
+{
+"n": 356,
+"kind": "log",
+"title": "25/5 list",
+"intro": "Write 25 goals. Keep 5. The other 20 are the ones to avoid, because they are tempting.",
+"prompts": [
+"My 25 (one per line)",
+"The 5 I keep",
+"What I will do to avoid the other 20"
+]
+},
+{
+"n": 357,
+"kind": "log",
+"title": "Franklin's two questions",
+"intro": "",
+"prompts": [
+"Morning: what good shall I do today?",
+"Evening: what good have I done today?"
+]
+},
+{
+"n": 358,
+"kind": "habit",
+"title": "Virtue of the week",
+"habit": "Practised this week's virtue",
+"intro": "Name the trait in the habit title if you like, and tick it each day you practised it."
+},
+{
+"n": 359,
+"kind": "card",
+"title": "Early session badge",
+"body": "Start a session before 8 am to earn \"Before The Bell\". Twenty of them earn \"Dawn Shift\"."
+},
+{
+"n": 360,
+"kind": "session",
+"title": "Deliberate practice",
+"intro": "Work at the edge of what you can do, and check each attempt straight away.",
+"minutes": 25,
+"task": "One hard problem type. Attempt, check, fix, repeat."
+},
+{
+"n": 361,
+"kind": "log",
+"title": "Feynman technique",
+"intro": "",
+"prompts": [
+"Topic",
+"Explained in simple words",
+"Where my explanation broke down"
+]
+},
+{
+"n": 362,
+"kind": "card",
+"title": "Deep work blocks",
+"body": "Mark a session as DEEP WORK on the Timer tab and use a 50 or 90 minute preset. Switch on app blocking in sessions and auto Do Not Disturb to protect it."
+},
+{
+"n": 363,
+"kind": "log",
+"title": "One percent better",
+"intro": "",
+"prompts": [
+"One small thing I improved today"
+]
+},
+{
+"n": 364,
+"kind": "log",
+"title": "Six-task list",
+"intro": "Six tasks, ranked. Do them in order. Unfinished ones move to tomorrow's list.",
+"prompts": [
+"1",
+"2",
+"3",
+"4",
+"5",
+"6"
+]
+},
+{
+"n": 365,
+"kind": "stat",
+"title": "80/20 finder",
+"stat": "pareto"
+},
+{
+"n": 366,
+"kind": "session",
+"title": "Shorter boxes",
+"intro": "Work fills the time you give it. Give this one less.",
+"minutes": 15,
+"task": "Finish a rough version in 15 minutes."
+},
+{
+"n": 367,
+"kind": "log",
+"title": "Stoic morning",
+"intro": "",
+"prompts": [
+"What could get in my way today?",
+"How I will meet it"
+]
+},
+{
+"n": 368,
+"kind": "log",
+"title": "Stoic evening",
+"intro": "",
+"prompts": [
+"What went well",
+"What went badly",
+"What changes tomorrow"
+]
+},
+{
+"n": 369,
+"kind": "log",
+"title": "Inversion",
+"intro": "",
+"prompts": [
+"How would I guarantee failure at this?",
+"So I will avoid"
+]
+},
+{
+"n": 370,
+"kind": "log",
+"title": "Hamming question",
+"intro": "",
+"prompts": [
+"The most important problem in my field",
+"Why I am not working on it",
+"A first step toward it"
+]
+},
+{
+"n": 371,
+"kind": "log",
+"title": "Build and sell",
+"intro": "Track both making things and showing them.",
+"prompts": [
+"What I made or showed"
+],
+"choices": [
+"made",
+"showed"
+]
+},
+{
+"n": 372,
+"kind": "log",
+"title": "Pain log",
+"intro": "Pain plus reflection.",
+"prompts": [
+"The setback",
+"The lesson"
+]
+},
+{
+"n": 373,
+"kind": "list",
+"title": "Say-no list",
+"intro": "What you turned down this week to protect your focus.",
+"prompts": [
+"Something I said no to"
+]
+},
+{
+"n": 374,
+"kind": "card",
+"title": "Maker's schedule",
+"body": "Guard one half-day with nothing booked in it. On the Timer tab, 90/20 gives two long uninterrupted rounds for it."
+},
+{
+"n": 375,
+"kind": "log",
+"title": "Ask for criticism",
+"intro": "Once a week, ask someone for honest feedback on your work.",
+"prompts": [
+"Who I asked",
+"What they said",
+"What I will change"
+]
+},
+{
+"n": 376,
+"kind": "single",
+"title": "Target role card",
+"intro": "",
+"prompts": [
+"The role",
+"Example companies",
+"Skills it needs"
+]
+},
+{
+"n": 377,
+"kind": "log",
+"title": "Skill gap map",
+"intro": "",
+"prompts": [
+"Skill",
+"Where I am (1 to 5)",
+"What the role needs (1 to 5)",
+"Next step to close the gap"
+]
+},
+{
+"n": 378,
+"kind": "list",
+"title": "Skill roadmaps",
+"intro": "Milestones for the skill you are building. Tick them off.",
+"prompts": [
+"Next milestone"
+]
+},
+{
+"n": 379,
+"kind": "habit",
+"title": "Daily DSA streak",
+"habit": "One DSA problem",
+"intro": ""
+},
+{
+"n": 380,
+"kind": "count",
+"title": "Problem count",
+"unit": "problems",
+"intro": "Entered by hand. Syncing from coding sites needs their APIs (BACKEND.md)."
+},
+{
+"n": 381,
+"kind": "list",
+"title": "Pattern tracker",
+"intro": "Problem types you have covered: two pointers, sliding window, BFS...",
+"prompts": [
+"A pattern I can now solve"
+]
+},
+{
+"n": 382,
+"kind": "log",
+"title": "Ship monthly",
+"intro": "One finished project every month.",
+"prompts": [
+"What I shipped",
+"Link"
+]
+},
+{
+"n": 383,
+"kind": "card",
+"title": "Commit mirror",
+"body": "Not connected. This needs a server that both phones talk to (see BACKEND.md). Until one exists the app shows nothing here: no made-up people, no made-up numbers."
+},
+{
+"n": 384,
+"kind": "count",
+"title": "Open-source counter",
+"unit": "contributions merged"
+},
+{
+"n": 385,
+"kind": "log",
+"title": "Competition log",
+"intro": "",
+"prompts": [
+"Event",
+"What I built or my rank",
+"What I learned"
+]
+},
+{
+"n": 386,
+"kind": "log",
+"title": "Paper a week",
+"intro": "",
+"prompts": [
+"Paper",
+"Summary in three lines"
+]
+},
+{
+"n": 387,
+"kind": "list",
+"title": "Maths track",
+"intro": "Linear algebra, probability, statistics: topics as you finish them.",
+"prompts": [
+"Topic finished"
+]
+},
+{
+"n": 388,
+"kind": "log",
+"title": "Mock interviews",
+"intro": "Run it timed (use a 50-minute session), then score yourself.",
+"prompts": [
+"Question or topic",
+"What went well",
+"What to fix"
+],
+"choices": [
+"1",
+"2",
+"3",
+"4",
+"5"
+]
+},
+{
+"n": 389,
+"kind": "session",
+"title": "Speaking reps",
+"intro": "Five minutes of speaking English out loud. Save a voice note as proof.",
+"minutes": 5,
+"task": "Speak in English about today's work for five minutes."
+},
+{
+"n": 390,
+"kind": "special",
+"title": "Living resume",
+"intro": "Built from the items you pinned in the Vault."
+},
+{
+"n": 391,
+"kind": "log",
+"title": "Application tracker",
+"intro": "",
+"prompts": [
+"Company and role",
+"Date applied"
+],
+"choices": [
+"applied",
+"test",
+"interview",
+"offer",
+"closed"
+]
+},
+{
+"n": 392,
+"kind": "habit",
+"title": "Networking streak",
+"habit": "One message to a senior or professional",
+"intro": ""
+},
+{
+"n": 393,
+"kind": "habit",
+"title": "Posting cadence",
+"habit": "One post about my work",
+"intro": ""
+},
+{
+"n": 394,
+"kind": "stat",
+"title": "Learning-hours counter",
+"stat": "skills"
+},
+{
+"n": 395,
+"kind": "stat",
+"title": "Compounding chart",
+"stat": "compound",
+"setKey": "gradYear",
+"setLabel": "Graduation year",
+"setOptions": [
+2027,
+2028,
+2029,
+2030
+]
+},
+{
+"n": 396,
+"kind": "card",
+"title": "One-hour card",
+"body": "One hour a day is 365 hours a year. That is nine full work weeks, taken from nowhere but the evenings you would not remember anyway."
+},
+{
+"n": 397,
+"kind": "list",
+"title": "Certificates shelf",
+"intro": "",
+"prompts": [
+"Certificate and date"
+]
+},
+{
+"n": 398,
+"kind": "list",
+"title": "Reading list",
+"intro": "",
+"prompts": [
+"Book or paper"
+]
+},
+{
+"n": 399,
+"kind": "log",
+"title": "Teach-back posts",
+"intro": "Write up what you learned so someone else could learn it.",
+"prompts": [
+"Topic",
+"My write-up"
+]
+},
+{
+"n": 400,
+"kind": "log",
+"title": "Yearly checkpoint",
+"intro": "",
+"prompts": [
+"Where am I against the target role?",
+"What changed this year",
+"Roadmap for next year"
+]
 }
 ]

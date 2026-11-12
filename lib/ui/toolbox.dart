@@ -11,6 +11,7 @@ import '../core/events.dart';
 import '../core/flags.dart';
 import '../core/stats.dart';
 import '../core/tools.dart';
+import 'share.dart';
 import 'special.dart';
 import 'theme.dart';
 
@@ -180,6 +181,18 @@ class _ToolState extends ConsumerState<ToolScreen> {
                     onChanged: (x) => app.setSetting(t.setKey, x ? '${v.today}' : '')),
               ],
             'special' => [specialTool(t.n, v)],
+            'share' => [
+                ..._fields(t),
+                Panel(child: Text(fillTemplate(t.body, v, [for (final x in c) x.text]), key: const Key('share-preview'))),
+                const SizedBox(height: 12),
+                FilledButton(
+                    key: const Key('tool-share'),
+                    onPressed: () async {
+                      await ref.read(shareProvider)(text: fillTemplate(t.body, v, [for (final x in c) x.text]));
+                      await app.log(Ev.tool, {'n': t.n});
+                    },
+                    child: const Text('SHARE')),
+              ],
             _ => [const Text('Unknown tool type.')],
           },
         ]));
@@ -204,7 +217,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
   List<Widget> _fields(ToolDef t) => [
         for (var i = 0; i < c.length; i++) ...[
           if (t.prompts.isNotEmpty) Padding(padding: const EdgeInsets.only(bottom: 6), child: H(t.prompts[i], color: Colors.white, size: 12)),
-          TextField(key: Key('tool-field-$i'), controller: c[i], minLines: 1, maxLines: 4),
+          TextField(key: Key('tool-field-$i'), controller: c[i], minLines: 1, maxLines: 4, onChanged: t.kind == 'share' ? (_) => setState(() {}) : null),
           const SizedBox(height: 12),
         ],
         if (t.choices.isNotEmpty)

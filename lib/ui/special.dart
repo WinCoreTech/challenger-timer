@@ -202,6 +202,7 @@ Widget specialTool(int n, DayView v) => switch (n) {
       283 => const BreathTool(60, box: true),
       560 => const BreathTool(180),
       153 || 154 || 159 || 168 || 179 || 185 => ProjectTool(n),
+      390 => const VaultTool(143),
       131 || 134 || 135 || 136 || 138 || 139 || 142 || 143 || 144 || 146 || 147 || 148 || 149 => VaultTool(n),
       _ => const Text('Not available.'),
     };

@@ -76,3 +76,7 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   fixes, mood before/after, stress, burnout and support prompts, overwhelm mode, forgive
   yesterday, sleep log and protected sleep window, wind-down, morning light and caffeine
   reminders, body prompts on the timer, 90/20 mode, nap timer, recovery score.
+- Batches 14 to 16 (features 326 to 400): share-sheet contracts, pledges, build-in-public
+  drafts and help requests; squads, rooms, leaderboards and cheers marked needs-backend
+  with honest "not connected" screens; playbook prompts (WOOP-style logs, Feynman, Ivy
+  Lee, stoic morning and evening); career-path trackers, 80/20 finder, compounding.

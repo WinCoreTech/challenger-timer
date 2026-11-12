@@ -15,4 +15,9 @@ implements `Backend`, then pass it to `backendProvider` in `lib/main.dart`.
 | 146 Cloud backup, 479 | A Firebase project (Storage or Firestore) or a Supabase project with one bucket | `google-services.json` in `android/app/` for Firebase, or `SUPABASE_URL` and `SUPABASE_ANON_KEY` |
 | 478 Google login | A Firebase project with Google sign-in enabled, and the debug and release SHA-1 fingerprints registered | `google-services.json` |
 
+| 326 two-way buddy, 328 to 330, 332 to 335, 339, 340, 344, 345, 348, 350 (squads, shared rooms, who is working, leaderboards, duels, cheers, verified proof, mentor access, group board) | Accounts and buddies: a Firebase project with Authentication (Google sign-in) and Firestore, or Supabase with Auth and Postgres. Collections: `users`, `buddies` (pairs), `squads`, `presence` (who is in a session), `days` (one row per user per day: sessions, minutes, streak), `cheers`. Security rules so a user reads only rows of people who accepted them. | `google-services.json`, or `SUPABASE_URL` and `SUPABASE_ANON_KEY` |
+| 331 Body doubling with video inside the app | A video service account (Jitsi is free and needs none; Daily or Agora need a key) | Optional `VIDEO_API_KEY` |
+| 337 Money stakes that really move money | A payment provider account (Razorpay or UPI collect) and a server to hold and release stakes. Not recommended for a student app. | Provider key and secret, on the server only |
+| 380 Problem count sync | LeetCode and Codeforces public profile endpoints (Codeforces has an official API with no key; LeetCode has only an unofficial GraphQL endpoint) | None for Codeforces |
+
 More rows are added as later batches reach features that need a server.

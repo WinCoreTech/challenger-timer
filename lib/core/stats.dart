@@ -141,6 +141,32 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
 String _f(double? x) => x == null ? '-' : x.toStringAsFixed(1);
 
 final Map<String, Stat> stats = {
+  'pareto': (v) {
+    final rows = [
+      for (final p in v.projects)
+        (
+          p.str('name'),
+          v.proofs.where((x) => x.str('projectId') == p.id).length + v.tasksOf(p.id).where((t) => t.flag('done')).length,
+          v.type(Ev.sessionDone).where((e) => e.get<String>('projectId') == p.id).fold(0, (a, e) => a + (e.get<num>('minutes') ?? 0).toInt())
+        )
+    ]..sort((a, b) => (b.$2 / (b.$3 + 1)).compareTo(a.$2 / (a.$3 + 1)));
+    return rows.isEmpty
+        ? ['No projects yet', 'With projects this ranks them by results (proof and finished tasks) per hour.']
+        : [rows.first.$1, 'gives you the most results per hour', for (final (n, res, min) in rows) '$n: $res results in ${(min / 60).toStringAsFixed(1)} h'];
+  },
+  'compound': (v) {
+    final first = v.sessionDays.isEmpty ? v.today : v.sessionDays.reduce((a, b) => a < b ? a : b);
+    final days = v.today - first + 1;
+    final total = v.metrics['minutes']! / 60;
+    final perDay = total / days;
+    final left = (dayOfDate(v.settingInt('gradYear', dateOfDay(v.today).year + 2), 6, 1) - v.today).clamp(0, 5000);
+    return [
+      '${(total + perDay * left).round()} hours',
+      'of logged work by June ${v.settingInt('gradYear', dateOfDay(v.today).year + 2)} at your pace so far',
+      'So far: ${total.toStringAsFixed(1)} hours over $days days (${(perDay * 60).round()} min a day).',
+      'One extra hour a day would add $left hours on top.',
+    ];
+  },
   'votes': (v) => ['${votes(v)}', 'votes for "I am someone who starts"', 'Every finished session, habit tick and proof is one vote. This is evidence, not a mood.'],
   'belief': (v) => [
         '${v.starts} starts',

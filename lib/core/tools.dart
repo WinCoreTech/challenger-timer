@@ -91,7 +91,7 @@ class ToolDef {
 }
 
 const toolKinds = {
-  'card', 'single', 'log', 'list', 'check', 'count', 'rate', 'habit', 'session', 'stat', 'toggle', 'dayflag', 'special'
+  'card', 'single', 'log', 'list', 'check', 'count', 'rate', 'habit', 'session', 'stat', 'toggle', 'dayflag', 'special', 'share'
 };
 
 Map<int, ToolDef> parseTools(String json) =>
@@ -143,4 +143,21 @@ extension ToolView on DayView {
     }
     return null;
   }
+}
+
+/// Fills a share template: {name}, {streak}, {starts}, {today}, {minutes},
+/// {rank}, {step} and {0}, {1}... for the typed fields.
+String fillTemplate(String body, DayView v, List<String> fields) {
+  var out = body
+      .replaceAll('{name}', v.name.isEmpty ? 'I' : v.name)
+      .replaceAll('{streak}', '${v.master.current}')
+      .replaceAll('{starts}', '${v.starts}')
+      .replaceAll('{today}', '${v.sessionsToday}')
+      .replaceAll('{minutes}', '${v.minutesToday}')
+      .replaceAll('{rank}', v.rank.rank.name)
+      .replaceAll('{step}', v.nextStep);
+  for (final (i, f) in fields.indexed) {
+    out = out.replaceAll('{$i}', f.trim());
+  }
+  return out;
 }
