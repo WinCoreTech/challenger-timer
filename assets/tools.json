@@ -1175,5 +1175,597 @@
 "kind": "card",
 "title": "No pay-to-win",
 "body": "There is nothing to buy in this app, with money or with coins, that skips the work. XP, rank and streaks come only from sessions, proof and habits."
+},
+{
+"n": 251,
+"kind": "single",
+"title": "Identity statement",
+"intro": "Shown on the running timer every session.",
+"prompts": [
+"I am someone who..."
+]
+},
+{
+"n": 252,
+"kind": "stat",
+"title": "Votes",
+"stat": "votes"
+},
+{
+"n": 254,
+"kind": "log",
+"title": "Belief check",
+"intro": "Write the old belief. Then read what your own logs say back.",
+"prompts": [
+"The old belief (for example: I never finish)"
+]
+},
+{
+"n": 253,
+"kind": "stat",
+"title": "Evidence counter",
+"stat": "belief"
+},
+{
+"n": 255,
+"kind": "card",
+"title": "\"Not yet\" wording",
+"body": "Nothing in this app is called failed. Unfinished things are \"not yet\". If you ever find the word failed on a screen, that is a bug."
+},
+{
+"n": 256,
+"kind": "log",
+"title": "Hard-things ladder",
+"intro": "A record of the hardest things you have done. Read it on bad days.",
+"prompts": [
+"A hard thing I did"
+]
+},
+{
+"n": 257,
+"kind": "single",
+"title": "Future-self card",
+"intro": "You in five years, in your own words.",
+"prompts": [
+"Where I am",
+"What I do all day",
+"What I am proud of"
+]
+},
+{
+"n": 258,
+"kind": "log",
+"title": "Letter to self",
+"intro": "Write now. Open it again in 30 days: each entry shows its date.",
+"prompts": [
+"Dear me in 30 days,"
+]
+},
+{
+"n": 259,
+"kind": "single",
+"title": "Values pick",
+"intro": "Three values. When a task feels pointless, check which one it serves.",
+"prompts": [
+"Value 1",
+"Value 2",
+"Value 3"
+]
+},
+{
+"n": 260,
+"kind": "log",
+"title": "Why chain",
+"intro": "Ask why five times about your main goal.",
+"prompts": [
+"Goal",
+"Why?",
+"Why does that matter?",
+"And why that?",
+"And why that?",
+"The real reason"
+]
+},
+{
+"n": 261,
+"kind": "single",
+"title": "Anti-vision",
+"intro": "One paragraph on the life you get by drifting. Open it only when you choose to.",
+"prompts": [
+"If I keep drifting, in five years..."
+]
+},
+{
+"n": 262,
+"kind": "single",
+"title": "Vision card",
+"intro": "The role you are aiming at, concretely.",
+"prompts": [
+"The work",
+"The skills it needs",
+"What a normal day looks like"
+]
+},
+{
+"n": 263,
+"kind": "log",
+"title": "Role-model board",
+"intro": "One principle each from people you admire.",
+"prompts": [
+"Person",
+"The one principle I take from them"
+]
+},
+{
+"n": 264,
+"kind": "list",
+"title": "Personal rules",
+"intro": "For example: I never skip Monday.",
+"prompts": [
+"A rule I live by"
+]
+},
+{
+"n": 265,
+"kind": "single",
+"title": "Start mantra",
+"intro": "A line of your own for the moment before you start.",
+"prompts": [
+"My line"
+]
+},
+{
+"n": 266,
+"kind": "card",
+"title": "Name talk",
+"body": "When you have not started yet, Home speaks to you by name, in the third person: \"Winzo, start the timer.\" Talking to yourself by name creates a little distance from the feeling."
+},
+{
+"n": 267,
+"kind": "card",
+"title": "Effort praise",
+"body": "The app praises what you did, never what you are. \"You started\" is in your control. \"You are smart\" is not."
+},
+{
+"n": 268,
+"kind": "single",
+"title": "Standards page",
+"intro": "The daily minimum you refuse to go below.",
+"prompts": [
+"My floor, even on the worst day"
+]
+},
+{
+"n": 269,
+"kind": "stat",
+"title": "Change timeline",
+"stat": "change"
+},
+{
+"n": 270,
+"kind": "card",
+"title": "Reframe library",
+"body": "\"I do not feel like it.\" You do not need to. Two minutes needs no mood.\n\n\"It is too late today.\" The day ends at 3 am. Two minutes still fits.\n\n\"I will do double tomorrow.\" Tomorrow-you says the same. Do a single today.\n\n\"I do not know where to start.\" Then the task is: write down where to start.\n\n\"It has to be good.\" It has to exist. Good comes from editing."
+},
+{
+"n": 271,
+"kind": "log",
+"title": "Excuse log",
+"intro": "Write the excuse, then answer it as you would answer a friend.",
+"prompts": [
+"The excuse",
+"My answer"
+]
+},
+{
+"n": 273,
+"kind": "stat",
+"title": "Effort rating",
+"stat": "reps",
+"intro": "Proofs can be tagged tired, bored or scared on the proof screen."
+},
+{
+"n": 274,
+"kind": "single",
+"title": "Personal constitution",
+"intro": "One page, written and signed by you.",
+"prompts": [
+"What I stand for",
+"What I will always do",
+"What I will never do",
+"Signed (your name and the date)"
+]
+},
+{
+"n": 275,
+"kind": "log",
+"title": "Yearly identity review",
+"intro": "Once a year.",
+"prompts": [
+"Who was I a year ago?",
+"Who am I now?",
+"Who do I want to be next year?"
+]
+},
+{
+"n": 277,
+"kind": "special",
+"title": "Name the feeling",
+"intro": "Naming a feeling takes some of its force away. Tap the closest one and get a matching way in."
+},
+{
+"n": 279,
+"kind": "card",
+"title": "Explainer card",
+"body": "Procrastination is not laziness. It is how the mind escapes a bad feeling about a task: boredom, fear, confusion. So shouting at yourself makes it worse, and shrinking the task makes it better. That is why everything here starts at two minutes."
+},
+{
+"n": 280,
+"kind": "stat",
+"title": "Avoidance detector",
+"stat": "avoid"
+},
+{
+"n": 281,
+"kind": "special",
+"title": "Aversion type",
+"intro": "What is it about this task? Each kind has its own fix."
+},
+{
+"n": 282,
+"kind": "log",
+"title": "Worry dump",
+"intro": "Two minutes of writing every worry down before starting. They are easier to carry on paper.",
+"prompts": [
+"Everything on my mind"
+]
+},
+{
+"n": 283,
+"kind": "special",
+"title": "Box breathing",
+"intro": "In for four, hold four, out four, hold four. One minute."
+},
+{
+"n": 284,
+"kind": "card",
+"title": "\"Good enough\" line",
+"body": "Open a task from the Plan tab and tap DEFINE \"GOOD ENOUGH\". One sentence on what done looks like stops perfectionism from moving the finish line."
+},
+{
+"n": 285,
+"kind": "log",
+"title": "Fear-setting",
+"intro": "Name the fear and it shrinks to its real size.",
+"prompts": [
+"The worst that could happen",
+"How I could prevent it",
+"How I would repair it"
+]
+},
+{
+"n": 286,
+"kind": "card",
+"title": "Shame-free language",
+"body": "A rule for every screen, alarm and message in this app: no blame, no insult, no guilt. A tested rule: the buddy message, the Home line and the break ideas are checked for it automatically."
+},
+{
+"n": 287,
+"kind": "stat",
+"title": "Forgive yesterday",
+"stat": "forgive",
+"action": "Close yesterday"
+},
+{
+"n": 288,
+"kind": "toggle",
+"title": "Overwhelm mode",
+"intro": "Hides everything on Home except the next step and one button.",
+"setKey": "overwhelm",
+"setLabel": "Show me only one thing"
+},
+{
+"n": 290,
+"kind": "stat",
+"title": "Discomfort reps",
+"stat": "reps"
+},
+{
+"n": 291,
+"kind": "card",
+"title": "Action-first card",
+"body": "Motivation usually shows up after you start, not before. Waiting to feel like it is waiting for the effect before the cause."
+},
+{
+"n": 292,
+"kind": "rate",
+"title": "Mood after",
+"intro": "One tap when a session ends.",
+"choices": [
+"rough",
+"great"
+],
+"max": 5
+},
+{
+"n": 293,
+"kind": "log",
+"title": "Trigger log",
+"intro": "What you did instead. No judgement, only data.",
+"prompts": [
+"What I did instead"
+],
+"choices": [
+"reels",
+"sleep",
+"games",
+"chatting",
+"other"
+]
+},
+{
+"n": 294,
+"kind": "single",
+"title": "Replacement plan",
+"intro": "One rule for your most common escape.",
+"prompts": [
+"If I want to open ___, I first do one 2-minute session"
+]
+},
+{
+"n": 295,
+"kind": "card",
+"title": "Company prompt",
+"body": "Been working alone for a long while? Sit beside someone who is also working: a friend, the library, a study room. You do not have to talk."
+},
+{
+"n": 296,
+"kind": "rate",
+"title": "Stress meter",
+"intro": "Once a week. A high rating makes the app ask for less, not more.",
+"choices": [
+"calm",
+"very stressed"
+],
+"max": 5
+},
+{
+"n": 297,
+"kind": "stat",
+"title": "Burnout warning",
+"stat": "wellbeing"
+},
+{
+"n": 298,
+"kind": "log",
+"title": "Gratitude line",
+"intro": "One sentence a day.",
+"prompts": [
+"Today I am glad that"
+]
+},
+{
+"n": 299,
+"kind": "stat",
+"title": "Support prompt",
+"stat": "wellbeing"
+},
+{
+"n": 300,
+"kind": "card",
+"title": "Instant celebration",
+"body": "The moment a session ends the screen flips, the phone buzzes, a tone plays and you are told to fist pump. Celebrating right away is what wires a habit in."
+},
+{
+"n": 301,
+"kind": "rate",
+"title": "Sleep log",
+"intro": "Hours last night.",
+"choices": [
+"1 hour",
+"10 hours"
+],
+"max": 10
+},
+{
+"n": 302,
+"kind": "toggle",
+"title": "Wind-down alarm",
+"intro": "A reminder 45 minutes before your bedtime.",
+"setKey": "rem.302",
+"setLabel": "Remind me to wind down",
+"setOptions": [
+21,
+22,
+23,
+24
+],
+"optKey": "bedHour"
+},
+{
+"n": 303,
+"kind": "card",
+"title": "Protected sleep window",
+"body": "Between your bedtime and wake time (set in Wind-down alarm and Morning light) the app schedules no reminders at all, and no challenge can override that."
+},
+{
+"n": 304,
+"kind": "stat",
+"title": "Sleep versus focus",
+"stat": "sleepFocus"
+},
+{
+"n": 305,
+"kind": "rate",
+"title": "Energy check",
+"intro": "Morning, afternoon, evening.",
+"choices": [
+"flat",
+"full"
+],
+"max": 5
+},
+{
+"n": 306,
+"kind": "stat",
+"title": "Peak-hours map",
+"stat": "peakMap"
+},
+{
+"n": 307,
+"kind": "card",
+"title": "Morning or night type",
+"body": "Pick the hour you naturally come alive. It becomes your suggested cue time in Settings.",
+"setKey": "chronoHour",
+"setLabel": "I work best from (hour)",
+"setOptions": [
+6,
+8,
+10,
+16,
+20,
+22
+]
+},
+{
+"n": 308,
+"kind": "toggle",
+"title": "Morning light reminder",
+"intro": "Ten minutes outside after waking.",
+"setKey": "rem.308",
+"setLabel": "Remind me after waking",
+"setOptions": [
+5,
+6,
+7,
+8,
+9
+],
+"optKey": "wakeHour"
+},
+{
+"n": 309,
+"kind": "count",
+"title": "Water counter",
+"unit": "glasses"
+},
+{
+"n": 310,
+"kind": "card",
+"title": "Movement break",
+"body": "In sessions of 50 minutes or more, the running timer tells you to stand up and move at each 50-minute mark."
+},
+{
+"n": 311,
+"kind": "habit",
+"title": "Walk session",
+"habit": "10-minute walk",
+"intro": "A walk is recovery, not a break from being productive."
+},
+{
+"n": 312,
+"kind": "habit",
+"title": "Exercise streak",
+"habit": "Five push-ups",
+"intro": "The minimum is five. More is allowed."
+},
+{
+"n": 313,
+"kind": "count",
+"title": "Meal log",
+"unit": "meals",
+"intro": "Tap when you eat. Work days with fewer than two meals are worth noticing."
+},
+{
+"n": 314,
+"kind": "toggle",
+"title": "Caffeine cut-off",
+"intro": "A reminder at 3 pm.",
+"setKey": "rem.314",
+"setLabel": "Remind me at 3 pm"
+},
+{
+"n": 315,
+"kind": "special",
+"title": "Nap timer",
+"intro": "Twenty minutes. Longer leaves you groggy."
+},
+{
+"n": 316,
+"kind": "card",
+"title": "Eye rest",
+"body": "Every 20 minutes of a running session, the timer asks you to look far away for 20 seconds."
+},
+{
+"n": 317,
+"kind": "card",
+"title": "Posture ping",
+"body": "Every 30 minutes of a running session, the timer asks for a posture check."
+},
+{
+"n": 318,
+"kind": "card",
+"title": "90/20 mode",
+"body": "On the Timer tab, \"More ways to run it\" has 90/20: ninety minutes of work, twenty of rest, twice."
+},
+{
+"n": 319,
+"kind": "card",
+"title": "Planned rest day",
+"body": "Use Active days (in the streak tools) to mark one weekday as rest. It never counts against a streak."
+},
+{
+"n": 320,
+"kind": "stat",
+"title": "Recovery score",
+"stat": "recovery"
+},
+{
+"n": 321,
+"kind": "card",
+"title": "Active rest menu",
+"body": "Walk. Stretch. Music with your eyes closed. Talk to a friend, out loud, not by text. Rest that is not a screen."
+},
+{
+"n": 322,
+"kind": "count",
+"title": "Screen-free breaks",
+"unit": "breaks without a screen"
+},
+{
+"n": 323,
+"kind": "check",
+"title": "Sunday reset",
+"items": [
+"Clean the desk",
+"Plan the week",
+"Pack the bag",
+"Set Monday's first task"
+]
+},
+{
+"n": 324,
+"kind": "check",
+"title": "Basics check",
+"intro": "Confirm these before any sprint or marathon day.",
+"items": [
+"Slept 7 hours or more",
+"Ate a proper meal",
+"Moved my body today"
+]
+},
+{
+"n": 325,
+"kind": "stat",
+"title": "Hours warning",
+"stat": "wellbeing"
+},
+{
+"n": 289,
+"kind": "session",
+"title": "Boredom training",
+"intro": "Five minutes with nothing: no phone, no music. Sit. It builds the tolerance that study needs.",
+"minutes": 5,
+"task": "Sit with nothing for five minutes."
 }
 ]

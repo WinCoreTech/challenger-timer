@@ -281,7 +281,8 @@ class App extends Notifier<AppData> {
       String outcome = '',
       int difficulty = 0,
       int units = 0,
-      String unit = ''}) async {
+      String unit = '',
+      String anyway = ''}) async {
     final p = view.pendingProof;
     if (p == null) return;
     final rec = await addRec(Kind.proof, {
@@ -289,6 +290,7 @@ class App extends Notifier<AppData> {
       'minutes': p['minutes'], 'title': p['title'], 'day': view.today,
       if (outcome.isNotEmpty) 'outcome': outcome, if (difficulty > 0) 'difficulty': difficulty,
       if (units > 0 && unit.isNotEmpty) ...{'units': units, 'unit': unit},
+      if (anyway.isNotEmpty) 'anyway': anyway,
       if (view.type(Ev.sessionDone).where((e) => e.get<String>('sid') == p['sid']).firstOrNull?.get<String>('tag') case final String t) 'tag': t,
     });
     lastProofId = rec.id;

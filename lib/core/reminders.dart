@@ -5,6 +5,7 @@ import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'tools.dart';
+import 'wellbeing.dart';
 
 class Reminder {
   const Reminder(this.id, this.minute, this.title, this.text,
@@ -41,7 +42,8 @@ List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
     }
   }
   out.addAll(fixedReminders(v));
-  return out;
+  // 303: nothing is ever scheduled inside the protected sleep window.
+  return [for (final r in out) if (!inSleepWindow(v, r.minute)) r];
 }
 
 /// Reminders that come from settings rather than from user-written entries.
@@ -65,6 +67,9 @@ List<Reminder> fixedReminders(DayView v) {
           start: true));
     }
   }
+  add(302, 302, v.settingInt('bedHour', 23) * 60 - 45, 'Wind down', 'Bed in 45 minutes. Screens down, bag packed, tomorrow\'s first task set.');
+  add(308, 308, v.settingInt('wakeHour', 7) * 60 + 20, 'Morning light', 'Ten minutes outside in daylight wakes the body clock up.');
+  add(314, 314, 15 * 60, 'Caffeine cut-off', 'Last tea or coffee for today, so tonight\'s sleep is safe.');
   add(224, 2241, 13 * 60, 'Message check', 'First of two message slots today. Reply, then close them.');
   add(224, 2242, 19 * 60, 'Message check', 'Second message slot. After this, messages can wait until tomorrow.');
   add(225, 225, v.settingInt('nightHour', 23) * 60, 'Screens down', 'This is the hour you chose to stop screens. Tomorrow starts with tonight.');

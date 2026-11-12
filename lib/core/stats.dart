@@ -12,6 +12,7 @@ import 'game.dart';
 import 'planning.dart';
 import 'projects.dart';
 import 'tools.dart';
+import 'wellbeing.dart';
 import 'streak_engine.dart';
 
 typedef Stat = List<String> Function(DayView v);
@@ -137,7 +138,55 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
       if (extra.isNotEmpty) extra,
     ];
 
+String _f(double? x) => x == null ? '-' : x.toStringAsFixed(1);
+
 final Map<String, Stat> stats = {
+  'votes': (v) => ['${votes(v)}', 'votes for "I am someone who starts"', 'Every finished session, habit tick and proof is one vote. This is evidence, not a mood.'],
+  'belief': (v) => [
+        '${v.starts} starts',
+        'Your logs, in reply to the old belief:',
+        '${v.type(Ev.sessionDone).length} sessions finished, ${v.proofs.length} pieces of proof, ${v.master.totalDays} days shown up, ${v.master.comebacks} comebacks.',
+        'Someone who "never finishes" does not have these numbers.',
+      ],
+  'change': (v) {
+    final (a, b) = changeTimeline(v);
+    return ['$a → $b min', 'your first 30 days against your last 30'];
+  },
+  'reps': (v) => ['${discomfortReps(v)}', 'times you started without feeling like it', 'Low-mood days with a session, and proofs you tagged tired, bored or scared.'],
+  'avoid': (v) {
+    final t = mostPostponed(v);
+    return t.isEmpty
+        ? ['None', 'No task has been pushed yet.']
+        : ['${t.length} tasks keep getting pushed', for (final x in t) '• ${x.str('title')} (${x.integer('postponed') + x.integer('moved')} times)', 'Which feeling sits behind the top one: boring, hard, unclear or pointless? The Feeling tool has a fix for each.'];
+  },
+  'forgive': (v) => [
+        forgaveYesterday(v) ? 'Closed' : 'Open',
+        forgaveYesterday(v) ? 'Yesterday is closed. Today is the only day there is.' : 'Whatever yesterday was, it is over. Close it and start clean.',
+        'Students who forgave themselves for delaying were found to delay less the next time.',
+      ],
+  'moodAfter': (v) {
+    final (a, b) = moodBeforeAfter(v);
+    return ['${_f(a)} → ${_f(b)}', 'average mood before sessions and after', 'Log "Mood check" before and "Mood after" when you finish. Motivation usually arrives after starting.'];
+  },
+  'wellbeing': (v) => [
+        lowMoodTwoWeeks(v) ? 'Please read this' : burnoutRisk(v) ? 'Rest day suggested' : highStress(v) ? 'Lighter week' : 'Steady',
+        if (lowMoodTwoWeeks(v))
+          'Your mood has been low for two weeks. That is worth more than an app. Please talk to someone you trust, or your college counsellor. Reaching out takes strength.',
+        if (burnoutRisk(v)) 'Your hours went up while your mood went down. Take a full rest day. The streak has freezes for exactly this.',
+        if (highStress(v)) 'You rated stress high. This week two minutes a day is the whole plan. Nothing bigger is asked.',
+        if (hoursWarning(v)) 'More hours than last week but fewer things finished. Shorter, sharper sessions may serve you better.',
+        'Recovery score: ${recoveryScore(v)} of 100 (sleep, a rest day, breaks).',
+      ],
+  'sleepFocus': (v) {
+    final (g, s2) = sleepVsFocus(v);
+    return ['${_f(g)} vs ${_f(s2)} min', 'average work on days after 7+ hours of sleep, and after less', 'Needs sleep logged on a few days.'];
+  },
+  'peakMap': (v) {
+    final h = minutesByHour(v);
+    final top = [for (var i = 0; i < 24; i++) i].where((i) => h[i] > 0).toList()..sort((a, b) => h[b].compareTo(h[a]));
+    return top.isEmpty ? ['No data yet', 'Shows your best hours after a few sessions.'] : ['${two(top.first)}:00', 'is your best hour', for (final i in top.take(5)) '${two(i)}:00  ${h[i]} min'];
+  },
+  'recovery': (v) => ['${recoveryScore(v)}', 'recovery score out of 100', 'From sleep over the last 7 logs, at least one rest day this week, and breaks taken.'],
   'level': (v) {
     final l = levelFor(v.xpTotal);
     return ['Level $l', '${xpForLevel(l + 1) - v.xpTotal} XP to level ${l + 1}', 'A slow curve on purpose. It rewards years, not one big week.'];

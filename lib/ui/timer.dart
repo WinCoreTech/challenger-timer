@@ -20,6 +20,16 @@ export 'photo.dart';
 
 const presets = [2, 5, 15, 25, 50, 90];
 
+/// 310, 316, 317: short body reminders shown on the running timer for one
+/// minute at 20-minute (eyes), 30-minute (posture) and 50-minute (move) marks.
+String? bodyPrompt(DayView v, int elapsedMin) {
+  if (elapsedMin == 0) return null;
+  if (v.on(310) && elapsedMin % 50 == 0) return 'Fifty minutes. Stand up and move for a moment.';
+  if (v.on(317) && elapsedMin % 30 == 0) return 'Posture check: shoulders down, back straight.';
+  if (v.on(316) && elapsedMin % 20 == 0) return 'Eye rest: look at something far away for 20 seconds.';
+  return null;
+}
+
 String clock(int ms) {
   final s = (ms / 1000).ceil();
   return '${two(s ~/ 60)}:${two(s % 60)}';
@@ -104,6 +114,8 @@ class _TimerState extends ConsumerState<TimerScreen> {
       if (!s.flow) Bar(1 - left / (s.minutes * msPerMinute), height: 6),
       const SizedBox(height: 8),
       Center(child: H(s.flow ? 'Flowtime: stop when focus fades' : '${s.minutes} minute session', size: 12)),
+      if (bodyPrompt(v, s.elapsedMs(now) ~/ msPerMinute) case final String tip)
+        Padding(padding: const EdgeInsets.only(top: 10), child: Center(child: Text(tip, key: const Key('bodyPrompt'), style: const TextStyle(color: gold)))),
       const Spacer(),
       if (v.on(92))
         TextButton(
@@ -345,6 +357,9 @@ class _TimerState extends ConsumerState<TimerScreen> {
               if (v.on(78))
                 OutlinedButton(key: const Key('flowtime'), onPressed: () => go(flow: true, source: 'flow'), child: const Text('FLOWTIME: COUNT UP, STOP WHEN FOCUS FADES')),
               const SizedBox(height: 8),
+              if (v.on(318))
+                OutlinedButton(key: const Key('mode9020'), onPressed: () => go(work: 90, rest: 20, rounds: 2, source: 'cycle'), child: const Text('90/20: 90 MIN WORK, 20 MIN REST')),
+              const SizedBox(height: 8),
               if (v.on(99))
                 OutlinedButton(key: const Key('marathon'), onPressed: () => go(work: 25, rest: 5, rounds: 6, source: 'marathon'), child: const Text('MARATHON DAY: 6 × 25 MIN, BREAKS ENFORCED')),
             ]),
@@ -367,6 +382,7 @@ class _ProofState extends ConsumerState<ProofScreen> {
   String outcome = '';
   int difficulty = 0;
   String unit = '';
+  String anyway = '';
   final units = TextEditingController();
   bool recording = false;
   bool first = true;
@@ -397,7 +413,7 @@ class _ProofState extends ConsumerState<ProofScreen> {
     await ref.read(appProvider.notifier)
         .saveProof(
         type: type, value: v, parkingNote: note.text, outcome: outcome, difficulty: difficulty,
-        units: int.tryParse(units.text.trim()) ?? 0, unit: unit);
+        units: int.tryParse(units.text.trim()) ?? 0, unit: unit, anyway: anyway);
     if (mounted) context.go(receipt ? '/receipt' : '/');
   }
 
@@ -505,6 +521,15 @@ class _ProofState extends ConsumerState<ProofScreen> {
                 for (final u in const ['words', 'pages', 'problems'])
                   ChoiceChip(key: Key('unit-$u'), label: Text(u.toUpperCase()), selected: unit == u, onSelected: (_) => setState(() => unit = u)),
               ])),
+            ]),
+          ],
+          if (v.on(272)) ...[
+            const SizedBox(height: 16),
+            const H('Did it anyway, while feeling'),
+            const SizedBox(height: 6),
+            Wrap(spacing: 8, children: [
+              for (final o in const ['tired', 'bored', 'scared'])
+                ChoiceChip(key: Key('anyway-$o'), label: Text(o.toUpperCase()), selected: anyway == o, onSelected: (x) => setState(() => anyway = x ? o : '')),
             ]),
           ],
           if (v.on(83)) ...[

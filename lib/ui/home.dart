@@ -31,6 +31,7 @@ String homeLine(DayView v) {
     final f = freshStart(v.today, birthday: v.kv['t.65'] == null ? '' : v.single(const ToolDef(n: 65, kind: 'single', title: '', prompts: [''])).first);
     if (f != null) return 'It is $f. A clean page, if you want one.';
   }
+  if (v.on(266) && v.name.isNotEmpty && !v.workedToday) return '${v.name}, start the timer. Two minutes.';
   return streakLine(v.master);
 }
 
@@ -43,16 +44,17 @@ class HomeScreen extends ConsumerWidget {
     final app = ref.read(appProvider.notifier);
     final active = v.active;
     // Feature 71: after three or more days away, one button and no stats.
-    if (v.on(71) && daysAway(v) >= 3 && !v.workedToday && active == null) {
+    final overwhelm = v.on(288) && v.kv['overwhelm'] == '1';
+    if ((v.on(71) && daysAway(v) >= 3 && !v.workedToday && active == null) || (overwhelm && active == null && v.pendingProof == null)) {
       return SafeArea(
           child: Padding(
               padding: const EdgeInsets.all(24),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 const Center(child: Poster(PosterArt.door, size: 120)),
                 const SizedBox(height: 24),
-                const Text('WELCOME BACK.', textAlign: TextAlign.center, style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
+                Text(overwhelm ? 'ONE THING.' : 'WELCOME BACK.', textAlign: TextAlign.center, style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 8),
-                const Text('Nothing to catch up on. No numbers today. Just this.', textAlign: TextAlign.center, style: TextStyle(color: dim, fontSize: 16)),
+                Text(overwhelm ? v.nextStep : 'Nothing to catch up on. No numbers today. Just this.', textAlign: TextAlign.center, style: const TextStyle(color: dim, fontSize: 16)),
                 const SizedBox(height: 32),
                 SizedBox(
                     height: 96,
@@ -62,7 +64,7 @@ class HomeScreen extends ConsumerWidget {
                           await app.startSession();
                           if (context.mounted) context.go('/timer');
                         },
-                        child: const Text('START AGAIN', style: TextStyle(fontSize: 30)))),
+                        child: Text(overwhelm ? 'START 2 MIN' : 'START AGAIN', style: const TextStyle(fontSize: 30)))),
               ])));
     }
     return SafeArea(

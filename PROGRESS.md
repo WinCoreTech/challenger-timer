@@ -72,3 +72,7 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
 - Batch 10 (features 226 to 250): levels, gentle rank decay, early-finish badges, reward chest,
   daily quests, coins and reward shop, savings jar, skill ladders, avatar, workshop,
   seasons, personal records, prestige, combo.
+- Batches 11 to 13 (features 251 to 325): identity tools, name talk, feeling and aversion
+  fixes, mood before/after, stress, burnout and support prompts, overwhelm mode, forgive
+  yesterday, sleep log and protected sleep window, wind-down, morning light and caffeine
+  reminders, body prompts on the timer, 90/20 mode, nap timer, recovery score.
