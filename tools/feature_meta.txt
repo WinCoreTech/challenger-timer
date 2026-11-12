@@ -151,3 +151,28 @@
 148|done|2|Shows proof from the same date a month and a year ago. Tested.
 149|done|2|Weekly progress photos kept by week. Camera untested on device.
 150|done|2|Three wins a day as dated entries.
+151|done||Projects hold tasks, sessions and proof. Tested.
+152|done|2|One "why" line per project on the Plan tab.
+153|done|2|Asks for the first physical action again and again, saving each as a 25-minute task.
+154|needs-backend|2|AI splitting is not connected. Local version cuts pasted text into steps by lines, bullets and sentences. Tested.
+155|done|2|Each project shows its next action (first open, unblocked task). Tested.
+156|done|2|Size chosen on the task screen (25 min to 800 min) instead of the four labels in the plan.
+157|done|2|Your actual-to-estimate ratio and a corrected estimate. Tested.
+158|done|2|Logged minutes against the estimate on each task. Tested.
+159|done|2|Four-box view from urgent and important flags. Tested.
+160|done|2|One dated entry per day.
+161|done|2|Three free-text fields: 1 big, 3 medium, 5 small.
+162|done|2|"Do first" flag; the flagged task becomes the next action. Tested.
+163|done|2|A fourth active project is refused with a kind message. Tested.
+164|done|2|Checklist of parked ideas.
+165|done|2|Three ways out plus a note of the block. Not wired into the running timer.
+166|done|2|Dread 1 to 5 per task; finishing a 4 or 5 pays +30 XP. Tested.
+167|done|2|Tasks that do not start with a verb are marked "(verb?)". Tested.
+168|done|2|Lab record, assignment, exam prep, hackathon templates. Tested.
+169|partial|2|Milestone flag on tasks, recorded in the log. The celebration is the same haptic and tone as any finished task.
+170|done|2|Project bar starts at 10 percent. Tested.
+171|done|2|"Almost there: N sessions left" when 3 or fewer remain. Tested.
+172|done|2|Lists tasks with time logged that are not finished. Tested.
+173|done|2|A task can wait for another; blocked tasks show a lock and are skipped as next action. Tested.
+174|done|2|Daily or weekly repeat: finishing creates the next copy. Tested.
+175|done|2|Three-question retro entries.

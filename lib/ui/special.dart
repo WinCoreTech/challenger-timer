@@ -16,6 +16,7 @@ import '../core/deadlines.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/projects.dart';
 import '../core/tools.dart';
 import '../core/vault.dart';
 import 'photo.dart';
@@ -186,6 +187,7 @@ Widget specialTool(int n, DayView v) => switch (n) {
       59 || 60 => ModeTool(n),
       70 => const GiftTool(),
       74 => const ArchiveTool(),
+      153 || 154 || 159 || 168 => ProjectTool(n),
       131 || 134 || 135 || 136 || 138 || 139 || 142 || 143 || 144 || 146 || 147 || 148 || 149 => VaultTool(n),
       _ => const Text('Not available.'),
     };
@@ -561,6 +563,55 @@ class TaskScreen extends ConsumerWidget {
                   selected: m.est == e,
                   onSelected: (_) => app.putRec(t.copy({'est': e}))),
           ]),
+          if (v.on(157) && m.est > 0 && estimateRatio(v) != 1)
+            Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text('At your usual ratio that is about ${correctedEstimate(v, m.est)} minutes.', style: const TextStyle(color: dim))),
+          if (v.on(158) && m.est > 0) Text('Logged so far: ${m.done} of ${m.est} minutes.', style: const TextStyle(color: dim)),
+          const SizedBox(height: 10),
+          Wrap(spacing: 6, runSpacing: 6, children: [
+            for (final (f, key, label) in const [
+              (162, 'frog', 'DO FIRST'), (159, 'urgent', 'URGENT'), (159, 'important', 'IMPORTANT'), (169, 'milestone', 'MILESTONE'),
+            ])
+              if (v.on(f))
+                FilterChip(key: Key('flag-$key'), label: Text(label), selected: t.flag(key), onSelected: (x) => app.putRec(t.copy({key: x}))),
+            if (v.on(174))
+              for (final e in const [1, 7])
+                FilterChip(
+                    key: Key('every-$e'),
+                    label: Text(e == 1 ? 'REPEATS DAILY' : 'REPEATS WEEKLY'),
+                    selected: t.integer('every') == e,
+                    onSelected: (x) => app.putRec(t.copy({'every': x ? e : 0}))),
+          ]),
+          if (v.on(166)) ...[
+            const SizedBox(height: 8),
+            const H('Dread (4 or 5 pays bonus XP when done)'),
+            Wrap(spacing: 6, children: [
+              for (var d = 1; d <= 5; d++)
+                ChoiceChip(key: Key('dread-$d'), label: Text('$d'), selected: t.integer('dread') == d, onSelected: (_) => app.putRec(t.copy({'dread': d}))),
+            ]),
+          ],
+          if (v.on(173)) ...[
+            const SizedBox(height: 8),
+            const H('Must wait for'),
+            Wrap(spacing: 6, children: [
+              for (final o in v.tasksOf(t.str('projectId')))
+                if (o.id != t.id && !o.flag('done'))
+                  ChoiceChip(
+                      label: Text(o.str('title')),
+                      selected: t.str('after') == o.id,
+                      onSelected: (x) => app.putRec(t.copy({'after': x ? o.id : ''}))),
+            ]),
+          ],
+          if (v.on(284)) ...[
+            const SizedBox(height: 8),
+            TextButton(
+                onPressed: () async {
+                  final g = await askText(context, 'Good enough looks like', initial: t.str('enough'), hint: 'Two pages, diagrams rough');
+                  if (g != null) await app.putRec(t.copy({'enough': g.trim()}));
+                },
+                child: Text(t.str('enough').isEmpty ? 'DEFINE "GOOD ENOUGH"' : 'GOOD ENOUGH: ${t.str('enough')}')),
+          ],
           const SizedBox(height: 16),
           FilledButton(
               key: const Key('taskStart'),
@@ -797,5 +848,113 @@ class _ShareCardState extends ConsumerState<ShareCardTool> {
           },
           child: const Text('SAVE AND SHARE AS IMAGE')),
     ]);
+  }
+}
+
+
+/// Features 153, 154, 159, 168: project building tools.
+class ProjectTool extends ConsumerStatefulWidget {
+  const ProjectTool(this.n, {super.key});
+  final int n;
+  @override
+  ConsumerState<ProjectTool> createState() => _ProjectToolState();
+}
+
+class _ProjectToolState extends ConsumerState<ProjectTool> {
+  final c = TextEditingController();
+  String? pid;
+  @override
+  void dispose() {
+    c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final v = ref.watch(viewProvider);
+    final app = ref.read(appProvider.notifier);
+    final project = pid ?? (v.projects.isEmpty ? null : v.projects.first.id);
+    Widget picker() => v.projects.isEmpty
+        ? const Text('Add a project on the Plan tab first.', style: TextStyle(color: dim))
+        : Wrap(spacing: 6, children: [
+            for (final p in v.projects) ChoiceChip(label: Text(p.str('name')), selected: project == p.id, onSelected: (_) => setState(() => pid = p.id)),
+          ]);
+    Future<void> add(String title) => app.addRec(Kind.task, {'projectId': project, 'title': title, 'done': false, 'est': 25});
+    switch (widget.n) {
+      case 153:
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          picker(),
+          const SizedBox(height: 12),
+          const Text('What is the first physical action? Keep answering until every step is under 25 minutes.', style: TextStyle(fontSize: 16)),
+          const SizedBox(height: 8),
+          TextField(key: const Key('wizardStep'), controller: c, decoration: const InputDecoration(hintText: 'Open the PDF to question 1')),
+          const SizedBox(height: 8),
+          FilledButton(
+              key: const Key('wizardAdd'),
+              onPressed: project == null || c.text.trim().isEmpty
+                  ? null
+                  : () async {
+                      await add(c.text.trim());
+                      c.clear();
+                      setState(() {});
+                    },
+              child: const Text('ADD STEP, THEN ASK AGAIN')),
+          if (project != null) for (final t in openTasks(v, project)) Text('• ${t.str('title')}${vague(t) ? '  (start it with a verb?)' : ''}'),
+        ]);
+      case 154:
+        final steps = splitAssignment(c.text);
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          const Text('The AI splitter is not connected (BACKEND.md). This simpler version cuts pasted text into steps at lines, bullets and sentences. You edit them afterwards.',
+              style: TextStyle(color: gold)),
+          const SizedBox(height: 8),
+          picker(),
+          const SizedBox(height: 8),
+          TextField(key: const Key('splitText'), controller: c, minLines: 3, maxLines: 8, onChanged: (_) => setState(() {}), decoration: const InputDecoration(hintText: 'Paste the assignment')),
+          for (final s in steps) Text('• $s'),
+          const SizedBox(height: 8),
+          FilledButton(
+              key: const Key('splitAdd'),
+              onPressed: project == null || steps.isEmpty
+                  ? null
+                  : () async {
+                      for (final s in steps) {
+                        await add(s);
+                      }
+                      c.clear();
+                      setState(() {});
+                    },
+              child: Text('ADD ${steps.length} TASKS')),
+        ]);
+      case 159:
+        const names = ['Urgent and important: do now', 'Important, not urgent: schedule', 'Urgent, not important: keep it quick', 'Neither: drop or shelve'];
+        final open = v.of(Kind.task).where((t) => !t.flag('done')).toList();
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Text('Mark tasks urgent or important on their task screen.', style: TextStyle(color: dim)),
+          for (var q = 0; q < 4; q++) ...[
+            Padding(padding: const EdgeInsets.only(top: 12, bottom: 4), child: H(names[q], color: q == 0 ? cyan : dim)),
+            for (final t in open.where((t) => quadrant(t) == q))
+              InkWell(onTap: () => context.push('/task/${t.id}'), child: Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Text('• ${t.str('title')}'))),
+          ],
+        ]);
+      case 168:
+        return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          for (final e in templates.entries)
+            Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: OutlinedButton(
+                    key: Key('template-${e.key}'),
+                    onPressed: wipFull(v)
+                        ? () => toast(context, 'Three active projects is the limit. Finish or archive one first.')
+                        : () async {
+                            final p = await app.addRec(Kind.project, {'name': e.key});
+                            for (final s in e.value) {
+                              await app.addRec(Kind.task, {'projectId': p.id, 'title': s, 'done': false, 'est': 25});
+                            }
+                            if (context.mounted) toast(context, '${e.key} added with ${e.value.length} steps.');
+                          },
+                    child: Text('${e.key.toUpperCase()} · ${e.value.length} STEPS'))),
+        ]);
+    }
+    return const SizedBox();
   }
 }

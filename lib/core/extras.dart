@@ -6,6 +6,7 @@ import 'dart:math';
 import 'challenges.dart';
 import 'deadlines.dart';
 import 'engine.dart';
+import 'projects.dart';
 import 'events.dart';
 
 // ---- 18. Voice start ------------------------------------------------------
@@ -154,6 +155,7 @@ List<(String, int)> featureXp(DayView v) {
   }
   out.addAll(challengeXp(v));
   out.addAll(deadlineXp(v));
+  out.addAll(projectXp(v));
   if (v.flagOn(98)) {
     // Feature 98: harder sessions pay more. Difficulty 2 = +10, 3 = +20.
     final d = v.type(Ev.proof).fold<int>(0, (a, e) => a + (((e.get<int>('difficulty') ?? 1) - 1).clamp(0, 2)) * 10);

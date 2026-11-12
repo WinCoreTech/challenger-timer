@@ -633,5 +633,92 @@
 "Win 2",
 "Win 3"
 ]
+},
+{
+"n": 153,
+"kind": "special",
+"title": "Breakdown wizard"
+},
+{
+"n": 154,
+"kind": "special",
+"title": "Task splitter"
+},
+{
+"n": 157,
+"kind": "stat",
+"title": "Estimate correction",
+"stat": "estRatio"
+},
+{
+"n": 159,
+"kind": "special",
+"title": "Urgent-important matrix"
+},
+{
+"n": 160,
+"kind": "log",
+"title": "One Big Thing",
+"intro": "One must-do for today. Only one.",
+"prompts": [
+"Today's one big thing"
+]
+},
+{
+"n": 161,
+"kind": "log",
+"title": "1-3-5 list",
+"intro": "One big, three medium, five small. Nothing more fits in a day.",
+"prompts": [
+"1 big",
+"3 medium",
+"5 small"
+]
+},
+{
+"n": 164,
+"kind": "list",
+"title": "Someday shelf",
+"intro": "Ideas that are not for now. Parked, not lost.",
+"prompts": [
+"An idea for later"
+]
+},
+{
+"n": 165,
+"kind": "log",
+"title": "Stuck button",
+"intro": "Stuck is information, not failure. Pick one way out and note what the block was.",
+"prompts": [
+"What exactly am I stuck on?"
+],
+"choices": [
+"shrink it",
+"ask someone",
+"switch for 10 minutes"
+]
+},
+{
+"n": 168,
+"kind": "special",
+"title": "Templates",
+"intro": "A ready project with small first steps."
+},
+{
+"n": 172,
+"kind": "stat",
+"title": "Open loops",
+"stat": "openLoops"
+},
+{
+"n": 175,
+"kind": "log",
+"title": "Project retro",
+"intro": "Three questions when a project ends.",
+"prompts": [
+"What went well?",
+"What was hard?",
+"What would I do differently?"
+]
 }
 ]

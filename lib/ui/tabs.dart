@@ -9,6 +9,7 @@ import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/projects.dart';
 import '../core/rules.dart';
 import '../core/stats.dart';
 import '../core/streak_engine.dart';
@@ -405,6 +406,7 @@ class _PlanState extends ConsumerState<PlanScreen> {
         TextButton.icon(
             key: const Key('addProject'),
             onPressed: () async {
+              if (wipFull(v)) return toast(context, 'Three active projects is the limit. Finish or archive one first, so each gets real attention.');
               final name = await askText(context, 'New project', hint: 'DSA practice', ok: 'ADD');
               if (name != null && name.trim().isNotEmpty) await app.addRec(Kind.project, {'name': name.trim()});
             },
@@ -428,6 +430,24 @@ class _PlanState extends ConsumerState<PlanScreen> {
                         '${v.proofs.where((p) => p.str('projectId') == pr.id).length} proof',
                         style: const TextStyle(color: dim)),
                     children: [
+                      if (v.on(170)) Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Bar(headStart(v, pr.id), height: 6)),
+                      if (v.on(152))
+                        ListTile(
+                            dense: true,
+                            title: Text(pr.str('why').isEmpty ? 'Add one line: why does this matter to you?' : 'Why: ${pr.str('why')}',
+                                style: const TextStyle(color: dim)),
+                            onTap: () async {
+                              final w = await askText(context, 'Why it matters', initial: pr.str('why'));
+                              if (w != null) await app.putRec(pr.copy({'why': w.trim()}));
+                            }),
+                      if (v.on(155))
+                        ListTile(
+                            dense: true,
+                            leading: const Icon(Icons.arrow_forward, color: cyan, size: 18),
+                            title: Text(nextAction(v, pr.id)?.str('title') ?? 'No next action defined. Add one small task.',
+                                key: Key('next-${pr.id}'), style: const TextStyle(fontWeight: FontWeight.w700))),
+                      if (v.on(171) && projectSessionsLeft(v, pr.id) > 0 && projectSessionsLeft(v, pr.id) <= 3)
+                        ListTile(dense: true, title: Text('Almost there: ${projectSessionsLeft(v, pr.id)} sessions left to finish.', style: const TextStyle(color: cyan))),
                       for (final t in v.tasksOf(pr.id))
                         CheckboxListTile(
                             key: Key('task-${t.id}'),
@@ -440,7 +460,9 @@ class _PlanState extends ConsumerState<PlanScreen> {
                                 tooltip: 'Due date and deadline tools',
                                 icon: const Icon(Icons.chevron_right, color: dim),
                                 onPressed: () => context.push('/task/${t.id}')),
-                            title: Text(t.str('title'),
+                            title: Text(
+                                '${v.on(162) && t.flag('frog') ? '🐸 ' : ''}${v.on(173) && blocked(v, t) ? '🔒 ' : ''}${t.str('title')}'
+                                '${v.on(167) && vague(t) ? '  (verb?)' : ''}',
                                 style: TextStyle(
                                     decoration: t.flag('done') ? TextDecoration.lineThrough : null,
                                     color: t.flag('done') ? dim : null))),
@@ -455,6 +477,11 @@ class _PlanState extends ConsumerState<PlanScreen> {
                             icon: const Icon(Icons.add),
                             label: const Text('TASK')),
                         const Spacer(),
+                        TextButton(
+                            onPressed: () async {
+                              await app.putRec(pr.copy({'archived': true}));
+                            },
+                            child: const Text('ARCHIVE')),
                         TextButton(
                             onPressed: () async {
                               await app.startSession(projectId: pr.id);

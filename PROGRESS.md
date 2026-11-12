@@ -59,3 +59,6 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   Note: one push in batch 5 went out with a failing widget test and was fixed in the next
   commit. Commits now go through tools/ship.sh, which refuses to push unless analyze and
   all tests pass.
+- Batch 7 (features 151 to 175): why line, breakdown wizard, local task splitter, next action,
+  estimate correction, urgent-important matrix, frog flag, WIP limit, dread XP, vague-task
+  check, templates, head-start bar, almost-there, open loops, dependencies, recurring tasks.

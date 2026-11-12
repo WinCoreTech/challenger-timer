@@ -8,6 +8,7 @@ import 'deadlines.dart';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'projects.dart';
 import 'tools.dart';
 import 'streak_engine.dart';
 
@@ -135,6 +136,19 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
     ];
 
 final Map<String, Stat> stats = {
+  'estRatio': (v) {
+    final r = estimateRatio(v);
+    return [
+      '${r.toStringAsFixed(1)}x',
+      'is how long your tasks really take compared with your guesses',
+      'So a 50-minute guess is more like ${correctedEstimate(v, 50)} minutes for you.',
+      'Based on finished tasks that had an estimate and logged sessions.',
+    ];
+  },
+  'openLoops': (v) {
+    final l = openLoops(v);
+    return ['${l.length}', 'half-done tasks waiting for you', for (final t in l) '• ${t.str('title')}'];
+  },
   'load': (v) {
     final cal = loadCalendar(v);
     final busy = cal.where((w) => w.count > 0).toList();

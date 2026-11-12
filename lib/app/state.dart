@@ -315,7 +315,15 @@ class App extends Notifier<AppData> {
     final done = !task.flag('done');
     await putRec(task.copy({'done': done, 'doneTs': done ? _now.ms : null}));
     if (done) {
-      await log(Ev.taskDone, {'taskId': task.id});
+      // Feature 174: a recurring task comes back after its interval.
+      final every = task.integer('every');
+      if (every > 0 && view.on(174)) {
+        await addRec(Kind.task, {
+          ...task.data, 'done': false, 'doneTs': null, 'postponed': 0,
+          if (task.data['due'] is int) 'due': task.integer('due') + every,
+        });
+      }
+      await log(Ev.taskDone, {'taskId': task.id, if (task.flag('milestone')) 'milestone': true});
       celebrate();
     }
   }
