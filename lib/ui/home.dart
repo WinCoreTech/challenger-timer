@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../app/state.dart';
 import '../core/day.dart';
+import '../core/coach.dart';
 import '../core/engine.dart';
 import '../core/extras.dart';
 import '../core/game.dart';
@@ -31,6 +32,8 @@ String homeLine(DayView v) {
     final f = freshStart(v.today, birthday: v.kv['t.65'] == null ? '' : v.single(const ToolDef(n: 65, kind: 'single', title: '', prompts: [''])).first);
     if (f != null) return 'It is $f. A clean page, if you want one.';
   }
+  if (v.on(522) && dayThreeDip(v) && !v.workedToday) return 'Around day three motivation usually dips. That is normal, not a sign. Two minutes anyway.';
+  if (v.on(540) && !v.workedToday && slumpWarning(v) != null) return slumpWarning(v)!;
   if (v.on(266) && v.name.isNotEmpty && !v.workedToday) return '${v.name}, start the timer. Two minutes.';
   if (v.on(462) && !v.workedToday && toneLines.containsKey(toneOf(v))) return toneLines[toneOf(v)]!;
   return streakLine(v.master);

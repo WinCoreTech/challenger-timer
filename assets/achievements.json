@@ -270,5 +270,27 @@
   "desc": "Start 20 sessions before 8 am.",
   "metric": "earlyStarts",
   "gte": 20
+ },
+ {
+  "id": "starter",
+  "name": "Starter",
+  "desc": "Finish all seven week-one missions.",
+  "metric": "weekOne",
+  "gte": 7
+ },
+ {
+  "id": "year_1",
+  "name": "One Year In",
+  "desc": "A year since your first day.",
+  "metric": "daysSinceFirst",
+  "gte": 365
+ },
+ {
+  "id": "year_2",
+  "name": "Two Years In",
+  "desc": "Two years since your first day.",
+  "metric": "daysSinceFirst",
+  "gte": 730,
+  "hidden": true
  }
 ]

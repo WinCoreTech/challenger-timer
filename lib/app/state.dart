@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
+import '../core/coach.dart';
 import '../core/flags.dart';
 import '../core/reminders.dart';
 import '../core/rules.dart';
@@ -434,8 +435,8 @@ class App extends Notifier<AppData> {
       'scrollFrom': v.on(212) && v.settingInt('scrollHour', 0) > 0 ? v.settingInt('scrollHour', 0) * 60 : null,
       'quietFrom': v.on(455) ? v.settingInt('quietFrom', 0) : 0,
       'quietTo': v.on(455) ? v.settingInt('quietTo', 0) : 0,
-      'remCap': v.on(454) ? v.settingInt('remCap', 3) : 99,
-      'reminders': [for (final r in buildReminders(v, ref.read(toolsProvider))) r.toJson()],
+      'remCap': v.on(454) ? v.settingInt('remCap', v.on(521) ? defaultReminderCap(v) : 3) : 99,
+      'reminders': graduationTestRunning(v) ? const <Object>[] : [for (final r in buildReminders(v, ref.read(toolsProvider))) r.toJson()],
     });
   }
 

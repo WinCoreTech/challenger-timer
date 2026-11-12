@@ -85,3 +85,9 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   export; reminder set (nudge, streak at risk, morning brief, evening wrap, night-before,
   start-by, notes from past you, Sunday preview), class silence, tone picker, own alarm
   words, partial Hindi and Marathi.
+- Batches 20 to 24 (features 476 to 600): text size, week-one missions and Starter badge,
+  fading support, day-3 message, rule-based coach (plan draft, priority, task rewriter,
+  excuse responder, deadline extraction, slump forecast, learned cue, reflection prompts),
+  voice journal, routine builder with timed runs, preset routine habits, weekly spotlight,
+  milestone letters, year in review, habit audit, graduation test. AI features marked
+  needs-backend with no fake output.

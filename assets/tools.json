@@ -2976,5 +2976,629 @@
 2,
 3
 ]
+},
+{
+"n": 495,
+"kind": "card",
+"title": "Accessibility",
+"body": "Text size for the whole app, on top of your phone's own font setting. Buttons are at least 48 dp tall and text is white or cyan on black.",
+"setKey": "textPct",
+"setLabel": "Text size (percent)",
+"setOptions": [
+100,
+115,
+130,
+150
+]
+},
+{
+"n": 500,
+"kind": "card",
+"title": "Dogfood rule",
+"body": "Building something? Make it a project here and log every work session on it with proof. The app that built habits should be built by habit."
+},
+{
+"n": 501,
+"kind": "single",
+"title": "One goal question",
+"intro": "",
+"prompts": [
+"The single thing I most want to stop delaying"
+]
+},
+{
+"n": 502,
+"kind": "card",
+"title": "One habit only",
+"body": "During your first seven days the app asks you to stay with one habit. You can still add another if you insist."
+},
+{
+"n": 504,
+"kind": "single",
+"title": "Delay quiz",
+"intro": "Five questions. Your answers are kept for you to reread: they do not change settings by themselves.",
+"prompts": [
+"When in the day do I delay most?",
+"Which kind of task do I delay most?",
+"What do I do instead?",
+"What feeling comes just before I delay?",
+"What has worked for me before?"
+]
+},
+{
+"n": 505,
+"kind": "stat",
+"title": "Week-one missions",
+"stat": "weekOne"
+},
+{
+"n": 513,
+"kind": "card",
+"title": "Just-in-time tips",
+"body": "Tools appear in the Toolbox as your rank rises, and the Toolbox shows which ones unlock next. Nothing is explained before you can use it."
+},
+{
+"n": 514,
+"kind": "card",
+"title": "Sample day",
+"body": "EXAMPLE, not your data. 7:30 alarm shows \"Open notebook to page 12\". Tap Start 2 min. Timer ends, you type one line of proof and a parking note. Evening: set tomorrow's first task. 8 pm: your buddy gets one SMS. That is a whole good day."
+},
+{
+"n": 515,
+"kind": "card",
+"title": "Task import",
+"body": "Paste a list of tasks into the Task splitter tool: each line becomes a task. Import from Google Tasks is not connected (BACKEND.md)."
+},
+{
+"n": 516,
+"kind": "card",
+"title": "Calendar connect",
+"body": "Not built. Reading your phone calendar would need the calendar permission. Use the Timetable tool to enter your classes by hand."
+},
+{
+"n": 518,
+"kind": "card",
+"title": "Tone at setup",
+"body": "Pick the voice in the Tone picker tool. It is not part of the first-run setup, to keep that under a minute."
+},
+{
+"n": 520,
+"kind": "special",
+"title": "Student starter pack",
+"intro": "Three small habits for college."
+},
+{
+"n": 521,
+"kind": "card",
+"title": "Fading support",
+"body": "In your first week up to three ordinary reminders a day may ring. After that the limit drops to two unless you set your own in Daily cap."
+},
+{
+"n": 522,
+"kind": "card",
+"title": "Day-3 dip message",
+"body": "On day three and four, Home tells you that the dip in motivation is normal."
+},
+{
+"n": 524,
+"kind": "stat",
+"title": "Week-one report",
+"stat": "weekOneReport"
+},
+{
+"n": 525,
+"kind": "card",
+"title": "Week-two choice",
+"body": "From day eight you can add a second habit on the Streaks tab, or stay with one. Staying with one is a fine choice."
+},
+{
+"n": 526,
+"kind": "card",
+"title": "Coach chat",
+"body": "The AI version is not connected (BACKEND.md). No chat is shown, because a fake one would have to make things up. The Coach tools below answer from your own log with fixed rules."
+},
+{
+"n": 527,
+"kind": "stat",
+"title": "Morning plan draft",
+"stat": "coachPlan"
+},
+{
+"n": 528,
+"kind": "stat",
+"title": "Auto-priority",
+"stat": "priority"
+},
+{
+"n": 529,
+"kind": "special",
+"title": "Task rewriter",
+"intro": "Turns \"study ML\" into a physical first action, using fixed patterns."
+},
+{
+"n": 530,
+"kind": "stat",
+"title": "Time estimates",
+"stat": "estRatio",
+"intro": "Suggested from your own finished tasks."
+},
+{
+"n": 531,
+"kind": "special",
+"title": "Excuse responder",
+"intro": ""
+},
+{
+"n": 532,
+"kind": "card",
+"title": "Stuck helper",
+"body": "The AI version is not connected (BACKEND.md). Use the Stuck button and the Feeling tools: they give a first step for each kind of block."
+},
+{
+"n": 533,
+"kind": "card",
+"title": "Notes Q&A",
+"body": "The AI version is not connected (BACKEND.md). Nothing is shown."
+},
+{
+"n": 534,
+"kind": "card",
+"title": "Quiz maker",
+"body": "The AI version is not connected (BACKEND.md). Flashcards quiz you on what you typed in yourself."
+},
+{
+"n": 535,
+"kind": "card",
+"title": "Auto daily log",
+"body": "The Daily page tool assembles the day's sessions, proof and notes by itself."
+},
+{
+"n": 536,
+"kind": "card",
+"title": "Auto-tagging",
+"body": "Proof inherits the project and tag of its session automatically. Sorting by subject from the content of a photo is not connected (BACKEND.md)."
+},
+{
+"n": 537,
+"kind": "card",
+"title": "Photo to text",
+"body": "Not connected. Reading handwriting needs an OCR library or service (BACKEND.md). Photos stay photos."
+},
+{
+"n": 538,
+"kind": "special",
+"title": "Voice journal",
+"intro": "Speak and the phone's speech recogniser turns it into a text entry."
+},
+{
+"n": 539,
+"kind": "stat",
+"title": "Pattern detection",
+"stat": "insights"
+},
+{
+"n": 540,
+"kind": "stat",
+"title": "Slump forecast",
+"stat": "slump"
+},
+{
+"n": 541,
+"kind": "stat",
+"title": "Learned reminder timing",
+"stat": "cueLearn"
+},
+{
+"n": 542,
+"kind": "card",
+"title": "Auto-reschedule",
+"body": "Not automatic. A missed task is moved with the \"Move to tomorrow\" button on its screen, which also counts the move."
+},
+{
+"n": 543,
+"kind": "special",
+"title": "Deadline extraction",
+"intro": "Paste a notice. If it holds a date, it becomes a task with that due date."
+},
+{
+"n": 544,
+"kind": "card",
+"title": "Resume bullet writer",
+"body": "The AI version is not connected (BACKEND.md). The Living resume tool lists your pinned proof as plain bullets."
+},
+{
+"n": 545,
+"kind": "stat",
+"title": "Interview question maker",
+"stat": "interview"
+},
+{
+"n": 546,
+"kind": "card",
+"title": "Roadmap generator",
+"body": "The AI version is not connected (BACKEND.md). Write your own milestones in Skill roadmaps."
+},
+{
+"n": 547,
+"kind": "stat",
+"title": "Tailored reflection prompts",
+"stat": "reflect"
+},
+{
+"n": 548,
+"kind": "stat",
+"title": "Honest coach",
+"stat": "capacity"
+},
+{
+"n": 549,
+"kind": "stat",
+"title": "What-worked memory",
+"stat": "worked"
+},
+{
+"n": 550,
+"kind": "card",
+"title": "Off switch",
+"body": "Every coach tool has its own switch in Settings, Features. All of them compute from your own log with fixed rules and say so when there is not enough data."
+},
+{
+"n": 551,
+"kind": "special",
+"title": "Morning routine builder",
+"intro": "Add the steps in order, then run them one at a time."
+},
+{
+"n": 552,
+"kind": "special",
+"title": "Night routine builder",
+"intro": ""
+},
+{
+"n": 553,
+"kind": "habit",
+"title": "Make the bed",
+"habit": "Make the bed",
+"intro": ""
+},
+{
+"n": 554,
+"kind": "habit",
+"title": "Pack the bag",
+"habit": "Pack the bag the night before",
+"intro": ""
+},
+{
+"n": 555,
+"kind": "habit",
+"title": "Clothes ready",
+"habit": "Lay out tomorrow's clothes",
+"intro": ""
+},
+{
+"n": 556,
+"kind": "habit",
+"title": "Five-minute tidy",
+"habit": "Five-minute room tidy",
+"intro": ""
+},
+{
+"n": 557,
+"kind": "habit",
+"title": "Desk reset",
+"habit": "Clear the desk after the last session",
+"intro": ""
+},
+{
+"n": 558,
+"kind": "habit",
+"title": "Ten pages",
+"habit": "Read ten pages",
+"intro": ""
+},
+{
+"n": 559,
+"kind": "habit",
+"title": "One journal line",
+"habit": "One journal line",
+"intro": ""
+},
+{
+"n": 560,
+"kind": "special",
+"title": "Three quiet minutes",
+"intro": "Sit and breathe for three minutes."
+},
+{
+"n": 561,
+"kind": "habit",
+"title": "After-dinner walk",
+"habit": "After-dinner walk",
+"intro": ""
+},
+{
+"n": 562,
+"kind": "habit",
+"title": "No phone at meals",
+"habit": "No phone at meals",
+"intro": ""
+},
+{
+"n": 563,
+"kind": "habit",
+"title": "Weekly family call",
+"habit": "Called family this week",
+"intro": ""
+},
+{
+"n": 564,
+"kind": "log",
+"title": "Money note",
+"intro": "",
+"prompts": [
+"What I spent today"
+]
+},
+{
+"n": 565,
+"kind": "habit",
+"title": "Message check times",
+"habit": "Checked messages only at my two times",
+"intro": ""
+},
+{
+"n": 566,
+"kind": "habit",
+"title": "One new word",
+"habit": "One new word",
+"intro": ""
+},
+{
+"n": 567,
+"kind": "habit",
+"title": "Ten minutes of tech news",
+"habit": "Ten minutes of tech news",
+"intro": ""
+},
+{
+"n": 568,
+"kind": "list",
+"title": "Chore tracker",
+"intro": "Chores with whose turn it is.",
+"prompts": [
+"Chore and whose turn"
+]
+},
+{
+"n": 569,
+"kind": "list",
+"title": "Errand batch",
+"intro": "One weekly slot for laundry and shopping.",
+"prompts": [
+"Errand for this week's batch"
+]
+},
+{
+"n": 570,
+"kind": "habit",
+"title": "Digital cleanup",
+"habit": "Sorted files and downloads this week",
+"intro": ""
+},
+{
+"n": 571,
+"kind": "card",
+"title": "One-tap routine run",
+"body": "Open the Morning or Night routine builder and tap RUN: the steps play one at a time."
+},
+{
+"n": 572,
+"kind": "card",
+"title": "Routine timer",
+"body": "Each routine run is timed. The builder shows your best time to beat."
+},
+{
+"n": 573,
+"kind": "single",
+"title": "Anchor moments",
+"intro": "Three fixed slots to hang habits on.",
+"prompts": [
+"After waking, I",
+"After college, I",
+"After dinner, I"
+]
+},
+{
+"n": 574,
+"kind": "card",
+"title": "Two-minute rule",
+"body": "If it takes under two minutes, do it now. Not later, not on a list. Now."
+},
+{
+"n": 575,
+"kind": "list",
+"title": "Daily non-negotiables",
+"intro": "Three at most. If you have more than three, none of them is non-negotiable.",
+"prompts": [
+"A non-negotiable"
+]
+},
+{
+"n": 576,
+"kind": "card",
+"title": "Monthly theme",
+"body": "The monthly campaign changes name each month. The colours of the app do not change."
+},
+{
+"n": 577,
+"kind": "card",
+"title": "Rotating challenge types",
+"body": "The daily challenge cycles through five different kinds, so two days in a row never ask for the same thing."
+},
+{
+"n": 578,
+"kind": "card",
+"title": "Planned reward fade",
+"body": "Not built as an automatic fade. When a habit runs by itself, graduate it (Streaks tab) so it stops asking for attention."
+},
+{
+"n": 579,
+"kind": "stat",
+"title": "Weekly spotlight",
+"stat": "spotlight"
+},
+{
+"n": 580,
+"kind": "log",
+"title": "Monthly goal reset",
+"intro": "",
+"prompts": [
+"Goal for this month",
+"What I am dropping to make room"
+]
+},
+{
+"n": 581,
+"kind": "stat",
+"title": "Staleness check",
+"stat": "staleness",
+"action": "Yes, still helping"
+},
+{
+"n": 582,
+"kind": "card",
+"title": "Auto difficulty",
+"body": "The weekly boss already adjusts: it asks for one more session than you did last week, and never less than five."
+},
+{
+"n": 583,
+"kind": "card",
+"title": "Plateau note",
+"body": "Flat weeks are normal. Skill grows in steps, not in a line: weeks of nothing visible, then a jump. Keep the daily start and wait for the step."
+},
+{
+"n": 584,
+"kind": "stat",
+"title": "Milestone letters",
+"stat": "letters"
+},
+{
+"n": 585,
+"kind": "stat",
+"title": "Year in review",
+"stat": "year"
+},
+{
+"n": 586,
+"kind": "card",
+"title": "Anniversary badges",
+"body": "One year and two years after your first day, a badge appears on Me."
+},
+{
+"n": 587,
+"kind": "card",
+"title": "Dormant mode",
+"body": "After days away, Home shrinks to one button and hides every number until you have started again."
+},
+{
+"n": 588,
+"kind": "card",
+"title": "Short re-onboarding",
+"body": "Coming back is one screen: Start again. Your habits, projects and vault are as you left them."
+},
+{
+"n": 589,
+"kind": "stat",
+"title": "Quarterly habit audit",
+"stat": "audit"
+},
+{
+"n": 590,
+"kind": "card",
+"title": "Simple mode",
+"body": "Me, Settings, Simple mode hides everything except Start, timer, proof, streaks and plan."
+},
+{
+"n": 591,
+"kind": "card",
+"title": "Custom home",
+"body": "Home is kept to one button on purpose. You can switch off the start count (feature 23) and the bonus bar in Settings."
+},
+{
+"n": 592,
+"kind": "card",
+"title": "Seasonal events",
+"body": "Exam season: switch on Exam mode. Summer build season: start a project from the Hackathon template and use Ship monthly."
+},
+{
+"n": 593,
+"kind": "stat",
+"title": "Long-game view",
+"stat": "longGame"
+},
+{
+"n": 594,
+"kind": "log",
+"title": "Semester-break plan",
+"intro": "",
+"prompts": [
+"One project for the break",
+"Hours a day",
+"What done looks like"
+]
+},
+{
+"n": 595,
+"kind": "check",
+"title": "New-semester reset",
+"items": [
+"Enter the new timetable",
+"Archive last semester's projects",
+"Add this semester's subjects as projects",
+"Set the cue time for the new schedule"
+]
+},
+{
+"n": 596,
+"kind": "stat",
+"title": "Minimum upgrade",
+"stat": "upgrade"
+},
+{
+"n": 597,
+"kind": "share",
+"title": "Guide a junior",
+"intro": "Help someone else start.",
+"prompts": [
+"Their name"
+],
+"body": "{0}, try this with me: two minutes of work a day, with proof. I am on day {streak}. I will check on you tomorrow."
+},
+{
+"n": 598,
+"kind": "list",
+"title": "Idea box",
+"intro": "Improvements for this app as you use it.",
+"prompts": [
+"An idea"
+]
+},
+{
+"n": 599,
+"kind": "log",
+"title": "Builder's changelog",
+"intro": "Each release you ship is an achievement.",
+"prompts": [
+"What I shipped",
+"Version or link"
+]
+},
+{
+"n": 600,
+"kind": "toggle",
+"title": "Graduation test",
+"intro": "Turns every ordinary reminder off for seven days. The cue alarm and rescue stay under their own switches in Settings.",
+"setKey": "gradTest",
+"setLabel": "Run the 7-day test"
 }
 ]

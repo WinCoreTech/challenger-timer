@@ -135,5 +135,11 @@ class _AppState extends ConsumerState<ChallengerApp> with WidgetsBindingObserver
       title: 'Challenger Timer',
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
+      builder: (context, child) {
+        // Feature 495: text size on top of the phone's own font scale.
+        final pct = ref.watch(viewProvider).settingInt('textPct', 100).clamp(80, 160);
+        final mq = MediaQuery.of(context);
+        return MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(mq.textScaler.scale(1) * pct / 100)), child: child!);
+      },
       routerConfig: ref.watch(routerProvider));
 }

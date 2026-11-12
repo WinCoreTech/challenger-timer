@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:challenger_timer/core/analytics.dart';
+import 'package:challenger_timer/core/coach.dart';
 import 'package:challenger_timer/core/engine.dart';
 import 'package:challenger_timer/core/events.dart';
 import 'package:challenger_timer/core/extras.dart';
@@ -48,7 +49,7 @@ void main() {
         expect(catalog[t.n]!.built, isTrue, reason: 'tool ${t.n} has no status line');
         expect(t.title, isNotEmpty);
         if (t.kind == 'stat') {
-          expect(stats.containsKey(t.stat) || analyticsStats.containsKey(t.stat), isTrue, reason: 'stat ${t.stat}');
+          expect(stats.containsKey(t.stat) || analyticsStats.containsKey(t.stat) || coachStats.containsKey(t.stat), isTrue, reason: 'stat ${t.stat}');
         }
         if (t.kind == 'check') expect(t.items, isNotEmpty);
         if (t.kind == 'toggle' || t.kind == 'dayflag') expect(t.setKey, isNotEmpty);

@@ -20,4 +20,9 @@ implements `Backend`, then pass it to `backendProvider` in `lib/main.dart`.
 | 337 Money stakes that really move money | A payment provider account (Razorpay or UPI collect) and a server to hold and release stakes. Not recommended for a student app. | Provider key and secret, on the server only |
 | 380 Problem count sync | LeetCode and Codeforces public profile endpoints (Codeforces has an official API with no key; LeetCode has only an unofficial GraphQL endpoint) | None for Codeforces |
 
+| 526 Coach chat, 532 Stuck helper, 533 Notes Q&A, 534 Quiz maker, 544 Resume bullets, 546 Roadmap generator, 154 AI splitter, 449 AI summary | An Anthropic API account, and a small server (Cloud Function or Supabase Edge Function) that holds the key and forwards requests. Never ship the key inside the APK. | `ANTHROPIC_API_KEY` on the server only; `COACH_URL` in the app |
+| 537 Photo to text, 536 content tagging | Google ML Kit text recognition (on-device library, no key) added to `pubspec.yaml`; handwriting quality is limited | None |
+| 515 Google Tasks import, 516 Calendar connect | Google Cloud project with the Tasks API enabled and an OAuth client for Android. Calendar can instead use the on-device calendar permission with no server. | OAuth client ID (SHA-1 registered) |
+| 423 Group study session, 466 Buddy nudges | Same buddy and squad store as above, plus Firebase Cloud Messaging for nudges | `google-services.json` |
+
 More rows are added as later batches reach features that need a server.

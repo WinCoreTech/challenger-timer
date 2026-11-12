@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../app/state.dart';
+import '../core/coach.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
@@ -201,6 +202,12 @@ class StreaksScreen extends ConsumerWidget {
         fab: FloatingActionButton.extended(
             key: const Key('addHabit'),
             onPressed: () async {
+              if (v.on(502) && v.habits.isNotEmpty && v.type(Ev.onboarded).isNotEmpty && dayIndex(v) < 7) {
+                final sure = await confirm(context, 'Week one is for one habit',
+                    'One habit, kept, teaches more than five dropped. You can add more from day eight. Add another anyway?',
+                    ok: 'ADD ANYWAY', cancel: 'WAIT');
+                if (!sure || !context.mounted) return;
+              }
               final name = await askText(context, 'New tiny habit', hint: 'Open the book', ok: 'ADD');
               if (name != null && name.trim().isNotEmpty) await app.addRec(Kind.habit, {'name': name.trim()});
             },

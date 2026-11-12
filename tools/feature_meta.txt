@@ -474,3 +474,128 @@
 473|done|7|Sunday 6 pm message with the week's due count. Tested.
 474|partial|7|A note only. Ignored alerts are not counted.
 475|partial|7|Six core words in Hindi and Marathi; the rest of the app is English.
+476|done|0|One Flutter codebase, Android only.
+477|done|0|SQLite on the phone through Drift. Tested.
+478|needs-backend|0|Not connected. See BACKEND.md.
+479|needs-backend|0|Not connected; JSON and CSV export are the manual backup. See BACKEND.md.
+480|done|0|Foreground service for the running session. Built, untested on device.
+481|done|0|Start time stored; remaining time computed from the clock; survives restart. Tested.
+482|done|0|Alarm-clock alarms with an inexact fallback. Built, untested on device.
+483|done|0|Widget provider with streak and start. Built, untested on device.
+484|done|0|Asked only when the blocker or usage tools are switched on. Built, untested on device.
+485|done|0|Pure Dart engine with tests for time zones, DST, day boundary, month boundary and freezes.
+486|done|0|One day-end setting used by every calculation, including the Kotlin side. Tested.
+487|done|0|Everything is an event; streaks, XP and stats are computed from them. Tested.
+488|done|0|Ranks and achievements live in JSON assets. Tested.
+489|done|0|One flag per feature in assets/features.json, with user switches. Tested.
+490|done|0|Version 1 shipped first, as release build-2.
+491|done|0|Three questions, one permission, then the first session. Widget test.
+492|done|0|Toolbox entries appear by rank, with a preview of what unlocks next. Tested.
+493|done|0|Black, one cyan accent, uppercase headings, poster art drawn in code.
+494|done|0|Haptic and a short tone on every completion. Calls tested; feel and sound untested on device.
+495|done|0|Text size setting on top of the system font scale; 48 dp minimum buttons. Screen-reader labels are not audited.
+496|done|0|JSON and CSV export, delete all. Tested.
+497|partial|0|No background work except alarms and, while switched on, the blocker (polls once a second with the screen on). Battery use not measured on a device.
+498|done|0|Photos resized to 1600 px, JPEG quality 70, by the camera plugin. Untested on device.
+499|done|0|No analytics, no network permission in the release manifest.
+500|done|0|A card; the habit is yours to keep.
+501|partial|0|Asked in the toolbox, not during setup.
+502|done|0|A second habit in week one needs an extra confirmation. Widget test.
+503|done|0|Cue time is the third setup question. Widget test.
+504|partial|0|Five questions saved for you; they do not set defaults.
+505|done|0|One of seven week-one missions, ticked from the log. Tested.
+506|done|0|One of seven week-one missions, ticked from the log. Tested.
+507|done|0|One of seven week-one missions, ticked from the log. Tested.
+508|done|0|One of seven week-one missions, ticked from the log. Tested.
+509|done|0|One of seven week-one missions, ticked from the log. Tested.
+510|done|0|One of seven week-one missions, ticked from the log. Tested.
+511|done|0|One of seven week-one missions, ticked from the log. Tested.
+512|done|0|Starter badge for all seven missions. Tested.
+513|partial|0|Tools unlock by rank with a preview; there are no pop-up tips.
+514|done|0|A clearly labelled example card.
+515|partial|0|Paste lines into the Task splitter. Google Tasks import is not connected.
+516|partial|0|Not built. Classes are entered by hand in the Timetable tool.
+517|done|0|Each permission is asked alone, with a plain reason, when its feature is switched on. Widget test.
+518|partial|0|Tone is chosen in the toolbox, not at setup.
+519|done|0|Day-end setting in Settings. Tested.
+520|done|0|Three starter habits plus the project templates.
+521|done|0|Reminder cap 3 in week one, 2 after. Tested.
+522|done|0|Home says the dip is normal on days three and four. Tested.
+523|done|0|No account exists at all.
+524|done|0|First seven days on one screen.
+525|done|0|A card; the choice is made on the Streaks tab.
+526|needs-backend|8|No chat is shown. Rule-based coach tools exist instead.
+527|done|8|Draft from due dates and free slots, by fixed rules. Tested.
+528|done|8|Earliest due first, then smallest. Tested.
+529|partial|8|Pattern-based rewrite for common verbs only. Tested.
+530|done|8|Your own actual-to-estimate ratio.
+531|done|8|Keyword-matched replies from a fixed set. Tested.
+532|needs-backend|8|Concept explanations need an AI service. Local stuck tools exist.
+533|needs-backend|8|Needs an AI service.
+534|needs-backend|8|Needs an AI service. Flashcards cover self-made quizzes.
+535|done|8|Daily page assembles the day by itself.
+536|partial|8|Proof inherits project and tag from its session. No content-based sorting.
+537|needs-backend|8|Needs an OCR library or service.
+538|done|8|Speech to text entries through the phone's recogniser. Built, untested on device.
+539|done|8|Same rule-based insights as feature 446. Tested.
+540|done|8|Warns on the weekday you most often miss. Tested.
+541|done|8|Shows your median real start time; it does not move the alarm. Tested.
+542|partial|8|Not automatic: the Move to tomorrow button.
+543|done|8|Finds dates like 14 Nov, 14/11, tomorrow, Friday. Tested.
+544|needs-backend|8|AI writing not connected. Plain bullets from pinned proof.
+545|partial|8|Two fixed question patterns per project.
+546|needs-backend|8|Needs an AI service.
+547|done|8|Three prompts chosen from the week's numbers. Tested.
+548|done|8|Says so when deadlines ask for more than your 14-day pace.
+549|done|8|Counts fixes that were followed by a session. Tested.
+550|done|8|Per-tool switches; rules only, no invented data.
+551|done|8|Ordered steps, run one at a time. Widget test.
+552|done|8|Same builder for the night.
+553|done|8|Preset habit with its own streak.
+554|done|8|Preset habit with its own streak.
+555|done|8|Preset habit with its own streak.
+556|done|8|Preset habit with its own streak.
+557|done|8|Preset habit with its own streak.
+558|done|8|Preset habit with its own streak.
+559|done|8|Preset habit with its own streak.
+560|done|8|Three-minute breathing screen.
+561|done|8|Preset habit with its own streak.
+562|done|8|Preset habit with its own streak.
+563|done|8|Preset habit with its own streak.
+564|done|8|Dated entries.
+565|done|8|Preset habit with its own streak.
+566|done|8|Preset habit with its own streak.
+567|done|8|Preset habit with its own streak.
+568|partial|8|A checklist; turns are typed, not rotated.
+569|done|8|Checklist.
+570|done|8|Preset habit with its own streak.
+571|done|8|RUN plays the routine step by step. Widget test.
+572|done|8|Each run is timed and the best time is kept. Widget test.
+573|done|8|Three saved anchors.
+574|done|8|A card.
+575|partial|8|A checklist; the limit of three is advice, not enforced.
+576|partial|8|Only the campaign name changes monthly.
+577|done|8|Five daily challenge kinds in rotation.
+578|partial|8|Not built as a fade. Graduation removes a habit's prompts.
+579|done|8|One unused tool suggested per week. Tested.
+580|done|8|Dated entries.
+581|done|8|A question with a yes button; the date is kept.
+582|partial|8|Only the weekly boss adapts (last week plus one). The 80%/50% rule exists as a tested function but is not wired to other targets.
+583|done|8|A card.
+584|done|8|Letters at 30, 100 and 365 days shown up.
+585|done|8|This year's numbers.
+586|done|8|Badges at one and two years. Tested.
+587|done|8|Covered by the return screen from 3 days away.
+588|partial|8|One screen, not three.
+589|done|8|Habits with their last-90-day counts.
+590|done|8|Simple mode switch in Settings. Tested.
+591|partial|8|Home is fixed; two of its parts can be switched off.
+592|partial|8|A guide to existing tools.
+593|done|8|Hours per calendar year.
+594|done|8|Dated entries.
+595|done|8|Four-item checklist.
+596|done|8|Offers the ramp when ten sessions in a row ran 10+ minutes. Tested.
+597|done|8|Invitation through the share sheet.
+598|done|8|Checklist.
+599|done|8|Dated entries.
+600|done|8|Reminders off for seven days, then a count of days shown up. Tested.

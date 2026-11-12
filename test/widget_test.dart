@@ -158,6 +158,9 @@ void main() {
     expect(find.byKey(Key('tick-${h.id}')), findsNothing);
     await t.tap(find.byKey(const Key('addHabit')));
     await t.pumpAndSettle();
+    expect(find.text('WEEK ONE IS FOR ONE HABIT'), findsOneWidget);
+    await t.tap(find.text('ADD ANYWAY'));
+    await t.pumpAndSettle();
     await t.enterText(find.byType(TextField), 'One commit');
     await t.tap(find.text('ADD'));
     await t.pumpAndSettle();

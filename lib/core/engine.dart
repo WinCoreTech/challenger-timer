@@ -3,6 +3,7 @@
 library;
 
 import 'dart:convert';
+import 'coach.dart';
 import 'day.dart';
 import 'events.dart';
 import 'extras.dart';
@@ -296,6 +297,8 @@ class DayView {
       'longestSession': longestSession,
       'bestDaySessions': perDay.values.fold(0, (a, b) => a > b ? a : b),
       'xp': xpTotal,
+      'weekOne': weekOne(this).where((m) => m.$2).length,
+      'daysSinceFirst': showedUpDays.isEmpty ? 0 : today - showedUpDays.reduce((a, b) => a < b ? a : b),
       'earlyStarts': type(Ev.sessionStart).where((e) => e.moment.hour >= dayEndHour && e.moment.hour < 8).length,
       'earlySubmits': of(Kind.task).where((t) => t.flag('done') && t.data['due'] is int && t.data['doneTs'] is int && dayOf(t.integer('doneTs'), now.offsetMin, dayEndHour) < t.integer('due')).length,
     };
