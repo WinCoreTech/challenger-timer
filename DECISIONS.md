@@ -69,3 +69,34 @@ Every choice made without asking, newest section last.
 - Completion sound is a short system tone from `ToneGenerator`, so no audio asset.
 - I pushed builds to `main` as well as the working branch, because the workflow builds
   the APK only from `main`.
+
+## The 702 features
+- One flag per feature lives in `assets/features.json`, generated from `FEATURES.md` and
+  `tools/feature_meta.txt` by `tools/gen_features.py`, which also writes
+  `FEATURES_STATUS.md`. Users can switch any built feature off in Settings, Features.
+- Features outside Version 1 appear by rank (section 1 to 3 at rank 1, later sections at
+  higher ranks). They live in a Toolbox under Me, so Home stays one Start button. Simple
+  mode hides all of them.
+- Most small features (prompts, lists, checklists, counters, ratings, preset habits and
+  sessions, explainer cards, computed read-outs) are data in `assets/tools.json` rendered
+  by one generic screen. This was the only way to cover 702 items; it means many "done"
+  features are simple. Status notes say what each one really is.
+- Batches after the tenth were shipped several at a time (still in numerical order) to
+  save build time. Every push went through `tools/ship.sh`, which refuses to commit unless
+  the analyzer is clean and all tests pass. That script exists because one push in batch 5
+  went out with a failing test.
+- Rules that would change Version 1 behaviour are opt-in even when their flag is on:
+  decay instead of reset (55), ramp ladder (80), daily deposit drain (601, needs Firm).
+- XP rules use the flag without the rank gate, because rank depends on XP.
+- Pressure dial (701): Gentle by default; Firm and Relentless features are listed in
+  `lib/core/pressure.dart`. Raising is instant, lowering takes 24 hours. Auto-start (633)
+  is never synced when the cue time is inside the sleep window, and no reminder is ever
+  scheduled inside it.
+- Backend features run on `LocalBackend`, which only reports "not connected". Their
+  screens show no people and no numbers. Where a share-sheet version made sense
+  (contracts, pledges, digests) that was built and marked partial.
+- Features that involve money (stakes, escrow, deposits) only record what you wrote.
+  The app never holds or moves money.
+- AI coach features are fixed rules over the user's own log and say so on screen.
+- Extra permissions added by later batches, each asked only when its feature is used:
+  microphone (voice proof, voice promise), Do Not Disturb access (auto DND).

@@ -98,3 +98,68 @@ Tracked in `FEATURES_STATUS.md`, one line per feature. Batches are logged below.
   timed vault, permission guard, hidden lines, serial story, chests, spins, double hour,
   jackpot, puzzle, fog map, sticky banner. Squad features marked needs-backend.
 - Every line in FEATURES_STATUS.md now has a status.
+
+## Final state
+
+- CI: green through release `build-18`. One earlier run (build 7) was red because a
+  failing widget test was pushed; it was fixed in the next commit.
+- APK: https://github.com/WinCoreTech/challenger-timer/releases/tag/build-18
+- 702 features: 555 done, 99 partial, 44 needs-backend, 4 blocked. See `FEATURES_STATUS.md`.
+- 181 unit and widget tests pass. Nothing has run on a real phone.
+- Many "done" features are simple prompts, lists, checklists or explainer cards in the
+  Toolbox. The note on each status line says what was actually built.
+
+## Phone test checklist (run in this order)
+
+Install: open the release, download `app-debug.apk`, allow the install. If a newer build
+will not install over an older one, uninstall the old one first.
+
+Core loop
+1. Open the app. Expect three setup questions (name, one habit, alarm time), then one
+   permission dialog for notifications, then a running 02:00 timer on a black WORK screen.
+2. Pull down the notification shade. Expect a "Session running" notification counting down.
+3. Swipe the app away from recent apps and wait for the two minutes to end. Expect a
+   "Session done. Full win." notification with a sound. Tap it.
+4. Expect a cyan REST screen saying DONE with SAVE PROOF and JUST FIVE MORE.
+5. Tap SAVE PROOF, type one line, type a parking note, save. Expect a receipt card, then
+   Home showing your parking note as the next tiny step, streak 1 and "Bonus kept".
+6. Open the Vault tab. Expect the proof line under today's date.
+7. Start a 5-minute session from the Timer tab, then restart the phone. After it boots,
+   expect the "Session running" notification to come back with the right time left.
+8. On the proof screen choose PHOTO and take a picture. Expect the camera to open and the
+   photo to show in the Vault.
+
+Streaks and plan
+9. Streaks tab: tap DONE on your habit. Expect a tick, current 1, and two hearts for freezes.
+10. Plan tab before 10 pm: set tomorrow's first task and alarm time. Expect "Set. It locks
+    at 10 pm." After 10 pm, expect a lock icon and no way to edit it.
+
+Force stack (each asks for a permission when switched on)
+11. Me, Settings, Permissions: allow exact alarms, full-screen alarms and battery
+    optimisation. Set the cue time 2 minutes ahead, lock the phone. Expect the screen to
+    wake with a full-screen alarm showing the task and a START 2 MIN button.
+12. Tap START 2 MIN on the alarm. Expect the app to open on a running 2-minute timer.
+13. Settings: turn on Earn your phone, pick one app, allow usage access and display over
+    other apps. On a day with no session yet, open that app. Expect a black "EARN YOUR
+    PHONE" screen within about a second, with START 2 MIN.
+14. Finish a session, then open the same app. Expect it to open normally.
+15. Settings: add a buddy (use your own second number), turn on Buddy report, allow SMS.
+    Tap "Send today's report now". Expect an SMS to arrive.
+16. Deny SMS instead (or revoke it) and tap the same button. Expect the share sheet.
+17. Leave the buddy report on overnight. Expect an SMS at 8 pm.
+18. On a day with no session, wait for 9 pm. Expect a ringing, call-style alert.
+19. Settings: tap TURN OFF on any force-stack switch. Expect a 24-hour countdown and a
+    KEEP IT ON button, and the feature still working meanwhile.
+
+Extras (Me, Toolbox; Settings, Features has "unlock" switches per feature)
+20. Long-press the home screen, add the Challenger Timer widget. Expect the streak number
+    and a red START 2 MIN that turns green after a session.
+21. Add the "Start 2 min" quick-settings tile and tap it. Expect a session to start.
+22. Timer tab, "More ways to run it", Pomodoro. Expect a break screen after the round and
+    the next round starting by itself while the app is open.
+23. Timer tab, pick brown noise, start. Expect a low hiss that stops when the session ends.
+24. Proof screen, VOICE: record and play back. Expect your voice.
+25. Settings, Export JSON. Expect a share sheet with a `.json` file.
+
+For anything that does not match, note the step number, what you saw, and your phone
+model and Android version.

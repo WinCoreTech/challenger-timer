@@ -52,6 +52,8 @@ first. Saying no always leaves a working fallback.
 | Send SMS (`SEND_SMS`) | Automatic buddy report at 8 pm | At 8 pm you get a notification that opens the share sheet with the report filled in. |
 | Ignore battery optimisation | Stops Android delaying alarms and the blocker | Alarms can be late on aggressive phones (Xiaomi, Oppo, Vivo, Realme, Samsung). |
 | Camera | Photo proof, through the system camera app | Use one line or a link as proof instead. |
+| Microphone (`RECORD_AUDIO`) | Voice proof and the recorded promise, only between your two taps | Use text, photo or link proof. |
+| Do Not Disturb access | Optional: silence the phone during sessions | Sessions run without changing Do Not Disturb. |
 
 ### Battery optimisation and Doze
 
@@ -63,6 +65,13 @@ phones with aggressive battery savers you should also:
 2. In the phone's own settings, allow **Autostart** for Challenger Timer if your phone has
    that switch (Xiaomi, Oppo, Vivo, Realme).
 3. Do not swipe-lock or "clean" the app in the recent-apps cleaner.
+
+## Beyond the core app
+
+Me, Toolbox holds the optional extras, which unlock as your rank rises. Settings has
+**Simple mode** (hide all of them) and **Features** (a switch per feature). The pressure
+dial in the Toolbox starts on Gentle; stronger features need you to raise it, and lowering
+it takes 24 hours. `FEATURES_STATUS.md` lists all 702 features with what was really built.
 
 ## Your data
 
