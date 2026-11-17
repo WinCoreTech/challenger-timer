@@ -363,6 +363,7 @@ class _WelcomeState extends ConsumerState<WelcomeScreen> {
   final name = TextEditingController();
   final habit = TextEditingController();
   int cue = 9 * 60;
+  bool wideSleep = true;
   bool busy = false;
 
   @override
@@ -378,6 +379,12 @@ class _WelcomeState extends ConsumerState<WelcomeScreen> {
     final app = ref.read(appProvider.notifier);
     await app.setKv(K.name, name.text.trim());
     await app.setKv(K.cueMinute, '$cue');
+    // Plan v2 R3: 00:00 to 04:00 is always protected. A wider window is only suggested.
+    if (wideSleep) {
+      await app.setKv('bedHour', '23');
+      await app.setKv('wakeHour', '6');
+      await app.setKv('flag.303', '1');
+    }
     final h = habit.text.trim().isEmpty ? 'Open the book' : habit.text.trim();
     await app.addRec(Kind.habit, {'name': h});
     await app.log(Ev.onboarded, {'cueMinute': cue});
@@ -398,14 +405,23 @@ class _WelcomeState extends ConsumerState<WelcomeScreen> {
       ('One tiny habit', 'Small enough to do on your worst day. You can add more later.',
           TextField(key: const Key('obHabit'), controller: habit, decoration: const InputDecoration(hintText: 'Open the book'))),
       ('When should the alarm ring?', 'Pick the time you will start each day. A full-screen alarm shows your first task.',
-          Center(
-              child: TextButton(
-                  key: const Key('obCue'),
-                  onPressed: () async {
-                    final t = await showTimePicker(context: context, initialTime: TimeOfDay(hour: cue ~/ 60, minute: cue % 60));
-                    if (t != null) setState(() => cue = t.hour * 60 + t.minute);
-                  },
-                  child: Big(hhmm(cue), size: 72, color: accent)))),
+          Column(mainAxisSize: MainAxisSize.min, children: [
+            Center(
+                child: TextButton(
+                    key: const Key('obCue'),
+                    onPressed: () async {
+                      final t = await showTimePicker(context: context, initialTime: TimeOfDay(hour: cue ~/ 60, minute: cue % 60));
+                      if (t != null) setState(() => cue = t.hour * 60 + t.minute);
+                    },
+                    child: Big(hhmm(cue), size: 72, color: accent))),
+            SwitchListTile(
+                key: const Key('obSleep'),
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Protect 23:00 to 06:00 for sleep'),
+                subtitle: const Text('No alarms or reminders then. 00:00 to 04:00 is always protected either way.', style: TextStyle(color: dim, fontSize: 12)),
+                value: wideSleep,
+                onChanged: (x) => setState(() => wideSleep = x)),
+          ])),
     ];
     final (title, sub, body) = pages[step];
     final last = step == pages.length - 1;

@@ -10,6 +10,7 @@ import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
 import 'focus.dart';
+import 'planning.dart';
 import 'pressure.dart';
 import 'settings.dart';
 import 'streak_engine.dart';
@@ -135,4 +136,36 @@ List<String> driftLines(DayView v, int from, int to) {
     if (causes.isNotEmpty) 'Top causes: ${causes.take(3).map((c) => '${c.$1} (${c.$2})').join(', ')}',
     if (worst > 0) 'Most drifts around ${two(byHour.indexOf(worst))}:00.',
   ];
+}
+
+// ---- 6.5 Recovery challenge ---------------------------------------------------
+/// After a streak breaks, a short challenge brings it back: three qualifying
+/// days within the next five. Finishing it pays 100 XP once.
+class Recovery {
+  const Recovery(this.fromDay, this.have, this.need, this.daysLeft);
+  final int fromDay, have, need, daysLeft;
+  bool get done => have >= need;
+}
+
+Recovery? recoveryChallenge(DayView v) {
+  final b = v.master.lastBreakDay;
+  if (b == null) return null;
+  final have = [for (var d = b + 1; d <= b + 5; d++) d].where((d) => d <= v.today && v.showedUpDays.contains(d)).length;
+  final left = (b + 5 - v.today).clamp(0, 5);
+  final r = Recovery(b, have, 3, left);
+  return r.done || left > 0 ? r : null;
+}
+
+List<(String, int)> recoveryXp(DayView v) {
+  final r = recoveryChallenge(v);
+  return r != null && r.done ? [('Recovery challenge done', 100)] : const [];
+}
+
+/// When the "still there" nudge rings. After 14 days of use it moves to the
+/// hour you actually get the most done, never inside the sleep window.
+int nudgeMinute(DayView v) {
+  final first = v.type(Ev.sessionDone).firstOrNull?.day;
+  final peak = first != null && v.today - first >= 14 ? peakHour(v) : null;
+  if (peak == null) return (v.cueMinute + 30) % 1440;
+  return (peak * 60).clamp(4 * 60, 23 * 60 + 59);
 }

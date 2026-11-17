@@ -12,6 +12,7 @@ import 'batch01_test.dart' show pumpTool;
 import 'harness.dart';
 
 void main() {
+  recoveryTests();
   group('6.5 streak rule (plan v2)', () {
     test('a day counts only with one session of 25 minutes or more', () async {
       final r = Rig(streakMin: 25);
@@ -192,5 +193,33 @@ void main() {
     expect(shutdownDone(r.v), isTrue);
     expect(r.v.tomorrowPlan!.task, 'Open the DBMS file');
     expect(find.byKey(const Key('shutdownDone')), findsOneWidget);
+  });
+}
+
+void recoveryTests() {
+  test('recovery challenge: three full days within five after a break, 100 XP once', () async {
+    final r = Rig(streakMin: 25);
+    await r.app.setKv('flag.53', '0');
+    await r.session(minutes: 25);
+    expect(recoveryChallenge(r.v), isNull);
+    r.clock.advance(const Duration(days: 10)); // rest days and 3 freezes run out, then two misses break it
+    expect(r.v.master.lastBreakDay, isNotNull);
+    final c = recoveryChallenge(r.v)!;
+    expect([c.have, c.need], [0, 3]);
+    for (var i = 0; i < 3; i++) {
+      await r.session(minutes: 25);
+      r.clock.advance(const Duration(days: 1));
+    }
+    expect(recoveryChallenge(r.v)?.done, isTrue);
+    expect(r.v.xpExtras, contains(('Recovery challenge done', 100)));
+  });
+
+  test('adaptive nudge: cue + 30 min at first, your best hour after 14 days, never before 04:00', () async {
+    final r = Rig(streakMin: 25);
+    await r.app.setKv('cueMinute', '${9 * 60}');
+    expect(nudgeMinute(r.v), 9 * 60 + 30);
+    await r.session(minutes: 25); // 10:00 session
+    r.clock.advance(const Duration(days: 15));
+    expect(nudgeMinute(r.v), 10 * 60);
   });
 }

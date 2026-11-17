@@ -232,3 +232,7 @@ model and Android version.
   `lib/ui/theme.dart`), native alarm and block screens match. Still to do in Phase 3: light
   theme, original tile artwork, animations, haptics tuning, empty/error states audit,
   screenshots of every screen in light and dark.
+- Phase 2, third slice: recovery challenge after a streak break (3 full days in 5, 100 XP,
+  banner on Work), reminder nudge moves to your best hour after 14 days, onboarding asks
+  whether to protect 23:00 to 06:00 (on by default; 00:00 to 04:00 is always protected).
+  Still open in section 6: PDF portfolio export, project deadline streaks.

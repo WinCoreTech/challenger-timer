@@ -204,6 +204,14 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
           ChoiceChip(key: Key('mode-${m.id}'), label: Text(m.name.toUpperCase()), selected: v.pref(S.focusMode) == m.id, onSelected: (_) => app.setSetting(S.focusMode, m.id)),
       ]),
       Padding(padding: const EdgeInsets.only(top: 6), child: Text(modeOf(v.pref(S.focusMode)).about, style: const TextStyle(color: dim, fontSize: 12))),
+      if (recoveryChallenge(v) case final r? when !r.done) ...[
+        const SizedBox(height: 16),
+        Panel(
+            key: const Key('recovery'),
+            border: gold,
+            child: Text('Recovery challenge: ${r.have} of ${r.need} full sessions in ${r.daysLeft + 1} days brings the streak back with a 100 XP reward. Start small, finish one today.',
+                style: const TextStyle(color: gold))),
+      ],
       if (need != null && !v.prefOn(S.casualMode)) ...[
         const SizedBox(height: 20),
         Panel(

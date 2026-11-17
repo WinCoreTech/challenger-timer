@@ -91,7 +91,7 @@ List<Reminder> fixedReminders(DayView v, {Lines lines = Lines.empty}) {
     }
   }
   // 453: gentle nudge half an hour after the cue, before the 9 pm rescue.
-  if (v.on(453)) out.add(Reminder(453, (v.cueMinute + 30) % 1440, lines.pick(v, v.today), v.nextStep, start: true, skipIfWorked: true));
+  if (v.on(453)) out.add(Reminder(453, nudgeMinute(v), lines.pick(v, v.today), v.nextStep, start: true, skipIfWorked: true));
   // Plan v2 6.6: at 7 pm, if the streak is alive and today has no qualifying
   // session yet, one alert that offers a rescue session.
   if (streakAtRiskTonight(v)) {

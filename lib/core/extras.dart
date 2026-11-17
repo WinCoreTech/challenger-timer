@@ -163,6 +163,7 @@ List<(String, int)> featureXp(DayView v) {
   out.addAll(gameXp(v));
   out.addAll(focusXp(v));
   out.addAll(doorXp(v));
+  out.addAll(recoveryXp(v));
   out.addAll(pressureXp(v));
   if (v.flagOn(98)) {
     // Feature 98: harder sessions pay more. Difficulty 2 = +10, 3 = +20.

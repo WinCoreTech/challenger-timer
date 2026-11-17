@@ -48,6 +48,7 @@ void main() {
     await t.tap(find.byKey(const Key('obNext')));
     await t.pumpAndSettle();
     expect(find.text('09:00'), findsOneWidget);
+    expect(find.byKey(const Key('obSleep')), findsOneWidget);
     await t.tap(find.byKey(const Key('obNext')));
     await t.pumpAndSettle();
     // One plain-language permission request, nothing else.
@@ -61,6 +62,7 @@ void main() {
     expect(r.v.onboarded, isTrue);
     expect(r.v.name, 'Winzo');
     expect(r.v.habits.single.str('name'), 'Open the book');
+    expect(r.v.kv['bedHour'], '23', reason: 'the wider sleep window was accepted by default');
     expect(r.v.active!.minutes, 2);
     await closeApp(t);
   });
