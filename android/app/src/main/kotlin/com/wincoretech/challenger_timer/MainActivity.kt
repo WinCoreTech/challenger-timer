@@ -204,6 +204,12 @@ class MainActivity : FlutterActivity(), SensorEventListener {
                     result.success(null)
                 }
                 "leftWithScreenOn" -> result.success(screenOnAtPause)
+                "takeLateFinish" -> {
+                    val p = Core.prefs(this)
+                    val late = p.getLong("lateFinishMs", 0L)
+                    p.edit().remove("lateFinishMs").apply()
+                    result.success(late)
+                }
                 "noise" -> {
                     val kind = call.arguments as? String ?: ""
                     if (kind.isEmpty()) Noise.stop() else Noise.start(kind)
@@ -269,6 +275,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         e.putStringSet("allowApps", (m["allowApps"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet())
         e.putBoolean("unlockFriction", m["unlockFriction"] == true)
         e.putBoolean("sticky", m["sticky"] == true)
+        e.putBoolean("robust", m["robust"] != false)
         e.putBoolean("autoStart", m["autoStart"] == true)
         e.putString("alarmImage", m["alarmImage"] as? String ?: "")
         e.putString("alarmVoice", m["alarmVoice"] as? String ?: "")

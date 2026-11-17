@@ -27,3 +27,4 @@ key.properties
 # Secrets
 .env
 *.env
+.claude/

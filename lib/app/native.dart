@@ -32,6 +32,9 @@ abstract class Native {
   Future<Map<String, Object?>> usage();
   Future<void> faceDown(bool on);
 
+  /// Milliseconds the last native session finish ran late (0 if on time). Clears it.
+  Future<int> takeLateFinish();
+
   /// Keeps the screen awake (hard mode).
   Future<void> keepScreenOn(bool on);
 
@@ -112,6 +115,8 @@ class ChannelNative implements Native {
   Future<Map<String, Object?>> usage() async => (await _call<Map>('usage'))?.cast<String, Object?>() ?? const {'granted': false};
   @override
   Future<void> faceDown(bool on) => _call<void>('faceDown', on);
+  @override
+  Future<int> takeLateFinish() async => (await _call<num>('takeLateFinish'))?.toInt() ?? 0;
   @override
   Future<void> keepScreenOn(bool on) => _call<void>('keepScreenOn', on);
   @override
@@ -197,6 +202,14 @@ class FakeNative implements Native {
   Future<Map<String, Object?>> usage() async => usageData;
   @override
   Future<void> faceDown(bool on) async => calls.add('faceDown:$on');
+  int lateFinishMs = 0;
+  @override
+  Future<int> takeLateFinish() async {
+    final l = lateFinishMs;
+    lateFinishMs = 0;
+    return l;
+  }
+
   @override
   Future<void> keepScreenOn(bool on) async => calls.add('keepOn:$on');
   @override

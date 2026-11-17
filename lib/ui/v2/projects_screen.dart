@@ -7,3 +7,6 @@ class ProjectsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) => const Scaffold(body: SizedBox());
 }
+
+/// Placeholder: replaced with the real picker in phase 1.
+Future<String?> pickProject(BuildContext context, WidgetRef ref) async => null;

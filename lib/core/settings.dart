@@ -83,6 +83,9 @@ extension SettingsView on DayView {
     return n;
   }
 
+  /// A late finish was recorded and the warning has not been hidden since.
+  bool get lateWarning => type(Ev.lateFinish).isNotEmpty && pref(S.hideLateWarning) != '1';
+
   /// The break that follows the session just finished: long on every Nth.
   bool nextBreakIsLong() {
     final every = prefInt(S.longBreakEvery);

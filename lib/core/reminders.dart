@@ -9,6 +9,7 @@ import 'pressure.dart';
 import 'planning.dart';
 import 'events.dart';
 import 'tools.dart';
+import 'v2_schedule.dart';
 import 'wellbeing.dart';
 
 class Reminder {
@@ -46,6 +47,7 @@ List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
     }
   }
   out.addAll(fixedReminders(v));
+  out.addAll(scheduleReminders(v));
   // 303: nothing is ever scheduled inside the protected sleep window.
   // 468: nothing rings during a lecture on today's timetable.
   final wd = weekdayOf(v.today);

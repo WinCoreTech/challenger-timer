@@ -156,7 +156,7 @@ object Core {
     // ---- timer -----------------------------------------------------------
     fun startTimer(c: Context, end: Long, title: String) {
         prefs(c).edit().putLong("timerEnd", end).putString("timerTitle", title).apply()
-        schedule(c, "timer_done", end, true)
+        schedule(c, "timer_done", end, prefs(c).getBoolean("robust", true))
         try {
             c.startForegroundService(Intent(c, TimerService::class.java))
         } catch (e: Exception) {
@@ -177,7 +177,9 @@ object Core {
         val p = prefs(c)
         val end = p.getLong("timerEnd", 0L)
         if (end == 0L || System.currentTimeMillis() < end - 1500) return
-        p.edit().remove("timerEnd").putInt("lastSessionDay", today(c)).apply()
+        // Reference 5.3: remember how late the finish ran, for the battery warning.
+        val late = System.currentTimeMillis() - end
+        p.edit().remove("timerEnd").putInt("lastSessionDay", today(c)).putLong("lateFinishMs", if (late > 5000L) late else 0L).apply()
         cancel(c, "timer_done")
         c.stopService(Intent(c, TimerService::class.java))
         val n = Notification.Builder(c, CH_DONE)

@@ -12,6 +12,7 @@ import '../core/pressure.dart';
 import '../core/wellbeing.dart';
 import '../core/reminders.dart';
 import '../core/rules.dart';
+import '../core/settings.dart';
 import '../core/tools.dart';
 import '../data/store.dart';
 import 'native.dart';
@@ -157,7 +158,16 @@ class App extends Notifier<AppData> {
     await _finish(s, s.flow ? ActiveSession.flowCapMinutes : s.minutes, Moment(s.endMs, now.offsetMin));
     // Feature 77: the next phase starts on its own, but only if we are
     // actually here. A cycle never runs by itself while the app is closed.
-    if (s.cycleLeft > 0 && now.ms - s.endMs < 2 * msPerMinute) await startBreak(s.cycleRest, from: s, startMs: s.endMs);
+    final here = now.ms - s.endMs < 2 * msPerMinute;
+    // Reference 5.3: continuous mode from the Work screen loops work, break, work.
+    final loop = s.source == 'work' && view.prefOn(S.loop);
+    if (loop && here) {
+      final v = view;
+      await startBreak(v.nextBreakIsLong() ? v.longBreakMinutes(s.projectId) : v.shortBreakMinutes(s.projectId),
+          from: s, startMs: s.endMs, loop: true);
+    } else if (s.cycleLeft > 0 && here) {
+      await startBreak(s.cycleRest, from: s, startMs: s.endMs);
+    }
     return true;
   }
 
@@ -197,7 +207,7 @@ class App extends Notifier<AppData> {
       return syncNative();
     }
     final elapsedMin = s.elapsedMs(now.ms) ~/ msPerMinute;
-    if (elapsedMin >= view.doorMinutes.clamp(1, 2) && reason != 'left') {
+    if (elapsedMin >= view.doorMinutes.clamp(1, 2) && reason != 'left' && reason != 'cancel') {
       await _finish(s, elapsedMin, now);
     } else {
       await setKv(K.active, null);
@@ -221,10 +231,11 @@ class App extends Notifier<AppData> {
   }
 
   /// A rest timer. [from] carries a pomodoro cycle forward.
-  Future<void> startBreak(int minutes, {ActiveSession? from, int? startMs}) async {
+  Future<void> startBreak(int minutes, {ActiveSession? from, int? startMs, bool loop = false}) async {
     if (view.active != null) return;
     final b = ActiveSession(newId(), startMs ?? _now.ms, minutes < 1 ? 1 : minutes, from?.projectId, from?.title ?? '', 'break',
         isBreak: true,
+        meta: {if (loop) 'loop': true},
         chain: from?.chain ?? from?.sid,
         taskId: from?.taskId,
         tag: from?.tag ?? '',
@@ -240,7 +251,10 @@ class App extends Notifier<AppData> {
     await setKv(K.active, null);
     // Feature 93: a break has a hard end. Coming back late is counted, not punished.
     if (lateMs > msPerMinute && view.on(93)) await log(Ev.tool, {'n': 93, 'over': (lateMs / msPerMinute).ceil()});
-    if (b.cycleLeft > 0 && lateMs < 2 * msPerMinute) {
+    if (b.meta['loop'] == true && lateMs < 2 * msPerMinute && view.prefOn(S.loop)) {
+      await startSession(
+          minutes: view.workMinutes(b.projectId), projectId: b.projectId, title: b.title, source: 'work', tag: b.tag, taskId: b.taskId, chain: b.chain);
+    } else if (b.cycleLeft > 0 && lateMs < 2 * msPerMinute) {
       await startSession(
           minutes: b.cycleWork, projectId: b.projectId, title: b.title, source: 'cycle', tag: b.tag, taskId: b.taskId,
           chain: b.chain, cycleWork: b.cycleWork, cycleRest: b.cycleRest, cycleLeft: b.cycleLeft - 1);
@@ -428,7 +442,16 @@ class App extends Notifier<AppData> {
   // ---- native
   void celebrate() {
     native.haptic(heavy: true);
-    native.tone();
+    if (!view.prefOn(S.muted)) native.tone();
+  }
+
+  /// Reference 5.3: records a session finish that ran more than 5 seconds late
+  /// and brings the battery warning back.
+  Future<void> noteLateFinish() async {
+    final late = await native.takeLateFinish();
+    if (late <= 5000) return;
+    await log(Ev.lateFinish, {'ms': late});
+    await setKv(S.hideLateWarning, '0');
   }
 
   Future<void> syncNative() async {
@@ -460,6 +483,7 @@ class App extends Notifier<AppData> {
       'blockAll': v.on(22) && v.kv['blockAll'] == '1',
       'blockInSession': v.on(201) && v.kv['blockInSession'] == '1',
       'allowApps': v.kv['allowApps'] == null ? const <String>[] : (jsonDecode(v.kv['allowApps']!) as List).cast<String>(),
+      'robust': v.prefOn(S.robustCountdown),
       'sticky': v.on(697) && v.kv['sticky'] == '1',
       // 633 never auto-starts inside the protected sleep window.
       'autoStart': v.on(633) && v.kv['autoStart'] == '1' && !inSleepWindow(v, v.cueMinute),
