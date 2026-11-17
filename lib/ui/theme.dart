@@ -8,7 +8,8 @@ const line = Color(0xFF1E2A30);
 const dim = Color(0xFF8FA3AD);
 const gold = Color(0xFFFFC53D);
 
-ThemeData appTheme({bool rest = false}) {
+/// [font] is only set by the screenshot script; on a phone the system font is used.
+ThemeData appTheme({bool rest = false, String? font}) {
   final bg = rest ? cyan : ink;
   final fg = rest ? ink : Colors.white;
   final accent = rest ? ink : cyan;
@@ -16,50 +17,51 @@ ThemeData appTheme({bool rest = false}) {
       .copyWith(surface: bg, primary: accent, onPrimary: bg, onSurface: fg, secondary: accent);
   return ThemeData(
     useMaterial3: true,
+    fontFamily: font,
     colorScheme: scheme,
     scaffoldBackgroundColor: bg,
-    textTheme: Typography.whiteMountainView.apply(bodyColor: fg, displayColor: fg),
+    textTheme: Typography.whiteMountainView.apply(bodyColor: fg, displayColor: fg, fontFamily: font),
     appBarTheme: AppBarTheme(
         backgroundColor: bg,
         foregroundColor: fg,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: TextStyle(color: fg, fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 2)),
+        titleTextStyle: TextStyle(fontFamily: font, color: fg, fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 2)),
     navigationBarTheme: NavigationBarThemeData(
         backgroundColor: ink,
         indicatorColor: cyan.withValues(alpha: 0.18),
         labelTextStyle: WidgetStateProperty.all(
-            const TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1))),
+            TextStyle(fontFamily: font, fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1))),
     filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
             backgroundColor: accent,
             foregroundColor: bg,
             minimumSize: const Size(64, 52),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            textStyle: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.5, fontSize: 16))),
+            textStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w900, letterSpacing: 1.5, fontSize: 16))),
     outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
             foregroundColor: accent,
             minimumSize: const Size(64, 52),
             side: BorderSide(color: accent, width: 2),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-            textStyle: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.5))),
+            textStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w900, letterSpacing: 1.5))),
     textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(foregroundColor: accent, minimumSize: const Size(48, 48))),
     inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: rest ? Colors.white24 : panel,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6), borderSide: BorderSide.none),
-        hintStyle: TextStyle(color: rest ? Colors.black54 : dim)),
+        hintStyle: TextStyle(fontFamily: font, color: rest ? Colors.black54 : dim)),
     chipTheme: ChipThemeData(
         backgroundColor: panel,
         selectedColor: cyan,
         side: const BorderSide(color: line),
-        labelStyle: const TextStyle(fontWeight: FontWeight.w800),
-        secondaryLabelStyle: const TextStyle(color: ink, fontWeight: FontWeight.w900),
+        labelStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w800),
+        secondaryLabelStyle: TextStyle(fontFamily: font, color: ink, fontWeight: FontWeight.w900),
         checkmarkColor: ink),
     dividerColor: line,
-    snackBarTheme: const SnackBarThemeData(backgroundColor: panel, contentTextStyle: TextStyle(color: Colors.white)),
+    snackBarTheme: SnackBarThemeData(backgroundColor: panel, contentTextStyle: TextStyle(fontFamily: font, color: Colors.white)),
   );
 }
 

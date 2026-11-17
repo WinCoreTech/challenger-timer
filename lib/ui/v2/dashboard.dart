@@ -38,6 +38,7 @@ class DashboardScreen extends ConsumerWidget {
                           Icon(icon, color: cyan, size: 28),
                           const SizedBox(width: 10),
                           Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: H(title, color: Colors.white, size: 14))),
+                          if (value != null) const SizedBox(width: 10),
                           if (value != null)
                             Flexible(child: FittedBox(fit: BoxFit.scaleDown, child: Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w300)))),
                           if (warn) const Padding(padding: EdgeInsets.only(left: 6), child: Icon(Icons.warning_amber, key: Key('backupWarning'), color: gold)),
