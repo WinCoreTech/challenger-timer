@@ -72,7 +72,8 @@ class _ShutdownState extends ConsumerState<ShutdownScreen> {
                 child: TextButton(key: const Key('shutUsePlan'), onPressed: () => app.setPlan(next.task, next.minute), child: const Text('USE THIS PLAN'))),
           const SizedBox(height: 20),
           H('Streak titles · next at ${ms.next ?? '-'} days'),
-          for (final t in ms.unlocked) Text('★ $t'),
+          for (final t in ms.unlocked)
+            Row(children: [const Icon(Icons.star, color: gold, size: 18), const SizedBox(width: 6), Expanded(child: Text(t))]),
           if (ms.unlocked.isEmpty) const Text('The first title arrives at a 7-day streak.', style: TextStyle(color: dim)),
         ]));
   }

@@ -11,6 +11,7 @@ import 'package:challenger_timer/ui/v2/dashboard.dart';
 import 'package:challenger_timer/ui/v2/projects_screen.dart';
 import 'package:challenger_timer/ui/v2/ranks_screen.dart';
 import 'package:challenger_timer/ui/v2/settings_v2.dart';
+import 'package:challenger_timer/ui/v2/shutdown_screen.dart';
 import 'package:challenger_timer/ui/v2/stats_screen.dart';
 import 'package:challenger_timer/ui/v2/work_screen.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,10 @@ void main() {
     await shot(r, '06-stats', const StatsScreen());
     await shot(r, '07-achievements', const AchievementsScreen());
     await shot(r, '08-settings', const SettingsV2Screen());
+    await r.app.setKv('goalText', 'Placement prep');
+    await r.app.setKv('goalHours', '300');
+    await shot(r, '10-shutdown', const ShutdownScreen());
+    await shot(r, '01-dashboard', const DashboardScreen());
     await shot(r, '09-dashboard-tablet', const DashboardScreen(), size: const Size(2560, 1600), dpr: 2);
     await r.app.startSession(minutes: 25, projectId: dbms.id, source: 'work', title: 'Draw the ER diagram', meta: {'mode': 'normal'});
     r.clock.advance(const Duration(seconds: 2));
