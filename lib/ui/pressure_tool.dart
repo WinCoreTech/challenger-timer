@@ -65,7 +65,7 @@ class _PressureState extends ConsumerState<PressureTool> {
               child: Center(
                   child: Transform.rotate(
                       angle: st * 0.5,
-                      child: Icon(Icons.local_florist, key: const Key('plant'), size: 150 - st * 30.0, color: st == 0 ? cyan : st == 1 ? gold : dim)))),
+                      child: Icon(Icons.local_florist, key: const Key('plant'), size: 150 - st * 30.0, color: st == 0 ? accent : st == 1 ? gold : dim)))),
           Text('${name.isEmpty ? 'Your plant' : name} is ${const ['doing well', 'drooping a little', 'wilted, and waiting for you'][st]}.', style: const TextStyle(fontSize: 18)),
           const Text('It perks up the day you do a session. It cannot die.', style: TextStyle(color: dim)),
         ]);
@@ -216,7 +216,7 @@ class _Sign extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final p = Paint()
-      ..color = cyan
+      ..color = accent
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round;
     for (var i = 1; i < pts.length; i++) {

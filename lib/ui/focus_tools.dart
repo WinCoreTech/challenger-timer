@@ -38,7 +38,7 @@ class _BreathState extends State<BreathTool> {
     final label = widget.box ? const ['Breathe in', 'Hold', 'Breathe out', 'Hold'][step] : const ['Breathe in', 'Breathe out'][step];
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       if (left > 0) ...[
-        Center(child: Big('$left', size: 96, color: cyan, key: const Key('breathLeft'))),
+        Center(child: Big('$left', size: 96, color: accent, key: const Key('breathLeft'))),
         Center(child: H(label, color: Colors.white, size: 20)),
       ] else
         FilledButton(key: const Key('breathStart'), onPressed: _go, child: Text('BREATHE FOR ${widget.seconds} SECONDS')),
@@ -78,8 +78,8 @@ class _UsageState extends ConsumerState<UsageTool> {
     final apps = ((d['apps'] as List?) ?? const []).cast<Map>();
     final top = widget.n == 215 ? apps.take(3) : apps;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      if (widget.n == 207) ...[Big('${d['pickups']}', size: 72, color: cyan, key: const Key('pickups')), const H('Unlocks today')],
-      if (widget.n == 214) ...[Big('${d['total']} min', size: 56, color: cyan), const H('Screen time today')],
+      if (widget.n == 207) ...[Big('${d['pickups']}', size: 72, color: accent, key: const Key('pickups')), const H('Unlocks today')],
+      if (widget.n == 214) ...[Big('${d['total']} min', size: 56, color: accent), const H('Screen time today')],
       if (widget.n != 207)
         for (final a in top) ListTile(contentPadding: EdgeInsets.zero, title: Text('${a['label']}'), trailing: Text('${a['minutes']} min', style: const TextStyle(fontWeight: FontWeight.w800))),
     ]);

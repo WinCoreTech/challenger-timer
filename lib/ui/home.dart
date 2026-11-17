@@ -85,7 +85,7 @@ class HomeScreen extends ConsumerWidget {
                     const SizedBox(height: 4),
                     Text(v.on(621) && daysAway(v) >= 3 && !v.workedToday ? 'PART-TIME LEGEND (ON A BREAK)' : '${'★' * prestige(v)}${shownRank(v).rank.name.toUpperCase()}',
                         key: const Key('rankTitle'),
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: cyan, letterSpacing: 1)),
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: accent, letterSpacing: 1)),
                   ]))),
           InkWell(
               onTap: () => context.go('/streaks'),
@@ -93,7 +93,7 @@ class HomeScreen extends ConsumerWidget {
                 Poster(PosterArt.flame,
                     size: 44,
                     level: v.on(33) ? flameLevel(v.master.current) : (v.master.current / 30).clamp(0.0, 1.0),
-                    color: v.master.state == StreakState.paused ? dim : cyan),
+                    color: v.master.state == StreakState.paused ? dim : accent),
                 const SizedBox(width: 6),
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Big('${v.master.current}', size: 40, key: const Key('masterStreak')),
@@ -105,9 +105,9 @@ class HomeScreen extends ConsumerWidget {
         Text(homeLine(v), key: const Key('homeLine'), style: const TextStyle(color: dim)),
         const SizedBox(height: 20),
         Panel(
-            border: cyan,
+            border: accent,
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              H(tr(v, 'NEXT TINY STEP'), color: cyan),
+              H(tr(v, 'NEXT TINY STEP'), color: accent),
               const SizedBox(height: 8),
               Text(v.nextStep,
                   key: const Key('nextStep'),
@@ -176,11 +176,11 @@ class _Bonus extends StatelessWidget {
         key: const Key('bonus'),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(children: [
-            Expanded(child: H(risk ? 'Bonus in your pocket' : 'Bonus kept', color: risk ? gold : cyan)),
-            Big('+$xpDailyBonus XP', size: 20, color: risk ? gold : cyan),
+            Expanded(child: H(risk ? 'Bonus in your pocket' : 'Bonus kept', color: risk ? gold : accent)),
+            Big('+$xpDailyBonus XP', size: 20, color: risk ? gold : accent),
           ]),
           const SizedBox(height: 10),
-          Bar(risk ? v.dayLeft : 1, color: risk ? gold : cyan),
+          Bar(risk ? v.dayLeft : 1, color: risk ? gold : accent),
           const SizedBox(height: 8),
           Text(
               risk

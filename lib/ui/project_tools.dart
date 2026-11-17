@@ -89,7 +89,7 @@ class _ProjectToolState extends ConsumerState<ProjectTool> {
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Text('Mark tasks urgent or important on their task screen.', style: TextStyle(color: dim)),
           for (var q = 0; q < 4; q++) ...[
-            Padding(padding: const EdgeInsets.only(top: 12, bottom: 4), child: H(names[q], color: q == 0 ? cyan : dim)),
+            Padding(padding: const EdgeInsets.only(top: 12, bottom: 4), child: H(names[q], color: q == 0 ? accent : dim)),
             for (final t in open.where((t) => quadrant(t) == q))
               InkWell(onTap: () => context.push('/task/${t.id}'), child: Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Text('• ${t.str('title')}'))),
           ],

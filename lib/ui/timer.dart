@@ -107,7 +107,7 @@ class _TimerState extends ConsumerState<TimerScreen> {
     final hide = v.on(95) && v.kv['hideClock'] == '1';
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Row(children: [
-        Expanded(child: H(s.paused ? 'Paused' : 'Work', size: 28, color: cyan)),
+        Expanded(child: H(s.paused ? 'Paused' : 'Work', size: 28, color: accent)),
         if (s.hard) const H('Hard mode', color: gold),
         if (s.cycleLeft > 0) H('  ${s.cycleLeft} more rounds'),
       ]),
@@ -503,7 +503,7 @@ class _ProofState extends ConsumerState<ProofScreen> {
                     hintText: type == 'link' ? 'https://github.com/you/repo/commit/...' : 'What I did, in one sentence')),
           if (error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(error!, style: const TextStyle(color: gold))),
           const SizedBox(height: 20),
-          const H('Parking note for future you', color: cyan),
+          const H('Parking note for future you', color: accent),
           const SizedBox(height: 8),
           TextField(
               key: const Key('parkingNote'),
@@ -582,9 +582,9 @@ class ReceiptScreen extends ConsumerWidget {
                   const Spacer(),
                   Panel(
                       key: const Key('receipt'),
-                      border: cyan,
+                      border: accent,
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        const H('Session receipt', color: cyan, size: 18),
+                        const H('Session receipt', color: accent, size: 18),
                         const Divider(),
                         if (p != null) ...[
                           row('Time', '${p.integer('minutes')} minutes'),

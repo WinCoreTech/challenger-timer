@@ -33,7 +33,7 @@ class _CoachState extends ConsumerState<CoachTool> {
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           TextField(key: const Key('excuse'), controller: c, onChanged: (_) => setState(() {}), decoration: const InputDecoration(hintText: 'Type the excuse exactly as it sounds in your head')),
           const SizedBox(height: 12),
-          if (c.text.trim().isNotEmpty) Panel(border: cyan, child: Text(excuseReply(c.text), key: const Key('excuseReply'), style: const TextStyle(fontSize: 17))),
+          if (c.text.trim().isNotEmpty) Panel(border: accent, child: Text(excuseReply(c.text), key: const Key('excuseReply'), style: const TextStyle(fontSize: 17))),
           const SizedBox(height: 8),
           note,
         ]);
@@ -41,7 +41,7 @@ class _CoachState extends ConsumerState<CoachTool> {
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           TextField(key: const Key('vague'), controller: c, onChanged: (_) => setState(() {}), decoration: const InputDecoration(hintText: 'study ML')),
           const SizedBox(height: 12),
-          if (c.text.trim().isNotEmpty) Panel(border: cyan, child: Text(rewriteTask(c.text), key: const Key('rewritten'), style: const TextStyle(fontSize: 17))),
+          if (c.text.trim().isNotEmpty) Panel(border: accent, child: Text(rewriteTask(c.text), key: const Key('rewritten'), style: const TextStyle(fontSize: 17))),
           const SizedBox(height: 8),
           note,
         ]);

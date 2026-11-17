@@ -28,7 +28,7 @@ class ChainCalendar extends StatelessWidget {
           return Container(
               margin: const EdgeInsets.all(2),
               decoration: BoxDecoration(
-                  color: done ? cyan : panel,
+                  color: done ? accent : panel,
                   border: Border.all(color: day == v.today ? Colors.white : line),
                   borderRadius: BorderRadius.circular(4)),
               alignment: Alignment.center,
@@ -81,13 +81,13 @@ class WagerTool extends ConsumerWidget {
                 child: Text('BET $a XP')),
         ])
       else
-        const Text('One wager at a time. This one is still running.', style: TextStyle(color: cyan, fontWeight: FontWeight.w800)),
+        const Text('One wager at a time. This one is still running.', style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
       const SizedBox(height: 16),
       for (final w in all.reversed)
         ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text('${w.amount} XP from ${dayLabel(w.day)}'),
-            trailing: H(w.state, color: w.state == 'won' ? cyan : w.state == 'lost' ? gold : dim)),
+            trailing: H(w.state, color: w.state == 'won' ? accent : w.state == 'lost' ? gold : dim)),
     ]);
   }
 }

@@ -121,7 +121,7 @@ class _ProjectsState extends ConsumerState<ProjectsScreen> {
                           return ListTile(
                               key: Key('proj-${r.project.id}'),
                               contentPadding: EdgeInsets.only(left: 16.0 + r.depth * 24, right: 4),
-                              leading: Icon(active ? Icons.bolt : Icons.bedtime_outlined, color: active ? cyan : dim, semanticLabel: active ? 'Active this week' : 'Resting'),
+                              leading: Icon(active ? Icons.bolt : Icons.bedtime_outlined, color: active ? accent : dim, semanticLabel: active ? 'Active this week' : 'Resting'),
                               title: Text(r.project.str('name'), style: TextStyle(color: active ? Colors.white : dim, fontWeight: FontWeight.w600)),
                               subtitle: Text(hm(r.minutes), style: const TextStyle(color: dim)),
                               onTap: () => context.push('/project/${r.project.id}'),

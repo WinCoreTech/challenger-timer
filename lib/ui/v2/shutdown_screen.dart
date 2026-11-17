@@ -35,9 +35,9 @@ class _ShutdownState extends ConsumerState<ShutdownScreen> {
         appBar: AppBar(title: const Text('SHUTDOWN')),
         body: ListView(padding: const EdgeInsets.all(16), children: [
           Panel(
-              border: cyan,
+              border: accent,
               child: Row(children: [
-                Big('$score', size: 56, color: cyan, key: const Key('dayScore')),
+                Big('$score', size: 56, color: accent, key: const Key('dayScore')),
                 const SizedBox(width: 12),
                 Expanded(
                     child: Text('today, out of 100\n${v.minutesToday} of ${dailyTargetMinutes(v)} target minutes (50), streak day (20), plan kept (15), focus (15)',
@@ -45,7 +45,7 @@ class _ShutdownState extends ConsumerState<ShutdownScreen> {
               ])),
           const SizedBox(height: 16),
           if (shutdownDone(v))
-            const Text('Shutdown complete for today. The desk is closed.', key: Key('shutdownDone'), style: TextStyle(color: cyan, fontWeight: FontWeight.w700))
+            const Text('Shutdown complete for today. The desk is closed.', key: Key('shutdownDone'), style: TextStyle(color: accent, fontWeight: FontWeight.w700))
           else ...[
             for (var i = 0; i < 3; i++) ...[
               H(prompts[i]),

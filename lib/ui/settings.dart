@@ -182,7 +182,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> with WidgetsBindingOb
     Widget perm(String key, String label, String why) => ListTile(
         contentPadding: EdgeInsets.zero,
         leading: Icon(status[key] == true ? Icons.check_circle : Icons.radio_button_unchecked,
-            color: status[key] == true ? cyan : dim),
+            color: status[key] == true ? accent : dim),
         title: Text(label),
         subtitle: Text(why, style: const TextStyle(color: dim, fontSize: 12)),
         trailing: status[key] == true
@@ -320,7 +320,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> with WidgetsBindingOb
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(children: [
                 Expanded(child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800))),
-                H(pending ? 'Turning off' : on ? 'On' : 'Off', color: pending ? gold : on ? cyan : dim),
+                H(pending ? 'Turning off' : on ? 'On' : 'Off', color: pending ? gold : on ? accent : dim),
               ]),
               const SizedBox(height: 4),
               Text(why, style: const TextStyle(color: dim, fontSize: 12)),
@@ -405,7 +405,7 @@ class _WelcomeState extends ConsumerState<WelcomeScreen> {
                     final t = await showTimePicker(context: context, initialTime: TimeOfDay(hour: cue ~/ 60, minute: cue % 60));
                     if (t != null) setState(() => cue = t.hour * 60 + t.minute);
                   },
-                  child: Big(hhmm(cue), size: 72, color: cyan)))),
+                  child: Big(hhmm(cue), size: 72, color: accent)))),
     ];
     final (title, sub, body) = pages[step];
     final last = step == pages.length - 1;

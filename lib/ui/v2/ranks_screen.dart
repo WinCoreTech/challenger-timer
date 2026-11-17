@@ -39,17 +39,17 @@ class RanksScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(bottom: 8),
                 child: Panel(
                     key: Key('rank-$i'),
-                    border: i == l.index ? cyan : null,
+                    border: i == l.index ? accent : null,
                     child: i > l.index + 1
                         ? const Row(children: [Icon(Icons.lock_outline, color: dim, size: 18), SizedBox(width: 8), Text('Unknown rank', style: TextStyle(color: dim))])
                         : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                             Row(children: [
-                              if (i == l.index) const Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.arrow_right, color: cyan)),
+                              if (i == l.index) const Padding(padding: EdgeInsets.only(right: 8), child: Icon(Icons.arrow_right, color: accent)),
                               Expanded(
                                   child: Text(v.ranks[i].name.toUpperCase(),
                                       style: TextStyle(
                                           fontWeight: i == l.index ? FontWeight.w900 : FontWeight.w500,
-                                          color: i == l.index ? cyan : i < l.index ? dim : Colors.white))),
+                                          color: i == l.index ? accent : i < l.index ? dim : Colors.white))),
                               Text(i == l.index ? 'YOU' : i < l.index ? 'passed' : 'next', style: const TextStyle(color: dim, fontSize: 12)),
                             ]),
                             if (i == l.index) ...[

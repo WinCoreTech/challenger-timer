@@ -68,9 +68,9 @@ class _StatsState extends ConsumerState<StatsScreen> {
                 child: Text('No work logged in this period.', key: Key('statsEmpty'), textAlign: TextAlign.center, style: TextStyle(color: dim, fontSize: 16)))
           else ...[
             Panel(
-                border: cyan,
+                border: accent,
                 child: Row(children: [
-                  Big('${s.consistency}%', size: 52, color: cyan, key: const Key('statsConsistency')),
+                  Big('${s.consistency}%', size: 52, color: accent, key: const Key('statsConsistency')),
                   const SizedBox(width: 12),
                   Expanded(child: Text('consistency\n${s.activeDays} of ${s.countedDays} days had a session', style: const TextStyle(color: dim))),
                 ])),
@@ -115,7 +115,7 @@ class _StatsState extends ConsumerState<StatsScreen> {
                         Expanded(
                             child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 1),
-                                child: FractionallySizedBox(heightFactor: maxHr == 0 ? 0.02 : (s.byHour[h] / maxHr).clamp(0.02, 1.0), child: Container(color: s.byHour[h] > 0 ? cyan : line)))),
+                                child: FractionallySizedBox(heightFactor: maxHr == 0 ? 0.02 : (s.byHour[h] / maxHr).clamp(0.02, 1.0), child: Container(color: s.byHour[h] > 0 ? accent : line)))),
                     ]))),
             const Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text('00', style: TextStyle(color: dim, fontSize: 11)), Text('06', style: TextStyle(color: dim, fontSize: 11)),

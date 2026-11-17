@@ -43,7 +43,7 @@ class _LaunchState extends State<_Launch> {
   Widget build(BuildContext context) => Dialog.fullscreen(
       backgroundColor: ink,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Big('$n', size: 200, color: cyan, key: const Key('launchCount')),
+        Big('$n', size: 200, color: accent, key: const Key('launchCount')),
         const SizedBox(height: 24),
         const Text('No time to argue with yourself.', style: TextStyle(color: dim, fontSize: 16)),
         const SizedBox(height: 24),
@@ -96,7 +96,7 @@ class _RitualState extends ConsumerState<RitualScreen> with SingleTickerProvider
                         return Container(
                             width: 120 + 120 * t,
                             height: 120 + 120 * t,
-                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: cyan, width: 6)),
+                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: accent, width: 6)),
                             alignment: Alignment.center,
                             child: H(ready ? 'Ready' : a.value < 0.5 ? 'Breathe in' : 'Breathe out', color: Colors.white));
                       })),
@@ -140,7 +140,7 @@ class _DiceState extends ConsumerState<DiceTool> {
       for (final o in options)
         Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: Panel(border: o == pick ? cyan : null, child: Text(o, style: const TextStyle(fontSize: 16)))),
+            child: Panel(border: o == pick ? accent : null, child: Text(o, style: const TextStyle(fontSize: 16)))),
       const SizedBox(height: 12),
       OutlinedButton.icon(
           key: const Key('diceRoll'),

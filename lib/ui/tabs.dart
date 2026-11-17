@@ -39,7 +39,7 @@ class Lives extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Row(mainAxisSize: MainAxisSize.min, children: [
         for (var i = 0; i < (left > total ? left : total); i++)
-          Icon(i < left ? Icons.favorite : Icons.favorite_border, color: i < left ? cyan : dim, size: 22),
+          Icon(i < left ? Icons.favorite : Icons.favorite_border, color: i < left ? accent : dim, size: 22),
       ]);
 }
 
@@ -65,7 +65,7 @@ class StreaksScreen extends ConsumerWidget {
                         onTap: () => context.push('/habit/${h.id}'),
                         child: Text(h.str('name'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800)))),
                 if (v.tickedToday(h.id))
-                  const Icon(Icons.check_circle, color: cyan, size: 36)
+                  const Icon(Icons.check_circle, color: accent, size: 36)
                 else if (open)
                   FilledButton(
                       key: Key('tick-${h.id}'),
@@ -91,16 +91,16 @@ class StreaksScreen extends ConsumerWidget {
                         child: Text('TINY VERSION: ${tiny.toUpperCase()}'))),
               if (small)
                 Text('Restarting small: for three days ${tiny.isEmpty ? 'the tiniest version' : '"$tiny"'} is all that is asked.',
-                    style: const TextStyle(color: cyan)),
+                    style: const TextStyle(color: accent)),
               if (!open)
                 Text('Counts between ${hhmm(h.integer('from'))} and ${hhmm(h.integer('to'))}.', style: const TextStyle(color: dim)),
               const SizedBox(height: 12),
               Row(children: [
                 if (weekly > 0) ...[
-                  _stat('Weeks', '${weeklyStreak(days, v.today, weekly)}', color: cyan),
+                  _stat('Weeks', '${weeklyStreak(days, v.today, weekly)}', color: accent),
                   _stat('This week', '${doneThisWeek(days, v.today)}/$weekly'),
                 ] else ...[
-                  _stat('Current', '${s.current}', color: s.state == StreakState.paused ? dim : cyan),
+                  _stat('Current', '${s.current}', color: s.state == StreakState.paused ? dim : accent),
                   _stat('Longest', '${s.longest}'),
                 ],
                 _stat('Total days', '${s.totalDays}'),
@@ -138,7 +138,7 @@ class StreaksScreen extends ConsumerWidget {
                 const Text('SHOWED UP (master)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800)),
                 const SizedBox(height: 12),
                 Row(children: [
-                  _stat('Current', '${v.master.current}', color: v.master.state == StreakState.paused ? dim : cyan),
+                  _stat('Current', '${v.master.current}', color: v.master.state == StreakState.paused ? dim : accent),
                   _stat('Longest', '${v.master.longest}'),
                   _stat('Total days', '${v.master.totalDays}'),
                   if (v.on(69)) _stat('Last 30', '${consistency(v)}%'),
@@ -162,7 +162,7 @@ class StreaksScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(streakLine(v.master), style: const TextStyle(color: dim)),
                 if (v.on(56) && v.master.comebacks > 0)
-                  Text('Comebacks: ${v.master.comebacks}. That is the skill that matters.', style: const TextStyle(color: cyan)),
+                  Text('Comebacks: ${v.master.comebacks}. That is the skill that matters.', style: const TextStyle(color: accent)),
               ]))),
       if (v.on(34))
         Padding(
@@ -188,7 +188,7 @@ class StreaksScreen extends ConsumerWidget {
         for (final h in v.maintained)
           ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.verified, color: cyan),
+              leading: const Icon(Icons.verified, color: accent),
               title: Text(h.str('name')),
               subtitle: Text('${v.habitDays(h.id).length} days done', style: const TextStyle(color: dim)),
               onTap: () => context.push('/habit/${h.id}')),
@@ -211,7 +211,7 @@ class StreaksScreen extends ConsumerWidget {
               final name = await askText(context, 'New tiny habit', hint: 'Open the book', ok: 'ADD');
               if (name != null && name.trim().isNotEmpty) await app.addRec(Kind.habit, {'name': name.trim()});
             },
-            backgroundColor: cyan,
+            backgroundColor: accent,
             foregroundColor: ink,
             icon: const Icon(Icons.add),
             label: const Text('HABIT', style: TextStyle(fontWeight: FontWeight.w900))));
@@ -292,7 +292,7 @@ class _VaultState extends ConsumerState<VaultScreen> {
                   Row(children: [
                     Icon(
                         switch (pr.str('type')) { 'photo' => Icons.photo_camera, 'link' => Icons.link, 'voice' => Icons.mic, _ => Icons.notes },
-                        color: cyan,
+                        color: accent,
                         size: 18),
                     const SizedBox(width: 8),
                     Expanded(
@@ -361,10 +361,10 @@ class _PlanState extends ConsumerState<PlanScreen> {
     return _page('PLAN', [
       Panel(
           key: const Key('planCard'),
-          border: locked ? gold : cyan,
+          border: locked ? gold : accent,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
-              Expanded(child: H("Tomorrow's first task", color: locked ? gold : cyan)),
+              Expanded(child: H("Tomorrow's first task", color: locked ? gold : accent)),
               if (locked) const Icon(Icons.lock, color: gold, key: Key('planLock')),
             ]),
             const SizedBox(height: 10),
@@ -451,11 +451,11 @@ class _PlanState extends ConsumerState<PlanScreen> {
                       if (v.on(155))
                         ListTile(
                             dense: true,
-                            leading: const Icon(Icons.arrow_forward, color: cyan, size: 18),
+                            leading: const Icon(Icons.arrow_forward, color: accent, size: 18),
                             title: Text(nextAction(v, pr.id)?.str('title') ?? 'No next action defined. Add one small task.',
                                 key: Key('next-${pr.id}'), style: const TextStyle(fontWeight: FontWeight.w700))),
                       if (v.on(171) && projectSessionsLeft(v, pr.id) > 0 && projectSessionsLeft(v, pr.id) <= 3)
-                        ListTile(dense: true, title: Text('Almost there: ${projectSessionsLeft(v, pr.id)} sessions left to finish.', style: const TextStyle(color: cyan))),
+                        ListTile(dense: true, title: Text('Almost there: ${projectSessionsLeft(v, pr.id)} sessions left to finish.', style: const TextStyle(color: accent))),
                       for (final t in v.tasksOf(pr.id))
                         CheckboxListTile(
                             key: Key('task-${t.id}'),
@@ -516,12 +516,12 @@ class MeScreen extends ConsumerWidget {
       IconButton(key: const Key('openSettings'), onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings)),
     ], [
       Panel(
-          border: v.on(669) && r.index >= 8 ? gold : cyan,
+          border: v.on(669) && r.index >= 8 ? gold : accent,
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             H(v.name.isEmpty ? 'Rank' : '${v.name} · rank ${r.index + 1} of ${v.ranks.length}'),
             const SizedBox(height: 6),
             Text(r.rank.name.toUpperCase(),
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: cyan, height: 1.1)),
+                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900, color: accent, height: 1.1)),
             const SizedBox(height: 6),
             Text(r.rank.blurb, style: const TextStyle(color: dim)),
             if (idleSteps(v) > 0)
@@ -561,7 +561,7 @@ class MeScreen extends ConsumerWidget {
       Panel(
           onTap: () => context.push('/settings'),
           child: Row(children: [
-            const Icon(Icons.person_outline, color: cyan),
+            const Icon(Icons.person_outline, color: accent),
             const SizedBox(width: 12),
             Expanded(
                 child: Text((v.kv[K.buddyPhone] ?? '').isEmpty
@@ -575,7 +575,7 @@ class MeScreen extends ConsumerWidget {
             key: const Key('openToolbox'),
             onTap: () => context.push('/toolbox'),
             child: const Row(children: [
-              Icon(Icons.handyman_outlined, color: cyan),
+              Icon(Icons.handyman_outlined, color: accent),
               SizedBox(width: 12),
               Expanded(child: Text('Toolbox: optional extras that unlock as you rank up.')),
               Icon(Icons.chevron_right),

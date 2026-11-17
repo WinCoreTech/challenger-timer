@@ -1,20 +1,21 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-const cyan = Color(0xFF00E5FF);
-const ink = Color(0xFF000000);
-const panel = Color(0xFF0E1417);
-const line = Color(0xFF1E2A30);
-const dim = Color(0xFF8FA3AD);
-const gold = Color(0xFFFFC53D);
+/// Design system (plan v2 phase 3): orange on navy.
+const accent = Color(0xFFFF8A1F);
+const ink = Color(0xFF0A1020);
+const panel = Color(0xFF131B2E);
+const line = Color(0xFF26324D);
+const dim = Color(0xFF93A1BC);
+const gold = Color(0xFFFFE066);
 
 /// [font] is only set by the screenshot script; on a phone the system font is used.
 ThemeData appTheme({bool rest = false, String? font}) {
-  final bg = rest ? cyan : ink;
+  final bg = rest ? accent : ink;
   final fg = rest ? ink : Colors.white;
-  final accent = rest ? ink : cyan;
-  final scheme = ColorScheme.fromSeed(seedColor: cyan, brightness: rest ? Brightness.light : Brightness.dark)
-      .copyWith(surface: bg, primary: accent, onPrimary: bg, onSurface: fg, secondary: accent);
+  final ac = rest ? ink : accent;
+  final scheme = ColorScheme.fromSeed(seedColor: ac, brightness: rest ? Brightness.light : Brightness.dark)
+      .copyWith(surface: bg, primary: ac, onPrimary: bg, onSurface: fg, secondary: ac);
   return ThemeData(
     useMaterial3: true,
     fontFamily: font,
@@ -29,25 +30,25 @@ ThemeData appTheme({bool rest = false, String? font}) {
         titleTextStyle: TextStyle(fontFamily: font, color: fg, fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 2)),
     navigationBarTheme: NavigationBarThemeData(
         backgroundColor: ink,
-        indicatorColor: cyan.withValues(alpha: 0.18),
+        indicatorColor: ac.withValues(alpha: 0.18),
         labelTextStyle: WidgetStateProperty.all(
             TextStyle(fontFamily: font, fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1))),
     filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-            backgroundColor: accent,
+            backgroundColor: ac,
             foregroundColor: bg,
             minimumSize: const Size(64, 52),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             textStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w900, letterSpacing: 1.5, fontSize: 16))),
     outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-            foregroundColor: accent,
+            foregroundColor: ac,
             minimumSize: const Size(64, 52),
-            side: BorderSide(color: accent, width: 2),
+            side: BorderSide(color: ac, width: 2),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
             textStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w900, letterSpacing: 1.5))),
     textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(foregroundColor: accent, minimumSize: const Size(48, 48))),
+        style: TextButton.styleFrom(foregroundColor: ac, minimumSize: const Size(48, 48))),
     inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: rest ? Colors.white24 : panel,
@@ -55,7 +56,7 @@ ThemeData appTheme({bool rest = false, String? font}) {
         hintStyle: TextStyle(fontFamily: font, color: rest ? Colors.black54 : dim)),
     chipTheme: ChipThemeData(
         backgroundColor: panel,
-        selectedColor: cyan,
+        selectedColor: ac,
         side: const BorderSide(color: line),
         labelStyle: TextStyle(fontFamily: font, fontWeight: FontWeight.w800),
         secondaryLabelStyle: TextStyle(fontFamily: font, color: ink, fontWeight: FontWeight.w900),
@@ -108,7 +109,7 @@ class Panel extends StatelessWidget {
 }
 
 class Bar extends StatelessWidget {
-  const Bar(this.value, {super.key, this.color = cyan, this.height = 10});
+  const Bar(this.value, {super.key, this.color = accent, this.height = 10});
   final double value;
   final Color color;
   final double height;
@@ -159,7 +160,7 @@ void toast(BuildContext context, String msg) =>
 enum PosterArt { flame, door, vault, shield, hourglass }
 
 class Poster extends StatelessWidget {
-  const Poster(this.art, {super.key, this.size = 96, this.color = cyan, this.level = 1});
+  const Poster(this.art, {super.key, this.size = 96, this.color = accent, this.level = 1});
   final PosterArt art;
   final double size;
   final Color color;
@@ -290,7 +291,7 @@ class _HeatPainter extends CustomPainter {
                   ? line
                   : l >= 4
                       ? gold
-                      : cyan.withValues(alpha: 0.35 + 0.65 * (l.clamp(1, 3) / 3));
+                      : accent.withValues(alpha: 0.35 + 0.65 * (l.clamp(1, 3) / 3));
         canvas.drawRRect(
             RRect.fromRectAndRadius(Rect.fromLTWH(c * cell + 0.8, r * cell + 0.8, cell - 1.6, cell - 1.6), const Radius.circular(1.5)),
             paint);

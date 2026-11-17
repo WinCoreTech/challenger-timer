@@ -41,7 +41,7 @@ class AlarmActivity : Activity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val rescue = intent.getStringExtra("kind") == "rescue"
         val task = intent.getStringExtra("task") ?: ""
-        val cyan = Color.parseColor("#00E5FF")
+        val cyan = Color.parseColor("#FF8A1F")
         fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
         fun text(s: String, size: Float, color: Int, bold: Boolean) = TextView(this).apply {
             text = s

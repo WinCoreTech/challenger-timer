@@ -35,7 +35,7 @@ class _FeelingState extends ConsumerState<FeelingTool> {
       ]),
       if (fix != null) ...[
         const SizedBox(height: 16),
-        Panel(border: cyan, child: Text(fix.$1, key: const Key('fix'), style: const TextStyle(fontSize: 18))),
+        Panel(border: accent, child: Text(fix.$1, key: const Key('fix'), style: const TextStyle(fontSize: 18))),
         const SizedBox(height: 12),
         FilledButton(
             key: const Key('fixStart'),

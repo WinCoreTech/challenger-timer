@@ -64,7 +64,7 @@ class ScheduleScreen extends ConsumerWidget {
                               Padding(
                                   padding: const EdgeInsets.only(top: 12, bottom: 8),
                                   child: H(wd == today ? '${weekdayNames[wd - 1]} (today)' : weekdayNames[wd - 1],
-                                      color: wd == today ? cyan : dim)),
+                                      color: wd == today ? accent : dim)),
                               for (final b in blocksOn(v, wd))
                                 Padding(
                                     padding: const EdgeInsets.only(bottom: 8),

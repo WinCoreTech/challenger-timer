@@ -42,7 +42,7 @@ class _StudyState extends ConsumerState<StudyTool> {
           const SizedBox(height: 8),
           if (due.isNotEmpty) ...[
             Panel(
-                border: cyan,
+                border: accent,
                 onTap: () => setState(() => show = !show),
                 child: Text(show ? due.first.str('back') : due.first.str('front'), key: const Key('cardFace'), style: const TextStyle(fontSize: 20))),
             const SizedBox(height: 8),
@@ -106,7 +106,7 @@ class _StudyState extends ConsumerState<StudyTool> {
                   title: Text('${s.str('name')} · $pct%'),
                   subtitle: Text(room >= 0 ? 'Can miss $room more and stay at 75%.' : 'Attend the next ${-room} to get back to 75%.', style: const TextStyle(color: dim)),
                   trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                    IconButton(icon: const Icon(Icons.check, color: cyan), onPressed: () => app.putRec(s.copy({'present': s.integer('present') + 1, 'total': s.integer('total') + 1}))),
+                    IconButton(icon: const Icon(Icons.check, color: accent), onPressed: () => app.putRec(s.copy({'present': s.integer('present') + 1, 'total': s.integer('total') + 1}))),
                     IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.putRec(s.copy({'total': s.integer('total') + 1}))),
                   ]));
             }),

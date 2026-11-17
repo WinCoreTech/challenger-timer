@@ -62,7 +62,7 @@ class GameTool extends ConsumerWidget {
           const SizedBox(height: 12),
           Wrap(spacing: 3, runSpacing: 3, verticalDirection: VerticalDirection.up, children: [
             for (var i = 0; i < bricks.clamp(0, 400); i++)
-              Container(width: 26, height: 12, color: i >= bricks - cracked ? gold.withValues(alpha: 0.5) : cyan),
+              Container(width: 26, height: 12, color: i >= bricks - cracked ? gold.withValues(alpha: 0.5) : accent),
           ]),
         ]);
     }

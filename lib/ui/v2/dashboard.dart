@@ -36,7 +36,7 @@ class DashboardScreen extends ConsumerWidget {
                     child: Padding(
                         padding: const EdgeInsets.all(12),
                         child: Row(children: [
-                          Icon(icon, color: cyan, size: 28),
+                          Icon(icon, color: accent, size: 28),
                           const SizedBox(width: 10),
                           Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: H(title, color: Colors.white, size: 14))),
                           if (value != null) const SizedBox(width: 10),
@@ -47,7 +47,7 @@ class DashboardScreen extends ConsumerWidget {
 
     final work = Material(
         color: panel,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: cyan, width: 2)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: accent, width: 2)),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
             key: const Key('tile-work'),
@@ -115,7 +115,7 @@ class DashboardScreen extends ConsumerWidget {
                       const SizedBox(width: 12),
                       Expanded(
                           child: Text(v.ladderRank.name.toUpperCase(),
-                              key: const Key('rankName'), overflow: TextOverflow.ellipsis, style: const TextStyle(color: cyan, fontWeight: FontWeight.w800, letterSpacing: 1))),
+                              key: const Key('rankName'), overflow: TextOverflow.ellipsis, style: const TextStyle(color: accent, fontWeight: FontWeight.w800, letterSpacing: 1))),
                       const Icon(Icons.chevron_right, color: dim),
                     ])))));
   }

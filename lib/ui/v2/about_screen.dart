@@ -49,10 +49,10 @@ class AboutScreen extends ConsumerWidget {
             child: Text('Straight talk: this is not an organiser and it will not plan your life. Your rank drops if work stops, except on rest, sick and exam days. '
                 'There is no account and nothing leaves this phone. It has not been tested on every phone, so tell the developer when something misbehaves.')),
         const SizedBox(height: 20),
-        const H('What\'s new', color: cyan),
+        const H('What\'s new', color: accent),
         for (final w in whatsNew) Padding(padding: const EdgeInsets.only(top: 6), child: Text('• $w')),
         const SizedBox(height: 20),
-        const H('Permissions and why', color: cyan),
+        const H('Permissions and why', color: accent),
         for (final (name, why) in permissions)
           ListTile(key: Key('perm-$name'), contentPadding: EdgeInsets.zero, dense: true, title: Text(name, style: const TextStyle(fontWeight: FontWeight.w700)), subtitle: Text(why, style: const TextStyle(color: dim))),
         const Text('Each one is asked for only when you switch on the feature that needs it.', style: TextStyle(color: dim, fontSize: 12)),

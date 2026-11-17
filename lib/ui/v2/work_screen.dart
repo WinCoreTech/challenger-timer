@@ -142,7 +142,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
                   onPressed: () => app.setSetting(S.muted, muted ? '0' : '1'),
                   icon: Icon(muted ? Icons.volume_off : Icons.volume_up)),
             ],
-            bottom: const PreferredSize(preferredSize: Size.fromHeight(1), child: Divider(height: 1, color: cyan))),
+            bottom: const PreferredSize(preferredSize: Size.fromHeight(1), child: Divider(height: 1, color: accent))),
         body: SafeArea(
             child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -195,7 +195,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
               },
               child: Text('JUST OPEN THE DOOR: 2 MINUTES · DOOR STREAK ${doorStreak(v).current}'))),
       if (lastFocusScore(v) != null && v.pendingProof != null)
-        Center(child: Text('Focus score for that one: ${lastFocusScore(v)} of 100', key: const Key('focusScore'), style: const TextStyle(color: cyan))),
+        Center(child: Text('Focus score for that one: ${lastFocusScore(v)} of 100', key: const Key('focusScore'), style: const TextStyle(color: accent))),
       const SizedBox(height: 16),
       const H('Focus mode'),
       const SizedBox(height: 6),
@@ -209,7 +209,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
         Panel(
             key: const Key('rankBanner'),
             child: Text(need == 0 ? 'Rank line reached. The next finished minute promotes you.' : '$need more ${need == 1 ? 'minute' : 'minutes'} today to advance in rank.',
-                style: const TextStyle(color: cyan, fontWeight: FontWeight.w700))),
+                style: const TextStyle(color: accent, fontWeight: FontWeight.w700))),
       ],
     ]);
   }
@@ -259,7 +259,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
     final clock = Text('${two(sec ~/ 60)}:${two(sec % 60)}',
         key: const Key('workCountdown'),
         style: TextStyle(
-            fontSize: 140, fontWeight: FontWeight.w200, height: 1, color: s.isBreak ? cyan : Colors.white, fontFeatures: const [FontFeature.tabularFigures()]));
+            fontSize: 140, fontWeight: FontWeight.w200, height: 1, color: s.isBreak ? accent : Colors.white, fontFeatures: const [FontFeature.tabularFigures()]));
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Text(s.isBreak ? 'Rest. Stand up, look far away, come back.' : s.title, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(color: dim, fontSize: 16)),
       const Spacer(),
@@ -278,7 +278,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
               iconSize: 36,
               tooltip: loop ? 'Continuous mode is on: work, break, work' : 'Continuous mode is off',
               onPressed: () => app.setSetting(S.loop, loop ? '0' : '1'),
-              icon: Icon(Icons.loop, color: loop ? cyan : dim))),
+              icon: Icon(Icons.loop, color: loop ? accent : dim))),
       Center(child: Text(loop ? 'Continuous: the break and the next session start by themselves.' : 'Single session.', style: const TextStyle(color: dim, fontSize: 12))),
       if (!s.isBreak) ...[
         const SizedBox(height: 8),

@@ -228,3 +228,7 @@ model and Android version.
   productive hours; PDF portfolio export; project deadline streaks; lock-screen widget
   (Android no longer allows them); onboarding question about a wider sleep window.
   Untested on device: floating timer, and everything listed before.
+- Phase 3 started (17 Nov 2026): orange-on-navy palette applied everywhere (one place:
+  `lib/ui/theme.dart`), native alarm and block screens match. Still to do in Phase 3: light
+  theme, original tile artwork, animations, haptics tuning, empty/error states audit,
+  screenshots of every screen in light and dark.

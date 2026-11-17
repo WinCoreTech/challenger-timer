@@ -173,7 +173,7 @@ class TaskScreen extends ConsumerWidget {
                     Bar(m.pace.$1),
                     const SizedBox(height: 6),
                     const H('Time gone', size: 10),
-                    Bar(m.pace.$2, color: m.pace.$2 > m.pace.$1 ? gold : cyan),
+                    Bar(m.pace.$2, color: m.pace.$2 > m.pace.$1 ? gold : accent),
                   ],
                 ])),
             if (v.on(103)) ...[
@@ -184,7 +184,7 @@ class TaskScreen extends ConsumerWidget {
                   ListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
-                      leading: Icon(day < v.today ? Icons.check : Icons.flag_outlined, color: day < v.today ? dim : cyan, size: 20),
+                      leading: Icon(day < v.today ? Icons.check : Icons.flag_outlined, color: day < v.today ? dim : accent, size: 20),
                       title: Text(label),
                       trailing: Text(dayLabel(day), style: const TextStyle(color: dim))),
             ],

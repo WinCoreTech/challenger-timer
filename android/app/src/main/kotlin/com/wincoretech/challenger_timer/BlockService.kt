@@ -111,7 +111,7 @@ class BlockService : Service() {
 
     private fun show() {
         if (overlay != null) return
-        val cyan = Color.parseColor("#00E5FF")
+        val cyan = Color.parseColor("#FF8A1F")
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             gravity = Gravity.CENTER

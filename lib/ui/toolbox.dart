@@ -66,7 +66,7 @@ class _ToolboxState extends ConsumerState<ToolboxScreen> {
                       child: Text('This week, try: ${spotlight(v, tools)!.title}'))),
             for (final sec in v.catalog.sections)
               if (live.any((f) => f.sec == sec)) ...[
-                Padding(padding: const EdgeInsets.only(top: 18, bottom: 6), child: H(sec, color: cyan)),
+                Padding(padding: const EdgeInsets.only(top: 18, bottom: 6), child: H(sec, color: accent)),
                 for (final f in live.where((f) => f.sec == sec))
                   ListTile(
                       key: Key('toolbox-${f.n}'),
@@ -149,7 +149,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
             const SizedBox(height: 16),
           ],
           ...switch (t.kind) {
-            'card' => [Panel(border: cyan, child: Text(t.body, style: const TextStyle(fontSize: 18, height: 1.4)))],
+            'card' => [Panel(border: accent, child: Text(t.body, style: const TextStyle(fontSize: 18, height: 1.4)))],
             'stat' => _stat(v, t),
             'single' => _single(v, t, app),
             'log' => _log(v, t, app),
@@ -160,7 +160,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
             'habit' => _habit(v, t, app),
             'session' => [
                 if (t.task.isNotEmpty)
-                  Panel(border: cyan, child: Text(t.task, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
+                  Panel(border: accent, child: Text(t.task, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
                 const SizedBox(height: 20),
                 FilledButton(
                     key: const Key('tool-start'),
@@ -212,7 +212,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
   List<Widget> _stat(DayView v, ToolDef t) {
     final lines = (stats[t.stat] ?? analyticsStats[t.stat] ?? coachStats[t.stat] ?? pressureStats[t.stat] ?? (_) => const ['-'])(v);
     return [
-      Big(lines.first, size: 48, color: cyan, key: const Key('stat-value')),
+      Big(lines.first, size: 48, color: accent, key: const Key('stat-value')),
       const SizedBox(height: 8),
       for (final l in lines.skip(1)) Padding(padding: const EdgeInsets.only(bottom: 6), child: Text(l, style: const TextStyle(fontSize: 16))),
       if (t.action.isNotEmpty) ...[
@@ -345,13 +345,13 @@ class _ToolState extends ConsumerState<ToolScreen> {
             title: Text(item)),
       const SizedBox(height: 12),
       Text(done.length >= t.items.length ? 'All done for today.' : '${done.length} of ${t.items.length} today.',
-          style: const TextStyle(color: cyan, fontWeight: FontWeight.w800)),
+          style: const TextStyle(color: accent, fontWeight: FontWeight.w800)),
       Text('Completed $streak days in a row.', style: const TextStyle(color: dim)),
     ];
   }
 
   List<Widget> _count(DayView v, ToolDef t, App app) => [
-        Center(child: Big('${v.toolSum(t.n, day: v.today)}', size: 96, color: cyan, key: const Key('tool-count'))),
+        Center(child: Big('${v.toolSum(t.n, day: v.today)}', size: 96, color: accent, key: const Key('tool-count'))),
         Center(child: H('${t.unit} today')),
         const SizedBox(height: 20),
         FilledButton(key: const Key('tool-plus'), onPressed: () => app.log(Ev.tool, {'n': t.n, 'add': 1}), child: const Text('+1')),
@@ -390,7 +390,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2),
-                      child: FractionallySizedBox(heightFactor: (val / t.max).clamp(0.05, 1.0), child: Container(color: cyan)))),
+                      child: FractionallySizedBox(heightFactor: (val / t.max).clamp(0.05, 1.0), child: Container(color: accent)))),
           ])),
     ];
   }
@@ -399,7 +399,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
     final h = v.habitFor(t);
     if (h == null) {
       return [
-        Panel(border: cyan, child: Text(t.habit, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
+        Panel(border: accent, child: Text(t.habit, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
         const SizedBox(height: 16),
         FilledButton(
             key: const Key('tool-add-habit'),
@@ -413,14 +413,14 @@ class _ToolState extends ConsumerState<ToolScreen> {
     final s = v.habitStreak(h.id);
     return [
       Panel(
-          border: cyan,
+          border: accent,
           child: Row(children: [
             Expanded(child: Text(h.str('name'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800))),
-            Big('${s.current}', size: 40, color: cyan),
+            Big('${s.current}', size: 40, color: accent),
           ])),
       const SizedBox(height: 16),
       v.tickedToday(h.id)
-          ? const Text('Done today.', style: TextStyle(color: cyan, fontWeight: FontWeight.w800))
+          ? const Text('Done today.', style: TextStyle(color: accent, fontWeight: FontWeight.w800))
           : FilledButton(key: const Key('tool-tick'), onPressed: () => app.tickHabit(h.id), child: const Text('DONE TODAY')),
       Padding(padding: const EdgeInsets.only(top: 8), child: Text('Longest: ${s.longest} days.', style: const TextStyle(color: dim))),
     ];

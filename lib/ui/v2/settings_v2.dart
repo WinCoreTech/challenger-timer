@@ -103,8 +103,8 @@ class SettingsV2Screen extends ConsumerWidget {
         appBar: AppBar(title: const Text('SETTINGS')),
         body: ListView(padding: const EdgeInsets.only(bottom: 40), children: [
           for (final r in _rows)
-            if (r is String) Padding(padding: const EdgeInsets.fromLTRB(16, 20, 16, 4), child: H(r, color: cyan)) else build(r as _Row),
-          const Padding(padding: EdgeInsets.fromLTRB(16, 20, 16, 4), child: H('More', color: cyan)),
+            if (r is String) Padding(padding: const EdgeInsets.fromLTRB(16, 20, 16, 4), child: H(r, color: accent)) else build(r as _Row),
+          const Padding(padding: EdgeInsets.fromLTRB(16, 20, 16, 4), child: H('More', color: accent)),
           ListTile(key: const Key('set-locks'), title: const Text('Locks, permissions and buddy'), trailing: const Icon(Icons.chevron_right), onTap: () => context.push('/settings')),
           ListTile(
               key: const Key('set-goal'),

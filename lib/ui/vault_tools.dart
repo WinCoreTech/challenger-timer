@@ -56,7 +56,7 @@ class VaultTool extends ConsumerWidget {
       case 136:
         final text = weeklyDigest(v);
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Panel(border: cyan, child: Text(text, key: const Key('digest'), style: const TextStyle(fontSize: 16, height: 1.5))),
+          Panel(border: accent, child: Text(text, key: const Key('digest'), style: const TextStyle(fontSize: 16, height: 1.5))),
           const SizedBox(height: 12),
           FilledButton(key: const Key('shareDigest'), onPressed: () => share(text: text), child: const Text('SHARE')),
         ]);
@@ -93,7 +93,7 @@ class VaultTool extends ConsumerWidget {
         final last = v.settingInt('lastExport', 0);
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Row(children: [
-            Icon(backupStale(v) ? Icons.warning_amber : Icons.check_circle, color: backupStale(v) ? gold : cyan),
+            Icon(backupStale(v) ? Icons.warning_amber : Icons.check_circle, color: backupStale(v) ? gold : accent),
             const SizedBox(width: 8),
             Expanded(
                 child: Text(last == 0
@@ -111,7 +111,7 @@ class VaultTool extends ConsumerWidget {
         if (totals.isEmpty) return const Text('Add a count (words, pages, problems) when you save proof. Lifetime totals appear here.', style: TextStyle(color: dim));
         return Column(children: [
           for (final e in totals.entries)
-            ListTile(contentPadding: EdgeInsets.zero, title: Text(e.key.toUpperCase()), trailing: Big('${e.value}', size: 32, color: cyan)),
+            ListTile(contentPadding: EdgeInsets.zero, title: Text(e.key.toUpperCase()), trailing: Big('${e.value}', size: 32, color: accent)),
         ]);
       case 148:
         final items = onThisDay(v);
@@ -160,7 +160,7 @@ class _ShareCardState extends ConsumerState<ShareCardTool> {
                   color: ink,
                   padding: const EdgeInsets.all(24),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const H('Challenger Timer', color: cyan, size: 16),
+                    const H('Challenger Timer', color: accent, size: 16),
                     const Spacer(),
                     Poster(PosterArt.flame, size: 120, level: flameLevel(v.master.current)),
                     Big('${v.master.current}', size: 120, color: Colors.white),
@@ -168,7 +168,7 @@ class _ShareCardState extends ConsumerState<ShareCardTool> {
                     const SizedBox(height: 16),
                     Text('${v.starts} starts · ${v.proofs.length} proofs', style: const TextStyle(color: dim, fontSize: 18)),
                     const Spacer(),
-                    Text(v.rank.rank.name.toUpperCase(), style: const TextStyle(color: cyan, fontSize: 22, fontWeight: FontWeight.w900)),
+                    Text(v.rank.rank.name.toUpperCase(), style: const TextStyle(color: accent, fontSize: 22, fontWeight: FontWeight.w900)),
                     const Text('Two minutes a day. That is the whole trick.', style: TextStyle(color: dim)),
                   ])))),
       const SizedBox(height: 12),
