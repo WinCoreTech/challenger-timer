@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 
 import '../app/state.dart';
 import '../core/events.dart';
-import 'home.dart';
 import 'settings.dart';
 import 'special.dart';
 import 'tabs.dart';
@@ -25,15 +24,8 @@ import 'v2/settings_v2.dart';
 import 'v2/stats_screen.dart';
 import 'v2/work_screen.dart';
 
-const _tabs = [
-  ('/', 'HOME', Icons.play_circle_fill),
-  ('/timer', 'TIMER', Icons.timer),
-  ('/streaks', 'STREAKS', Icons.local_fire_department),
-  ('/vault', 'VAULT', Icons.inventory_2),
-  ('/plan', 'PLAN', Icons.event_note),
-  ('/me', 'ME', Icons.person),
-];
-
+/// Plan v2: the dashboard is home and every other screen sits on top of it,
+/// so the system back button always returns to the dashboard.
 final routerProvider = Provider<GoRouter>((ref) => GoRouter(
       initialLocation: '/',
       redirect: (context, state) {
@@ -43,49 +35,33 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
         return null;
       },
       routes: [
-        ShellRoute(
-            builder: (context, state, child) {
-              final i = _tabs.indexWhere((t) => t.$1 == state.matchedLocation);
-              return Scaffold(
-                  body: child,
-                  bottomNavigationBar: NavigationBar(
-                      selectedIndex: i < 0 ? 0 : i,
-                      onDestinationSelected: (n) => context.go(_tabs[n].$1),
-                      destinations: [
-                        for (final t in _tabs)
-                          NavigationDestination(key: Key('tab-${t.$2}'), icon: Icon(t.$3), label: t.$2),
-                      ]));
-            },
-            routes: [
-              GoRoute(path: '/', pageBuilder: (c, s) => const NoTransitionPage(child: HomeScreen())),
-              GoRoute(path: '/timer', pageBuilder: (c, s) => const NoTransitionPage(child: TimerScreen())),
-              GoRoute(path: '/streaks', pageBuilder: (c, s) => const NoTransitionPage(child: StreaksScreen())),
-              GoRoute(path: '/vault', pageBuilder: (c, s) => const NoTransitionPage(child: VaultScreen())),
-              GoRoute(path: '/plan', pageBuilder: (c, s) => const NoTransitionPage(child: PlanScreen())),
-              GoRoute(path: '/me', pageBuilder: (c, s) => const NoTransitionPage(child: MeScreen())),
-            ]),
-        // Plan v2 screens (reference shell).
-        GoRoute(path: '/dash', builder: (c, s) => const DashboardScreen()),
-        GoRoute(path: '/work', builder: (c, s) => const WorkScreen()),
-        GoRoute(path: '/projects', builder: (c, s) => const ProjectsScreen()),
-        GoRoute(path: '/project/:id', builder: (c, s) => ProjectEditScreen(s.pathParameters['id']!)),
-        GoRoute(path: '/achievements', builder: (c, s) => const AchievementsScreen()),
-        GoRoute(path: '/stats', builder: (c, s) => const StatsScreen()),
-        GoRoute(path: '/schedule', builder: (c, s) => const ScheduleScreen()),
-        GoRoute(path: '/prefs', builder: (c, s) => const SettingsV2Screen()),
-        GoRoute(path: '/backup', builder: (c, s) => const BackupScreen()),
-        GoRoute(path: '/about', builder: (c, s) => const AboutScreen()),
-        GoRoute(path: '/ranks', builder: (c, s) => const RanksScreen()),
-        GoRoute(path: '/proof', builder: (c, s) => const ProofScreen()),
-        GoRoute(path: '/receipt', builder: (c, s) => const ReceiptScreen()),
-        GoRoute(path: '/settings', builder: (c, s) => const SettingsScreen()),
+        GoRoute(path: '/', builder: (c, s) => const DashboardScreen(), routes: [
+          GoRoute(path: 'work', builder: (c, s) => const WorkScreen()),
+          GoRoute(path: 'projects', builder: (c, s) => const ProjectsScreen()),
+          GoRoute(path: 'project/:id', builder: (c, s) => ProjectEditScreen(s.pathParameters['id']!)),
+          GoRoute(path: 'achievements', builder: (c, s) => const AchievementsScreen()),
+          GoRoute(path: 'stats', builder: (c, s) => const StatsScreen()),
+          GoRoute(path: 'schedule', builder: (c, s) => const ScheduleScreen()),
+          GoRoute(path: 'prefs', builder: (c, s) => const SettingsV2Screen()),
+          GoRoute(path: 'backup', builder: (c, s) => const BackupScreen()),
+          GoRoute(path: 'about', builder: (c, s) => const AboutScreen()),
+          GoRoute(path: 'ranks', builder: (c, s) => const RanksScreen()),
+          GoRoute(path: 'timer', builder: (c, s) => const TimerScreen()),
+          GoRoute(path: 'streaks', builder: (c, s) => const StreaksScreen()),
+          GoRoute(path: 'vault', builder: (c, s) => const VaultScreen()),
+          GoRoute(path: 'plan', builder: (c, s) => const PlanScreen()),
+          GoRoute(path: 'me', builder: (c, s) => const MeScreen()),
+          GoRoute(path: 'proof', builder: (c, s) => const ProofScreen()),
+          GoRoute(path: 'receipt', builder: (c, s) => const ReceiptScreen()),
+          GoRoute(path: 'settings', builder: (c, s) => const SettingsScreen()),
+          GoRoute(path: 'ritual', builder: (c, s) => const RitualScreen()),
+          GoRoute(path: 'habit/:id', builder: (c, s) => HabitScreen(s.pathParameters['id']!)),
+          GoRoute(path: 'task/:id', builder: (c, s) => TaskScreen(s.pathParameters['id']!)),
+          GoRoute(path: 'toolbox', builder: (c, s) => const ToolboxScreen()),
+          GoRoute(path: 'features', builder: (c, s) => const FeaturesScreen()),
+          GoRoute(path: 'tool/:n', builder: (c, s) => ToolScreen(int.parse(s.pathParameters['n']!))),
+        ]),
         GoRoute(path: '/welcome', builder: (c, s) => const WelcomeScreen()),
-        GoRoute(path: '/ritual', builder: (c, s) => const RitualScreen()),
-        GoRoute(path: '/habit/:id', builder: (c, s) => HabitScreen(s.pathParameters['id']!)),
-        GoRoute(path: '/task/:id', builder: (c, s) => TaskScreen(s.pathParameters['id']!)),
-        GoRoute(path: '/toolbox', builder: (c, s) => const ToolboxScreen()),
-        GoRoute(path: '/features', builder: (c, s) => const FeaturesScreen()),
-        GoRoute(path: '/tool/:n', builder: (c, s) => ToolScreen(int.parse(s.pathParameters['n']!))),
       ],
     ));
 

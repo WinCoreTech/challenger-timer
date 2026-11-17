@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:challenger_timer/core/engine.dart';
 import 'package:challenger_timer/core/events.dart';
 import 'package:challenger_timer/ui/settings.dart';
@@ -63,38 +65,33 @@ void main() {
     await closeApp(t);
   });
 
-  testWidgets('daily loop: one tap on START, timer, DONE, proof, parking note back on Home', (t) async {
+  testWidgets('daily loop: dashboard, Work, start, finish, proof, back on the dashboard', (t) async {
     final r = await onboardedRig();
     await pumpApp(t, r);
-    expect(find.byKey(const Key('start')), findsOneWidget);
+    expect(find.byKey(const Key('tile-work')), findsOneWidget);
     expect(find.text('PROFESSIONAL POSTPONER'), findsOneWidget);
-    expect(find.text('Bonus in your pocket'.toUpperCase()), findsOneWidget);
-    expect(find.byKey(const Key('masterStreak')), findsOneWidget);
-
-    await t.tap(find.byKey(const Key('start')));
+    await t.tap(find.byKey(const Key('tile-work')));
+    await t.pumpAndSettle();
+    await t.tap(find.byKey(const Key('workStart')));
     await t.pump(const Duration(milliseconds: 600));
     expect(r.v.active, isNotNull, reason: 'one tap starts the session');
-    expect(find.text('02:00'), findsOneWidget);
-    expect(find.text('WORK'), findsOneWidget);
+    expect(find.text('25:00'), findsOneWidget);
+    expect(find.text('WORKING'), findsOneWidget);
 
-    r.clock.advance(const Duration(seconds: 61));
+    r.clock.advance(const Duration(minutes: 24, seconds: 1));
     await t.pump(const Duration(milliseconds: 300));
     expect(find.text('00:59'), findsOneWidget);
 
     r.clock.advance(const Duration(seconds: 59));
     await t.pump(const Duration(milliseconds: 300));
     await t.pump(const Duration(milliseconds: 300));
-    // Theme flips to REST and the session is recorded.
-    expect(find.text('REST'), findsOneWidget);
-    expect(find.text('DONE.'), findsOneWidget);
-    expect(find.byKey(const Key('fiveMore')), findsOneWidget);
     expect(r.v.workedToday, isTrue);
-    final rest = Theme.of(t.element(find.text('DONE.')));
-    expect(rest.scaffoldBackgroundColor, isNot(Colors.black));
+    expect(find.textContaining('Session finished'), findsOneWidget);
 
-    await t.tap(find.byKey(const Key('saveProof')));
+    await t.tap(find.byKey(const Key('workProof')));
     await t.pumpAndSettle();
     // Empty proof is refused, kindly.
+    await t.ensureVisible(find.byKey(const Key('proofSave')));
     await t.tap(find.byKey(const Key('proofSave')));
     await t.pump();
     expect(find.textContaining('One line is enough'), findsOneWidget);
@@ -103,14 +100,18 @@ void main() {
     await t.ensureVisible(find.byKey(const Key('proofSave')));
     await t.tap(find.byKey(const Key('proofSave')));
     await t.pumpAndSettle();
+    if (find.byKey(const Key('receiptDone')).evaluate().isNotEmpty) {
+      await t.tap(find.byKey(const Key('receiptDone')));
+      await t.pumpAndSettle();
+    }
 
-    // Back on Home: next tiny step is the parking note, streak is 1, bonus kept.
-    expect(find.text('Open OS notes to page 14'), findsOneWidget);
-    expect(find.descendant(of: find.byKey(const Key('masterStreak')), matching: find.text('1')), findsOneWidget);
-    expect(find.text('BONUS KEPT'), findsOneWidget);
+    // Back on the dashboard: streak 1, parking note stored, rank moved up.
+    expect(r.v.nextStep, 'Open OS notes to page 14');
+    expect(find.descendant(of: find.byKey(const Key('tile-streaks')), matching: find.text('1')), findsOneWidget);
+    expect(find.text(ranks[1].name.toUpperCase()), findsOneWidget);
 
     // The proof is in the Vault.
-    await t.tap(find.byKey(const Key('tab-VAULT')));
+    await t.tap(find.byKey(const Key('tile-vault')));
     await t.pumpAndSettle();
     expect(find.text('Read two pages of OS notes'), findsOneWidget);
     await closeApp(t);
@@ -120,9 +121,9 @@ void main() {
     final r = await onboardedRig();
     await r.session();
     await pumpApp(t, r);
-    await t.tap(find.byKey(const Key('tab-TIMER')));
+    await t.tap(find.byKey(const Key('tile-work')));
     await t.pumpAndSettle();
-    await t.tap(find.byKey(const Key('saveProof')));
+    await t.tap(find.byKey(const Key('workProof')));
     await t.pumpAndSettle();
     await t.tap(find.text('LINK'));
     await t.pump();
@@ -147,7 +148,7 @@ void main() {
     final r = await onboardedRig();
     final h = await r.app.addRec(Kind.habit, {'name': 'Open the book'});
     await pumpApp(t, r);
-    await t.tap(find.byKey(const Key('tab-STREAKS')));
+    await t.tap(find.byKey(const Key('tile-streaks')));
     await t.pumpAndSettle();
     expect(find.byKey(const Key('lives')), findsOneWidget);
     expect(find.byIcon(Icons.favorite), findsNWidgets(2));
@@ -172,7 +173,8 @@ void main() {
     final r = await onboardedRig();
     r.clock.setWall(2026, 11, 11, 20);
     await pumpApp(t, r);
-    await t.tap(find.byKey(const Key('tab-PLAN')));
+    await t.ensureVisible(find.byKey(const Key('tile-plan')));
+    await t.tap(find.byKey(const Key('tile-plan')));
     await t.pumpAndSettle();
     await t.enterText(find.byKey(const Key('planTask')), 'Open notebook to page 12');
     await t.tap(find.byKey(const Key('planSave')));
@@ -191,7 +193,7 @@ void main() {
   testWidgets('settings: delayed off switch shows a countdown and can be cancelled', (t) async {
     final r = await onboardedRig();
     await pumpApp(t, r);
-    await t.tap(find.byKey(const Key('tab-ME')));
+    unawaited(r.container.read(routerProvider).push('/me'));
     await t.pumpAndSettle();
     expect(find.byKey(const Key('xpTotal')), findsOneWidget);
     await t.tap(find.byKey(const Key('openSettings')));
@@ -219,7 +221,7 @@ void main() {
     await r.app.setKv(K.buddyPhone, '+911234567890');
     final shared = <String>[];
     await pumpApp(t, r, shared: shared);
-    await t.tap(find.byKey(const Key('tab-ME')));
+    unawaited(r.container.read(routerProvider).push('/me'));
     await t.pumpAndSettle();
     await t.tap(find.byKey(const Key('openSettings')));
     await t.pumpAndSettle();
@@ -237,7 +239,7 @@ void main() {
   testWidgets('turning on the blocker asks for apps, then one permission at a time', (t) async {
     final r = await onboardedRig();
     await pumpApp(t, r);
-    await t.tap(find.byKey(const Key('tab-ME')));
+    unawaited(r.container.read(routerProvider).push('/me'));
     await t.pumpAndSettle();
     await t.tap(find.byKey(const Key('openSettings')));
     await t.pumpAndSettle();

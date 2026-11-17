@@ -193,3 +193,17 @@ model and Android version.
 
 - Phase 0 (17 Nov 2026): audit above, `special.dart` split with no behaviour change,
   `REFERENCE_SPEC.md`, `docs/ARCHITECTURE.md`, schema survival test. 183 tests.
+- Phase 1 (17 Nov 2026): reference shell. Dashboard home with tiles and rank bar (bottom
+  tabs removed), Work screen (idle, running, continuous mode, cancel, late-finish warning,
+  notes, mute), project picker, nested Projects with per-project lengths, Ranks ladder with
+  promotion and demotion, Achievements (unknown until earned, date earned), Stats with
+  eight ranges, Schedule blocks with reminders, Settings with every reference key, Backup
+  (versioned, redacted, load by paste, wipe), About. Phone, tablet-landscape and 2x-text
+  layouts are covered by widget tests. 218 tests.
+  Not done in Phase 1: golden screenshots; file picker for loading a backup (paste for
+  now); light theme (setting exists, dark is used); several sound and screen settings are
+  stored but not yet applied by the timer (almost-complete sound, overtime step, sound
+  channel and volumes, ticking, screen-during-countdown). The old Timer screen is still
+  used for alarm-started 2-minute sessions and Toolbox modes.
+  Untested on device: everything, as before, plus the late-finish detection and the
+  robust-countdown switch added to the Kotlin side.

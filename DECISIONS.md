@@ -122,3 +122,16 @@ Every choice made without asking, newest section last.
   drops the user's name, buddy contact and tool notes.
 - Eight achievements were added for reference triggers with no existing match (cancel,
   2/4/8-hour days, 10 sessions, return after 4+ days, two steady weeks, regained rank).
+- Three helper agents were started for Phase 1 screens and all stopped on a usage limit
+  before producing code (one draft Schedule screen was kept). The screens were then
+  written in the main session.
+- Home is now the tile dashboard. Every other screen is a child route of it, so system
+  back always returns to the dashboard. Streaks, Vault and Plan are tiles; Me and the
+  Toolbox are reached from Settings.
+- The Work screen's red X is a real cancel: no time is logged even after two minutes
+  (reference behaviour). The old Timer screen keeps its "two minutes counts" stop.
+- Continuous mode is a setting toggled by the loop icon. It only advances while the app
+  is open, like the older cycles: nothing runs on by itself while the app is closed.
+- Loading a backup is by pasting the file's text. A file picker needs a new plugin and
+  was left for the polish phase.
+- Project colours: bolt and bright = worked in the last 7 days; moon and dim = resting.
