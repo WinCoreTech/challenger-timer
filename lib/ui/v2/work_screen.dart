@@ -14,6 +14,7 @@ import '../../core/settings.dart';
 import '../../core/tree.dart';
 import '../../core/v2_day.dart';
 import '../theme.dart';
+import 'celebrate.dart';
 import 'projects_screen.dart';
 
 /// Status line by state. Our own words: strict coach, dry, never shaming.
@@ -182,6 +183,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
   Widget _left(DayView v, App app) {
     final need = v.ladder.minutesToAdvance;
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, mainAxisSize: MainAxisSize.min, children: [
+      const CelebrationBanner(),
       Text(workStatus(v), key: const Key('workStatus'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w300, height: 1.3)),
       const SizedBox(height: 24),
       if (v.pendingProof != null) ...[

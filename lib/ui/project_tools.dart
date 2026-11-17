@@ -142,7 +142,7 @@ class _ProjectToolState extends ConsumerState<ProjectTool> {
                   dense: true,
                   contentPadding: EdgeInsets.zero,
                   title: Text('${names[d - 1]} ${hhmm(k.integer('from'))} to ${hhmm(k.integer('to'))} · ${k.str('name')}'),
-                  trailing: IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(k.id))),
+                  trailing: IconButton(tooltip: 'Remove this class', icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(k.id))),
         ]);
       case 168:
         return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [

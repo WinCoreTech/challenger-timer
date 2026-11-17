@@ -206,3 +206,27 @@ List<(String, int, int)> projectDeadlines(DayView v) => [
           return (p.str('name'), streak, tasks.length);
         }()
     ].where((r) => r.$3 > 0).toList();
+
+// ---- A5: celebrations ---------------------------------------------------------------
+class Celebration {
+  const Celebration(this.key, this.title, this.line);
+  final String key, title, line;
+}
+
+/// The one thing worth a short animation right now: a promotion today, or a
+/// streak milestone reached today. Casual mode never shows one.
+Celebration? celebrationOf(DayView v) {
+  if (v.prefOn(S.casualMode)) return null;
+  final up = v.ladder.changes.where((c) => c.promotion && c.day == v.today).lastOrNull;
+  if (up != null) return Celebration('rank:${up.day}:${up.to}', 'RANK UP', v.ranks[up.to].name);
+  final n = v.master.current;
+  if (streakMilestones.contains(n) && v.showedUpDays.contains(v.today)) {
+    return Celebration('streak:$n', '$n-DAY STREAK', milestoneTitles[n] ?? 'Keep it going');
+  }
+  return null;
+}
+
+bool celebrationUnseen(DayView v) {
+  final c = celebrationOf(v);
+  return c != null && v.kv['seenCelebration'] != c.key;
+}

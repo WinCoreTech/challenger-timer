@@ -328,7 +328,7 @@ class _ToolState extends ConsumerState<ToolScreen> {
               value: r.flag('done'),
               onChanged: (_) => app.putRec(r.copy({'done': !r.flag('done')})),
               title: Text(r.str('text'), style: TextStyle(decoration: r.flag('done') ? TextDecoration.lineThrough : null)),
-              secondary: IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(r.id))),
+              secondary: IconButton(tooltip: 'Delete this item', icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(r.id))),
       ];
 
   List<Widget> _check(DayView v, ToolDef t, App app) {

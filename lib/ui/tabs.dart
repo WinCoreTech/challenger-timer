@@ -17,6 +17,7 @@ import '../core/stats.dart';
 import '../core/streak_engine.dart';
 import '../core/vault.dart';
 import 'home.dart';
+import 'light.dart';
 import 'theme.dart';
 
 Widget _page(String title, List<Widget> children, {Widget? fab, List<Widget>? actions}) => Scaffold(
@@ -311,11 +312,11 @@ class _VaultState extends ConsumerState<VaultScreen> {
                   if (pr.str('type') == 'photo')
                     ClipRRect(
                         borderRadius: BorderRadius.circular(6),
-                        child: Image.file(File(pr.str('value')),
+                        child: Unfilter(child: Image.file(File(pr.str('value')),
                             height: 180,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => const Text('Photo file is missing.', style: TextStyle(color: dim))))
+                            errorBuilder: (_, _, _) => const Text('Photo file is missing.', style: TextStyle(color: dim)))))
                   else if (pr.str('type') == 'voice')
                     TextButton.icon(
                         onPressed: () => ref.read(nativeProvider).play(pr.str('value')),
@@ -513,7 +514,7 @@ class MeScreen extends ConsumerWidget {
     final r = shownRank(v);
     final earned = ach.where((a) => a.earned(v.metrics)).length;
     return _page('ME', actions: [
-      IconButton(key: const Key('openSettings'), onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings)),
+      IconButton(key: const Key('openSettings'), tooltip: 'Settings and locks', onPressed: () => context.push('/settings'), icon: const Icon(Icons.settings)),
     ], [
       Panel(
           border: v.on(669) && r.index >= 8 ? gold : accent,

@@ -7,6 +7,7 @@ import '../../core/settings.dart';
 import '../../core/v2_dash.dart';
 import '../../core/v2_day.dart';
 import '../theme.dart';
+import 'celebrate.dart';
 
 /// Reference 5.1: a dashboard of tiles with the rank bar along the bottom.
 class DashboardScreen extends ConsumerWidget {
@@ -63,7 +64,7 @@ class DashboardScreen extends ConsumerWidget {
                         onPressed: () => app.setSetting(S.muted, muted ? '0' : '1'),
                         icon: Icon(muted ? Icons.volume_off : Icons.volume_up, color: dim)),
                   ]),
-                  SizedBox(height: wide ? 180 : 110, child: const Center(child: Poster(PosterArt.hourglass, size: 110))),
+                  SizedBox(height: wide ? 180 : 110, child: const Center(child: Poster(PosterArt.sunrise, size: 130))),
                   Text(workSlogan(v), key: const Key('slogan'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
                   if (goal(v) case final g?) ...[
                     const SizedBox(height: 12),
@@ -97,11 +98,11 @@ class DashboardScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
                 child: wide
                     ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Expanded(flex: 4, child: SingleChildScrollView(child: work)),
+                        Expanded(flex: 4, child: SingleChildScrollView(child: Column(children: [const CelebrationBanner(), work]))),
                         const SizedBox(width: 12),
                         Expanded(flex: 6, child: SingleChildScrollView(child: grid(MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2))),
                       ])
-                    : ListView(children: [work, const SizedBox(height: 10), grid(size.width < 380 || MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2)]))),
+                    : ListView(children: [const CelebrationBanner(), work, const SizedBox(height: 10), grid(size.width < 380 || MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2)]))),
         bottomNavigationBar: SafeArea(
             child: InkWell(
                 key: const Key('rankBar'),

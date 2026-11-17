@@ -243,3 +243,11 @@ model and Android version.
   phone, photos included only in the file you share). Ticking and the almost-complete cue
   only play while the Work screen is open; background cues need a native service.
   Untested on device: all cue sounds, brightness, wake-on-finish, PDF share.
+- Stage A3 to A6 (17 Nov 2026): light theme (setting: dark, light, system) done by
+  reversing brightness while keeping hues; proof photos are filtered back so ordinary
+  colours stay true, very saturated pixels can shift slightly; original sunrise artwork on
+  the Work tile; rank-up and streak-milestone banner (tap to dismiss, silent in casual
+  mode, respects the system "remove animations" setting); icon buttons named; widget test
+  checks 48 dp targets and labels on every new screen. Light screenshots for 5 screens are
+  in docs/screens/*-light.png. Not yet done: light screenshots for the remaining screens,
+  more tile artwork, high-contrast option, haptic tuning (needs a phone to judge).

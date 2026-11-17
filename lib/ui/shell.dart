@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 
 import '../app/state.dart';
 import '../core/events.dart';
+import '../core/settings.dart';
+import 'light.dart';
 import 'settings.dart';
 import 'special.dart';
 import 'tabs.dart';
@@ -142,7 +144,9 @@ class _AppState extends ConsumerState<ChallengerApp> with WidgetsBindingObserver
         // Feature 495: text size on top of the phone's own font scale.
         final pct = ref.watch(viewProvider).settingInt('textPct', 100).clamp(80, 160);
         final mq = MediaQuery.of(context);
-        return MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(mq.textScaler.scale(1) * pct / 100)), child: child!);
+        return ThemeSwitch(
+            setting: ref.watch(viewProvider).pref(S.theme),
+            child: MediaQuery(data: mq.copyWith(textScaler: TextScaler.linear(mq.textScaler.scale(1) * pct / 100)), child: child!));
       },
       routerConfig: ref.watch(routerProvider));
 }

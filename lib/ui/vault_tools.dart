@@ -15,6 +15,7 @@ import '../core/portfolio.dart';
 import '../core/vault.dart';
 import 'photo.dart';
 import 'share.dart';
+import 'light.dart';
 import 'theme.dart';
 
 Widget _lines(List<String> lines) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -25,8 +26,8 @@ Widget _lines(List<String> lines) => Column(crossAxisAlignment: CrossAxisAlignme
     ]);
 
 Widget _proofThumb(Rec p) => p.str('type') == 'photo'
-    ? Image.file(File(p.str('value')),
-        height: 150, fit: BoxFit.cover, errorBuilder: (_, _, _) => const SizedBox(height: 150, child: Center(child: Text('Photo missing'))))
+    ? Unfilter(child: Image.file(File(p.str('value')),
+        height: 150, fit: BoxFit.cover, errorBuilder: (_, _, _) => const SizedBox(height: 150, child: Center(child: Text('Photo missing')))))
     : Text(p.str('value'));
 
 class VaultTool extends ConsumerWidget {

@@ -157,7 +157,7 @@ class _RoutineState extends ConsumerState<RoutineTool> {
       if (best != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text('Best time: ${best ~/ 60} min ${best % 60} s over ${runs.length} runs. Last: ${runs.last.get<int>('seconds')! ~/ 60} min ${runs.last.get<int>('seconds')! % 60} s.')),
       const SizedBox(height: 12),
       for (final s in steps)
-        ListTile(dense: true, contentPadding: EdgeInsets.zero, title: Text(s.str('text')), trailing: IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(s.id))),
+        ListTile(dense: true, contentPadding: EdgeInsets.zero, title: Text(s.str('text')), trailing: IconButton(tooltip: 'Remove this step', icon: const Icon(Icons.close, color: dim), onPressed: () => app.deleteRec(s.id))),
       Row(children: [
         Expanded(child: TextField(key: const Key('routineField'), controller: c, decoration: const InputDecoration(hintText: 'Next step in the routine'))),
         const SizedBox(width: 8),

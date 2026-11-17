@@ -42,7 +42,7 @@ final _rows = <Object>[
   const _Row(S.keepScreenOn, 'Keep screen on', choices: _onOff),
   const _Row(S.screenDuringCountdown, 'Screen during countdowns', choices: [('device', 'Device default'), ('dim', 'Dim'), ('on', 'Full')]),
   const _Row(S.screenOnComplete, 'Turn on screen on complete', choices: _onOff),
-  const _Row(S.theme, 'Theme', choices: [('dark', 'Dark'), ('light', 'Light'), ('system', 'System')], note: 'Light and system themes arrive with the design pass. Dark is used for now.'),
+  const _Row(S.theme, 'Theme', choices: [('dark', 'Dark'), ('light', 'Light'), ('system', 'System')], note: 'Light inverts the dark design. Proof photos keep their own colours.'),
   const _Row('textPct', 'Text size', choices: [('100', '100%'), ('115', '115%'), ('130', '130%'), ('150', '150%'), ('200', '200%')]),
   const _Row(S.language, 'Language', choices: [('device', 'Device default'), ('en', 'English')]),
   'Behaviour',

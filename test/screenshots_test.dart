@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 
 import 'package:challenger_timer/core/events.dart';
 import 'package:challenger_timer/core/engine.dart';
+import 'package:challenger_timer/ui/light.dart';
 import 'package:challenger_timer/ui/theme.dart';
 import 'package:challenger_timer/ui/v2/achievements_screen.dart';
 import 'package:challenger_timer/ui/v2/dashboard.dart';
@@ -50,6 +51,7 @@ void main() {
     if (!shots) return;
     await loadFonts();
     final key = GlobalKey();
+    var light = false;
     Future<void> shot(Rig r, String name, Widget w, {Size size = const Size(1080, 2340), double dpr = 2.5}) async {
       t.view.physicalSize = size;
       t.view.devicePixelRatio = dpr;
@@ -58,13 +60,13 @@ void main() {
           child: RepaintBoundary(
               key: key,
               child: MaterialApp(debugShowCheckedModeBanner: false, theme: appTheme(font: 'Roboto'),
-                  home: KeyedSubtree(key: UniqueKey(), child: w)))));
+                  home: ThemeSwitch(setting: light ? 'light' : 'dark', child: KeyedSubtree(key: UniqueKey(), child: w))))));
       await t.pump(const Duration(milliseconds: 400));
       await t.runAsync(() async {
         final b = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
         final img = await b.toImage(pixelRatio: dpr);
         final bytes = await img.toByteData(format: ui.ImageByteFormat.png);
-        File('docs/screens/$name.png').writeAsBytesSync(bytes!.buffer.asUint8List());
+        File('docs/screens/$name${light ? '-light' : ''}.png').writeAsBytesSync(bytes!.buffer.asUint8List());
       });
     }
 
@@ -106,6 +108,10 @@ void main() {
     await r.app.startSession(minutes: 25, projectId: dbms.id, source: 'work', title: 'Draw the ER diagram', meta: {'mode': 'normal'});
     r.clock.advance(const Duration(seconds: 2));
     await shot(r, '03-working', const WorkScreen());
+    light = true;
+    for (final (n, w) in [('01-dashboard', const DashboardScreen()), ('02-work', const WorkScreen()), ('05-projects', const ProjectsScreen()), ('06-stats', const StatsScreen()), ('08-settings', const SettingsV2Screen())]) {
+      await shot(r, n, w);
+    }
     await t.pumpWidget(const SizedBox());
     t.view.reset();
   });

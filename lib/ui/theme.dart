@@ -157,7 +157,7 @@ void toast(BuildContext context, String msg) =>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
 // ---- Poster illustrations, drawn in code --------------------------------
-enum PosterArt { flame, door, vault, shield, hourglass }
+enum PosterArt { flame, door, vault, shield, hourglass, sunrise }
 
 class Poster extends StatelessWidget {
   const Poster(this.art, {super.key, this.size = 96, this.color = accent, this.level = 1});
@@ -234,6 +234,23 @@ class _PosterPainter extends CustomPainter {
               ..lineTo(w * 0.46, h * 0.64)
               ..lineTo(w * 0.7, h * 0.36),
             Paint()..color = ink..style = PaintingStyle.stroke..strokeWidth = w * 0.08..strokeCap = StrokeCap.round);
+      case PosterArt.sunrise:
+        // A low sun over a horizon with a path leading to it.
+        canvas.drawArc(Rect.fromCenter(center: Offset(w / 2, h * 0.62), width: w * 0.5, height: w * 0.5), 3.14159, 3.14159, true, fill);
+        for (var i = 0; i < 7; i++) {
+          final a = 3.14159 + (i + 0.5) * 3.14159 / 7;
+          canvas.drawLine(Offset(w / 2 + math.cos(a) * w * 0.32, h * 0.62 + math.sin(a) * w * 0.32),
+              Offset(w / 2 + math.cos(a) * w * 0.44, h * 0.62 + math.sin(a) * w * 0.44), Paint()..color = color..strokeWidth = w * 0.035..strokeCap = StrokeCap.round);
+        }
+        canvas.drawRect(Rect.fromLTWH(w * 0.04, h * 0.62, w * 0.92, h * 0.045), fill);
+        canvas.drawPath(
+            Path()
+              ..moveTo(w * 0.46, h * 0.67)
+              ..lineTo(w * 0.54, h * 0.67)
+              ..lineTo(w * 0.78, h * 0.95)
+              ..lineTo(w * 0.22, h * 0.95)
+              ..close(),
+            soft);
       case PosterArt.hourglass:
         canvas.drawRect(Rect.fromLTWH(w * 0.2, h * 0.06, w * 0.6, h * 0.07), fill);
         canvas.drawRect(Rect.fromLTWH(w * 0.2, h * 0.87, w * 0.6, h * 0.07), fill);

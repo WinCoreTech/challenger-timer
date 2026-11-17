@@ -95,7 +95,8 @@ void main() {
     expect(find.text('WORK'), findsOneWidget);
     expect(find.text('Thesis'), findsOneWidget);
     expect(find.text('25m'), findsOneWidget);
-    expect(find.text(r.v.ladderRank.name), findsOneWidget);
+    expect(find.descendant(of: find.byKey(const Key('workRank')), matching: find.text(r.v.ladderRank.name)), findsOneWidget);
+    expect(find.byKey(const Key('celebration')), findsOneWidget, reason: 'the first rank-up is celebrated');
     expect(find.textContaining('more minutes today to advance in rank'), findsOneWidget);
     await t.tap(find.byKey(const Key('workToday')));
     await t.pump();

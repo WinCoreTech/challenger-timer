@@ -106,8 +106,8 @@ class _StudyState extends ConsumerState<StudyTool> {
                   title: Text('${s.str('name')} · $pct%'),
                   subtitle: Text(room >= 0 ? 'Can miss $room more and stay at 75%.' : 'Attend the next ${-room} to get back to 75%.', style: const TextStyle(color: dim)),
                   trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                    IconButton(icon: const Icon(Icons.check, color: accent), onPressed: () => app.putRec(s.copy({'present': s.integer('present') + 1, 'total': s.integer('total') + 1}))),
-                    IconButton(icon: const Icon(Icons.close, color: dim), onPressed: () => app.putRec(s.copy({'total': s.integer('total') + 1}))),
+                    IconButton(tooltip: 'Present', icon: const Icon(Icons.check, color: accent), onPressed: () => app.putRec(s.copy({'present': s.integer('present') + 1, 'total': s.integer('total') + 1}))),
+                    IconButton(tooltip: 'Absent', icon: const Icon(Icons.close, color: dim), onPressed: () => app.putRec(s.copy({'total': s.integer('total') + 1}))),
                   ]));
             }),
           TextField(key: const Key('attName'), controller: a, decoration: const InputDecoration(hintText: 'Subject')),

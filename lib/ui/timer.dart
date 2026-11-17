@@ -15,6 +15,7 @@ import '../core/tools.dart';
 import 'photo.dart';
 import 'settings.dart' show askPermission;
 import 'special.dart';
+import 'light.dart';
 import 'theme.dart';
 
 export 'photo.dart';
@@ -454,7 +455,7 @@ class _ProofState extends ConsumerState<ProofScreen> {
                   })),
           const SizedBox(height: 16),
           if (type == 'photo') ...[
-            if (photo != null) ClipRRect(borderRadius: BorderRadius.circular(8), child: Image.file(File(photo!), height: 220, fit: BoxFit.cover)),
+            if (photo != null) ClipRRect(borderRadius: BorderRadius.circular(8), child: Unfilter(child: Image.file(File(photo!), height: 220, fit: BoxFit.cover))),
             const SizedBox(height: 8),
             OutlinedButton.icon(
                 key: const Key('takePhoto'),
