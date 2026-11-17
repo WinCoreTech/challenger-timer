@@ -100,3 +100,13 @@ Every choice made without asking, newest section last.
 - AI coach features are fixed rules over the user's own log and say so on screen.
 - Extra permissions added by later batches, each asked only when its feature is used:
   microphone (voice proof, voice promise), Do Not Disturb access (auto DND).
+
+## Plan v2 (from 17 Nov 2026)
+- The master prompt was written for a local session; it is being run in this cloud
+  session instead. There is still no Android SDK or phone here, so rule R9 applies to
+  everything native: built, compiled in CI, untested on device.
+- The prompt arrived cut off in the middle of Phase 1 of section 10. Work follows the
+  sections that did arrive (0 to 9 and the start of 10) and the plan table in the doc.
+- Section 7 data changes are made as new JSON fields on existing records and events, not
+  as new SQL tables. The store is three document tables, so this needs no migration and
+  cannot lose data. The schema version stays 1. A test loads old-shaped rows.

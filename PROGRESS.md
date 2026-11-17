@@ -1,5 +1,30 @@
 # Progress
 
+## Audit (17 Nov 2026, start of plan v2)
+
+Environment: Flutter 3.47.9 and Java 21 in this cloud session; no Android SDK, no adb, no
+phone. Kotlin is compiled only by GitHub Actions. Nothing has ever run on a device.
+
+**Solid** (tested, real logic): event log and SQLite store; streak engine with day
+boundary, DST, time-zone and freeze tests; XP and rank maths; session lifecycle (start,
+finish while closed, pause, cycles, hard mode); delayed off switch and pressure dial;
+deadline maths; reminders list with sleep window and class silence; ship script.
+
+**Shallow** (works, but thin): most Toolbox items are one generic prompt, list, checklist
+or card; analytics are text lines, not charts; "coach" is keyword rules; share-sheet
+versions stand in for social features; themes, languages and accessibility are minimal;
+Home and navigation do not follow the reference app.
+
+**Untested on device** (compiles in CI only): timer service, exact alarms, full-screen
+alarm, blocker overlay, SMS, widget, quick tile, voice recording, noise, Do Not Disturb,
+usage stats, face-down start, sticky notice, camera, haptics and tone.
+
+**Code health:** `lib/ui/special.dart` (1,790 lines) is now split into 12 files by area.
+Storage is three JSON-document tables at schema version 1; plan v2 data changes need no
+SQL migration (see `docs/ARCHITECTURE.md`, `test/schema_test.dart`).
+
+Plan v2 phases are logged at the end of this file.
+
 Nothing below has been run on a phone. "Tested" means unit or widget tests in `test/`.
 Releases: https://github.com/WinCoreTech/challenger-timer/releases
 
@@ -163,3 +188,8 @@ Extras (Me, Toolbox; Settings, Features has "unlock" switches per feature)
 
 For anything that does not match, note the step number, what you saw, and your phone
 model and Android version.
+
+## Plan v2
+
+- Phase 0 (17 Nov 2026): audit above, `special.dart` split with no behaviour change,
+  `REFERENCE_SPEC.md`, `docs/ARCHITECTURE.md`, schema survival test. 183 tests.
