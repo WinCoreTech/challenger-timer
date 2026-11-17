@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../app/state.dart';
 import '../../core/settings.dart';
 import '../../core/v2_dash.dart';
+import '../../core/v2_day.dart';
 import '../theme.dart';
 
 /// Reference 5.1: a dashboard of tiles with the rank bar along the bottom.
@@ -64,6 +65,12 @@ class DashboardScreen extends ConsumerWidget {
                   ]),
                   SizedBox(height: wide ? 180 : 110, child: const Center(child: Poster(PosterArt.hourglass, size: 110))),
                   Text(workSlogan(v), key: const Key('slogan'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
+                  if (goal(v) case final g?) ...[
+                    const SizedBox(height: 12),
+                    Text('${g.text}: ${g.hours.toStringAsFixed(1)} of ${g.target} h', key: const Key('goalCard'), style: const TextStyle(color: dim)),
+                    const SizedBox(height: 4),
+                    Bar(g.progress, height: 6),
+                  ],
                 ]))));
 
     final tiles = [
@@ -74,6 +81,7 @@ class DashboardScreen extends ConsumerWidget {
       tile('streaks', 'Streaks', Icons.local_fire_department, '/streaks', value: '${v.master.current}'),
       tile('vault', 'Vault', Icons.inventory_2, '/vault', value: '${v.proofs.length}'),
       tile('plan', 'Plan', Icons.checklist, '/plan'),
+      tile('shutdown', 'Shutdown', Icons.nightlight_round, '/shutdown', value: shutdownDone(v) ? 'done' : '${dailyScore(v, v.today)}'),
       tile('settings', 'Settings', Icons.settings, '/prefs'),
       tile('backup', 'Backup', Icons.save_alt, '/backup', warn: v.kv[S.lastBackup] == null),
       tile('about', 'About', Icons.info_outline, '/about'),

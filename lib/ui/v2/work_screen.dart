@@ -12,6 +12,7 @@ import '../../core/extras.dart';
 import '../../core/focus.dart';
 import '../../core/settings.dart';
 import '../../core/tree.dart';
+import '../../core/v2_day.dart';
 import '../theme.dart';
 import 'projects_screen.dart';
 
@@ -165,6 +166,18 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
         FilledButton(key: const Key('workProof'), onPressed: () => context.push('/proof'), child: const Text('LOG WHAT I DID')),
         const SizedBox(height: 12),
       ],
+      if (stayOffer(v)) ...[
+        FilledButton(
+            key: const Key('workStay'),
+            onPressed: () {
+              final pid = v.kv[K.lastProject];
+              app.startSession(
+                  minutes: v.workMinutes(pid), projectId: pid, source: 'work',
+                  title: v.pendingProof?['title'] as String? ?? v.nextStep, meta: {'mode': v.pref(S.focusMode), 'stay': true});
+            },
+            child: Text('STAY FOR ${v.workMinutes(v.kv[K.lastProject])}? DOUBLE XP')),
+        const SizedBox(height: 12),
+      ],
       OutlinedButton(
           key: const Key('workStart'),
           style: OutlinedButton.styleFrom(minimumSize: const Size(64, 88)),
@@ -172,6 +185,15 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
           child: Text('START\nWORK SESSION', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, letterSpacing: 2))),
       const SizedBox(height: 8),
       Center(child: Text('${v.workMinutes(v.kv[K.lastProject])} minutes', style: const TextStyle(color: dim))),
+      Center(
+          child: TextButton(
+              key: const Key('workDoor'),
+              onPressed: () async {
+                final line = await askText(context, 'The 2-minute door', hint: 'Write the worst first line you can', ok: 'OPEN THE DOOR');
+                if (line == null) return;
+                await app.startSession(minutes: 2, projectId: v.kv[K.lastProject], source: 'door', title: line.trim().isEmpty ? v.nextStep : line.trim());
+              },
+              child: Text('JUST OPEN THE DOOR: 2 MINUTES · DOOR STREAK ${doorStreak(v).current}'))),
       if (lastFocusScore(v) != null && v.pendingProof != null)
         Center(child: Text('Focus score for that one: ${lastFocusScore(v)} of 100', key: const Key('focusScore'), style: const TextStyle(color: cyan))),
       const SizedBox(height: 16),

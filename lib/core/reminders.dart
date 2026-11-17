@@ -9,6 +9,7 @@ import 'pressure.dart';
 import 'planning.dart';
 import 'events.dart';
 import 'tools.dart';
+import 'v2_day.dart';
 import 'v2_schedule.dart';
 import 'wellbeing.dart';
 
@@ -35,7 +36,7 @@ class Reminder {
 
 /// Everything that should ring today and on following days. The native side
 /// applies quiet hours (455) and the daily cap (454).
-List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
+List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools, {Lines lines = Lines.empty}) {
   final out = <Reminder>[];
   for (final t in tools.values) {
     if (!t.time || !v.on(t.n)) continue;
@@ -46,7 +47,7 @@ List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
       out.add(Reminder(t.n * 50 + i % 50, minute, t.title, a, start: true));
     }
   }
-  out.addAll(fixedReminders(v));
+  out.addAll(fixedReminders(v, lines: lines));
   out.addAll(scheduleReminders(v));
   // 303: nothing is ever scheduled inside the protected sleep window.
   // 468: nothing rings during a lecture on today's timetable.
@@ -57,7 +58,7 @@ List<Reminder> buildReminders(DayView v, Map<int, ToolDef> tools) {
 
 /// Reminders that come from settings rather than from user-written entries.
 /// Each later batch adds its own here, always behind its feature flag.
-List<Reminder> fixedReminders(DayView v) {
+List<Reminder> fixedReminders(DayView v, {Lines lines = Lines.empty}) {
   final out = <Reminder>[];
   void add(int feature, int id, int minute, String title, String text,
       {bool start = false, String days = '', bool skipIfWorked = false}) {
@@ -90,10 +91,12 @@ List<Reminder> fixedReminders(DayView v) {
     }
   }
   // 453: gentle nudge half an hour after the cue, before the 9 pm rescue.
-  if (v.on(453)) out.add(Reminder(453, (v.cueMinute + 30) % 1440, 'Still there', v.nextStep, start: true, skipIfWorked: true));
-  // 456: the streak is alive and today is still open at 6 pm.
-  if (v.on(456) && v.master.current > 0) {
-    out.add(Reminder(456, 18 * 60, 'Streak still open today', '${v.master.current} days so far. Two minutes keeps it.', start: true, skipIfWorked: true));
+  if (v.on(453)) out.add(Reminder(453, (v.cueMinute + 30) % 1440, lines.pick(v, v.today), v.nextStep, start: true, skipIfWorked: true));
+  // Plan v2 6.6: at 7 pm, if the streak is alive and today has no qualifying
+  // session yet, one alert that offers a rescue session.
+  if (streakAtRiskTonight(v)) {
+    out.add(Reminder(456, 19 * 60, 'Streak at risk: ${v.master.current} days',
+        '${lines.pick(v, v.today, salt: 3)} A ${v.strictStreak ? v.streakMin : 2}-minute rescue session keeps it.', start: true));
   }
   // 457 and 458: one line in the morning, one in the evening.
   if (v.on(457) && v.kv['rem.457'] == '1') out.add(Reminder(457, v.settingInt('wakeHour', 7) * 60 + 30, 'Today', 'First step: ${v.nextStep}'));

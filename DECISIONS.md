@@ -148,3 +148,14 @@ Every choice made without asking, newest section last.
   goes to the background: screen still on, and no call ringing or active. Untested on device.
 - A task label is required before a Work session. The last label is prefilled, so the
   usual start is two taps. Beast starts with an empty goal field on purpose.
+- Streak rule (owner decision): a day counts with one session of 25+ minutes. Habit ticks
+  no longer feed the master streak. 3 freezes a month; one missed day per Monday-to-Sunday
+  week is a rest day and costs nothing. The Version 1 rule is still in the engine
+  (`streakMin: 0`) and the older tests run against it; plan v2 tests run with 25.
+  Existing users' streaks are recomputed under the new rule on update.
+- Door: any 2-minute session opened by the alarm, a notification, the widget, the tile or
+  the door button. A door day does not count as a streak day. The door streak has no
+  freezes. The bonus is 5, 10 or 15 XP, fixed per session and labelled random.
+- Daily score: minutes against the daily target up to 50, qualifying streak day 20,
+  planned first task followed by a session 15, average focus score 15.
+- The reminder cap is one setting (default 5). It replaces the earlier week-one fade.

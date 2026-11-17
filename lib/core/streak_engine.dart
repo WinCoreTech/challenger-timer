@@ -19,6 +19,7 @@ class StreakRules {
     this.restWeekdays = const {},
     this.pausedDays = const {},
     this.freezeGainDays = const [],
+    this.restPerWeek = 0,
   });
 
   final int freezesPerMonth;
@@ -39,6 +40,10 @@ class StreakRules {
   /// Feature 70: days on which one extra freeze was received. It can only
   /// cover misses after that day.
   final List<int> freezeGainDays;
+
+  /// Plan v2: this many missed days per Monday-to-Sunday week are rest days.
+  /// They cost no freeze and are never a miss.
+  final int restPerWeek;
 }
 
 enum StreakState {
@@ -69,6 +74,7 @@ class StreakResult {
     required this.earnedFreezes,
     this.comebackDays = const {},
     this.lastBreakDay,
+    this.restDays = const {},
   });
   final int current;
   final int longest;
@@ -92,6 +98,9 @@ class StreakResult {
 
   /// The second missed day of the most recent break (feature 64).
   final int? lastBreakDay;
+
+  /// Missed days taken as the weekly rest day.
+  final Set<int> restDays;
 }
 
 StreakResult computeStreak(Set<int> activeDays, int today,
@@ -118,6 +127,8 @@ StreakResult computeStreak(Set<int> activeDays, int today,
   var earned = 0, run = 0;
   var hadGap = false;
   final comebackDays = <int>{};
+  final rested = <int>{};
+  final restUsed = <int, int>{}; // week -> rest days used
   int? lastBreak;
 
   for (var d = past.first; d <= today; d++) {
@@ -140,6 +151,12 @@ StreakResult computeStreak(Set<int> activeDays, int today,
     if (streak == 0) {
       hadGap = true;
       continue; // nothing to protect
+    }
+    final wk = (d + 3) ~/ 7; // Monday-based week
+    if ((restUsed[wk] ?? 0) < rules.restPerWeek) {
+      restUsed[wk] = (restUsed[wk] ?? 0) + 1;
+      rested.add(d);
+      continue;
     }
     final m = monthKey(d);
     if ((used[m] ?? 0) < rules.freezesPerMonth) {
@@ -187,5 +204,6 @@ StreakResult computeStreak(Set<int> activeDays, int today,
       breaks: breaks,
       earnedFreezes: earned,
       comebackDays: comebackDays,
-      lastBreakDay: lastBreak);
+      lastBreakDay: lastBreak,
+      restDays: rested);
 }

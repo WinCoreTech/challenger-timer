@@ -61,6 +61,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
+        FloatService.hide(this)
         listenFaceDown()
     }
 
@@ -96,6 +97,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         // Rule R6: a phone call (ringing or active) is not "leaving the app".
         val inCall = getSystemService(AudioManager::class.java).mode != AudioManager.MODE_NORMAL
         screenOnAtPause = getSystemService(PowerManager::class.java).isInteractive && !inCall
+        FloatService.show(this)
         super.onPause()
     }
 
@@ -277,6 +279,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         e.putStringSet("allowApps", (m["allowApps"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet())
         e.putBoolean("unlockFriction", m["unlockFriction"] == true)
         e.putBoolean("sticky", m["sticky"] == true)
+        e.putBoolean("floating", m["floating"] == true)
         e.putBoolean("robust", m["robust"] != false)
         e.putBoolean("autoStart", m["autoStart"] == true)
         e.putString("alarmImage", m["alarmImage"] as? String ?: "")

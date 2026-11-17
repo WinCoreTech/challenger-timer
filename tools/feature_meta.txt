@@ -519,7 +519,7 @@
 518|partial|0|Tone is chosen in the toolbox, not at setup.
 519|done|0|Day-end setting in Settings. Tested.
 520|done|0|Three starter habits plus the project templates.
-521|done|0|Reminder cap 3 in week one, 2 after. Tested.
+521|partial|0|Superseded in plan v2 by one setting: at most 5 reminders a day (user can lower it). The week-one fade is no longer applied.
 522|done|0|Home says the dip is normal on days three and four. Tested.
 523|done|0|No account exists at all.
 524|done|0|First seven days on one screen.

@@ -37,7 +37,8 @@ void main() {
     r.clock.advance(const Duration(days: 6));
     expect(defaultReminderCap(r.v), 2);
     await r.app.syncNative();
-    expect(r.native.lastSync['remCap'], 2);
+    // Plan v2 replaced the fading cap with one setting: at most 5 a day.
+    expect(r.native.lastSync['remCap'], 5);
     expect(r.native.lastSync['reminders'], isNotEmpty);
     await r.app.setKv('gradTestFrom', '${r.v.today}');
     await r.app.setKv('gradTest', '1');

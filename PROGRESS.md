@@ -217,3 +217,14 @@ model and Android version.
   2-minute door with its own streak, floating timer, funny reminder pack and 5-a-day cap,
   7 pm rescue session, night shutdown ritual and daily score, goal tracker card, drift
   charts in Stats, onboarding sleep-window question.
+- Phase 2, second slice (17 Nov 2026): streak day = one session of 25+ minutes with 3
+  freezes a month and one rest day a week; milestone titles from 7 to 365 days; the
+  2-minute door with its own streak, a random 5 to 15 XP bonus and "Stay for 25?" at
+  double XP; 60 original reminder lines in three tiers; 7 pm streak-at-risk alert; one
+  reminder cap (5 a day at most, 0 in casual mode); shutdown ritual with a daily score and
+  tomorrow chosen by rules; long-term goal bar on the dashboard; drift causes in Stats;
+  floating timer service (Kotlin). 236+ tests.
+  Not done from section 6: recovery challenge after a break; reminder times adapting to
+  productive hours; PDF portfolio export; project deadline streaks; lock-screen widget
+  (Android no longer allows them); onboarding question about a wider sleep window.
+  Untested on device: floating timer, and everything listed before.

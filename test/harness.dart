@@ -7,6 +7,7 @@ import 'package:challenger_timer/core/engine.dart';
 import 'package:challenger_timer/core/flags.dart';
 import 'package:challenger_timer/core/rules.dart';
 import 'package:challenger_timer/core/tools.dart';
+import 'package:challenger_timer/core/v2_day.dart';
 import 'package:challenger_timer/data/store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,10 +30,13 @@ class TestClock {
 final ranks = parseRanks(File('assets/ranks.json').readAsStringSync());
 final catalog = Catalog.parse(File('assets/features.json').readAsStringSync());
 final tools = parseTools(File('assets/tools.json').readAsStringSync());
+final lines = Lines.parse(File('assets/lines.json').readAsStringSync());
 final achievements = parseAchievements(File('assets/achievements.json').readAsStringSync());
 
 class Rig {
-  Rig({MemoryStore? store, TestClock? clock})
+  /// [streakMin] 0 keeps the Version 1 streak rule that the older tests were
+  /// written for; plan v2 tests pass 25.
+  Rig({MemoryStore? store, TestClock? clock, int streakMin = 0})
       : store = store ?? MemoryStore(),
         clock = clock ?? TestClock() {
     container = ProviderContainer(overrides: [
@@ -42,6 +46,8 @@ class Rig {
       ranksProvider.overrideWithValue(ranks),
       achievementsProvider.overrideWithValue(achievements),
       catalogProvider.overrideWithValue(catalog),
+      streakMinProvider.overrideWithValue(streakMin),
+      linesProvider.overrideWithValue(lines),
       toolsProvider.overrideWithValue(tools),
     ]);
   }

@@ -35,4 +35,4 @@ int? earnedDay(DayView v, Achievement a) {
 }
 
 DayView _upTo(DayView v, int day) => DayView(
-    events: v.events.where((e) => e.day <= day).toList(), recs: v.recs, kv: v.kv, now: v.now, ranks: v.ranks, catalog: v.catalog);
+    events: v.events.where((e) => e.day <= day).toList(), recs: v.recs, kv: v.kv, now: v.now, ranks: v.ranks, catalog: v.catalog, streakMin: v.streakMin);

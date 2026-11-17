@@ -124,7 +124,7 @@ class ActiveSession {
 }
 
 class DayView {
-  DayView({required this.events, required this.recs, required this.kv, required this.now, required this.ranks, Catalog? catalog})
+  DayView({required this.events, required this.recs, required this.kv, required this.now, required this.ranks, Catalog? catalog, this.streakMin = 25})
       : catalog = catalog ?? Catalog.empty;
 
   final List<Event> events;
@@ -133,6 +133,12 @@ class DayView {
   final Moment now;
   final List<Rank> ranks;
   final Catalog catalog;
+
+  /// Plan v2 streak rule: a day counts with one session of at least this many
+  /// minutes, with 3 freezes a month and one rest day a week. 0 selects the
+  /// Version 1 rule (any finished session or habit tick, 2 freezes).
+  final int streakMin;
+  bool get strictStreak => streakMin > 0;
 
   // ---- settings
   int get dayEndHour => int.tryParse(kv[K.dayEndHour] ?? '') ?? 3;
@@ -201,8 +207,12 @@ class DayView {
   // ---- streaks
   /// Master streak: any finished session or any habit tick.
   late final Set<int> showedUpDays = {
-    ...sessionDays,
-    for (final e in type(Ev.habitTick)) e.day,
+    if (strictStreak)
+      for (final e in type(Ev.sessionDone))
+        if ((e.get<num>('minutes') ?? 0) >= streakMin) e.day,
+    if (!strictStreak) ...sessionDays,
+    if (!strictStreak)
+      for (final e in type(Ev.habitTick)) e.day,
     if (flagOn(58)) ...repairedDays(this),
   };
   /// Feature 48: weekdays that never count as a miss.
@@ -210,6 +220,8 @@ class DayView {
       ? {for (final c in (kv['restDays'] ?? '').split('')) if (int.tryParse(c) != null) int.parse(c)}
       : const {};
   late final StreakRules streakRules = StreakRules(
+      freezesPerMonth: strictStreak ? 3 : 2,
+      restPerWeek: strictStreak ? 1 : 0,
       restWeekdays: restWeekdays,
       earnFreezeEvery: flagOn(53) ? 7 : 0,
       decayKeepPercent: flagOn(55) && kv['decay'] == '1' ? 80 : 0,
@@ -227,6 +239,8 @@ class DayView {
         rules: exam.isEmpty
             ? streakRules
             : StreakRules(
+                freezesPerMonth: streakRules.freezesPerMonth,
+                restPerWeek: streakRules.restPerWeek,
                 restWeekdays: streakRules.restWeekdays,
                 earnFreezeEvery: streakRules.earnFreezeEvery,
                 decayKeepPercent: streakRules.decayKeepPercent,

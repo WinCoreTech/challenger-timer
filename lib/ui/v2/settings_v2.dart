@@ -26,6 +26,8 @@ final _rows = <Object>[
       note: 'The count starts again after 3 hours with no finished session.'),
   const _Row(S.overtimeStep, 'Overtime step', choices: [('0', 'Off'), ('1', '1 min'), ('5', '5 min'), ('10', '10 min')]),
   const _Row(S.robustCountdown, 'Robust countdown timer', choices: _onOff, note: 'Ends sessions with an alarm-clock alarm. Use it if countdowns finish late on your phone.'),
+  const _Row('floatingTimer', 'Floating timer', choices: _onOff, note: 'A small countdown over other apps while a session runs. Needs "Display over other apps", asked for under Locks and permissions.'),
+  _Row('dailyTargetMinutes', 'Daily target', choices: _mins([25, 50, 75, 100, 150, 200, 300])),
   const _Row(S.stayAway, 'Stay-away mode', choices: _onOff, note: 'A full-screen pulsing timer while you work.'),
   const _Row(S.focusMode, 'Focus mode', choices: [('normal', 'Normal'), ('hyper', 'Hyper'), ('beast', 'Beast')]),
   _Row(S.dailyLimitHours, 'Daily limit', choices: [for (var i = 2; i <= 12; i++) ('$i', '$i hours')], note: 'Above this for 3 days in a row, the app eases its pressure.'),
@@ -59,7 +61,12 @@ class SettingsV2Screen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final v = ref.watch(viewProvider);
     final app = ref.read(appProvider.notifier);
-    String cur(String key) => key == 'textPct' ? (v.kv[key] ?? '100') : v.pref(key);
+    String cur(String key) => switch (key) {
+          'textPct' => v.kv[key] ?? '100',
+          'floatingTimer' => v.kv[key] ?? '0',
+          'dailyTargetMinutes' => v.kv[key] ?? '50',
+          _ => v.pref(key),
+        };
     Widget build(_Row r) {
       final note = r.note.isEmpty ? null : Text('Note: ${r.note}', style: const TextStyle(color: gold, fontSize: 12));
       if (r.slider) {
@@ -99,6 +106,17 @@ class SettingsV2Screen extends ConsumerWidget {
             if (r is String) Padding(padding: const EdgeInsets.fromLTRB(16, 20, 16, 4), child: H(r, color: cyan)) else build(r as _Row),
           const Padding(padding: EdgeInsets.fromLTRB(16, 20, 16, 4), child: H('More', color: cyan)),
           ListTile(key: const Key('set-locks'), title: const Text('Locks, permissions and buddy'), trailing: const Icon(Icons.chevron_right), onTap: () => context.push('/settings')),
+          ListTile(
+              key: const Key('set-goal'),
+              title: const Text('Long-term goal'),
+              subtitle: Text((v.kv['goalText'] ?? '').isEmpty ? 'Not set' : '${v.kv['goalText']} · ${v.kv['goalHours']} hours'),
+              onTap: () async {
+                final text = await askText(context, 'Long-term goal', initial: v.kv['goalText'] ?? '', hint: 'Crack placements');
+                if (text == null || !context.mounted) return;
+                final hours = await askText(context, 'Hours it will take', initial: v.kv['goalHours'] ?? '', hint: '500', keyboard: TextInputType.number);
+                await app.setSetting('goalText', text.trim());
+                await app.setSetting('goalHours', '${int.tryParse(hours ?? '') ?? 0}');
+              }),
           ListTile(key: const Key('set-me'), title: const Text('XP, levels and buddy'), trailing: const Icon(Icons.chevron_right), onTap: () => context.push('/me')),
           ListTile(key: const Key('set-toolbox'), title: const Text('Toolbox'), subtitle: const Text('Optional extras'), trailing: const Icon(Icons.chevron_right), onTap: () => context.push('/toolbox')),
           Padding(

@@ -169,6 +169,7 @@ object Core {
         prefs(c).edit().remove("timerEnd").apply()
         cancel(c, "timer_done")
         c.stopService(Intent(c, TimerService::class.java))
+        FloatService.hide(c)
     }
 
     /** Idempotent: called by both the service and the backup alarm. */
@@ -182,6 +183,7 @@ object Core {
         p.edit().remove("timerEnd").putInt("lastSessionDay", today(c)).putLong("lateFinishMs", if (late > 5000L) late else 0L).apply()
         cancel(c, "timer_done")
         c.stopService(Intent(c, TimerService::class.java))
+        FloatService.hide(c)
         val n = Notification.Builder(c, CH_DONE)
             .setSmallIcon(R.drawable.ic_stat)
             .setContentTitle("Session done. Full win.")

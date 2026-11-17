@@ -68,7 +68,7 @@ void main() {
     }
 
     // A believable two weeks of use.
-    final r = Rig(clock: TestClock(DateTime.utc(2026, 11, 3, 9)));
+    final r = Rig(streakMin: 25, clock: TestClock(DateTime.utc(2026, 11, 3, 9)));
     await r.app.setKv('name', 'Winzo');
     await r.app.log(Ev.onboarded);
     final sem = await r.app.addRec(Kind.project, {'name': 'Semester 5'});

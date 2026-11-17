@@ -15,6 +15,7 @@ import '../core/reminders.dart';
 import '../core/rules.dart';
 import '../core/settings.dart';
 import '../core/tools.dart';
+import '../core/v2_day.dart';
 import '../data/store.dart';
 import 'native.dart';
 
@@ -32,6 +33,10 @@ final storeProvider = Provider<Store>((ref) => throw UnimplementedError('overrid
 final nativeProvider = Provider<Native>((ref) => FakeNative());
 final clockProvider = Provider<Clock>((ref) => systemClock);
 final ranksProvider = Provider<List<Rank>>((ref) => const [Rank('Professional Postponer', 0, '')]);
+final linesProvider = Provider<Lines>((ref) => Lines.empty);
+
+/// Minutes a session needs to count for the streak (0 = Version 1 rule).
+final streakMinProvider = Provider<int>((ref) => 25);
 final catalogProvider = Provider<Catalog>((ref) => Catalog.empty);
 final toolsProvider = Provider<Map<int, ToolDef>>((ref) => const {});
 final achievementsProvider = Provider<List<Achievement>>((ref) => const []);
@@ -51,7 +56,7 @@ final viewProvider = Provider<DayView>((ref) {
   final d = ref.watch(appProvider);
   return DayView(
       events: d.events, recs: d.recs, kv: d.kv, now: ref.watch(clockProvider)(), ranks: ref.watch(ranksProvider),
-      catalog: ref.watch(catalogProvider));
+      catalog: ref.watch(catalogProvider), streakMin: ref.watch(streakMinProvider));
 });
 
 class App extends Notifier<AppData> {
@@ -63,7 +68,7 @@ class App extends Notifier<AppData> {
   Moment get _now => ref.read(clockProvider)();
   DayView get view => DayView(
       events: state.events, recs: state.recs, kv: state.kv, now: _now, ranks: ref.read(ranksProvider),
-      catalog: ref.read(catalogProvider));
+      catalog: ref.read(catalogProvider), streakMin: ref.read(streakMinProvider));
   int _seq = 0;
   String newId() => '${_now.ms.toRadixString(36)}-${_seq++}';
 
@@ -194,7 +199,7 @@ class App extends Notifier<AppData> {
     await setKv(
         K.pendingProof,
         jsonEncode({
-          'sid': s.sid, 'projectId': s.projectId, 'minutes': minutes + carried, 'title': s.title, 'chain': chain,
+          'sid': s.sid, 'projectId': s.projectId, 'minutes': minutes + carried, 'title': s.title, 'chain': chain, 'source': s.source,
           if (s.flow) 'break': minutes ~/ 5 < 1 ? 1 : minutes ~/ 5,
         }));
     celebrate();
@@ -523,12 +528,14 @@ class App extends Notifier<AppData> {
       'lockTo': v.on(637) && v.isOn('sw.ulysses') ? v.settingInt('lockToHour', 6) * 60 : null,
       'vaultUntil': v.on(641) ? v.settingInt('vaultUntil', 0) : 0,
       'widgetSinceZero': v.on(646) && v.kv['widgetSinceZero'] == '1',
+      'floating': v.kv['floatingTimer'] == '1',
       'unlockFriction': v.on(211) && v.kv['unlockFriction'] == '1',
       'scrollFrom': v.on(212) && v.settingInt('scrollHour', 0) > 0 ? v.settingInt('scrollHour', 0) * 60 : null,
       'quietFrom': v.on(455) ? v.settingInt('quietFrom', 0) : 0,
       'quietTo': v.on(455) ? v.settingInt('quietTo', 0) : 0,
-      'remCap': v.on(454) ? v.settingInt('remCap', v.on(521) ? defaultReminderCap(v) : 3) : 99,
-      'reminders': graduationTestRunning(v) ? const <Object>[] : [for (final r in buildReminders(v, ref.read(toolsProvider))) r.toJson()],
+      // Plan v2: at most 5 ordinary reminders a day, fewer if the user says so.
+      'remCap': v.prefOn(S.casualMode) ? 0 : reminderCap(v),
+      'reminders': graduationTestRunning(v) ? const <Object>[] : [for (final r in buildReminders(v, ref.read(toolsProvider), lines: ref.read(linesProvider))) r.toJson()],
     });
   }
 

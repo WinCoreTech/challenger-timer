@@ -5,6 +5,7 @@ import '../../app/state.dart';
 import '../../core/day.dart';
 import '../../core/ranges.dart';
 import '../../core/tree.dart';
+import '../../core/v2_day.dart';
 import '../theme.dart';
 
 /// Reference 5.8.
@@ -80,6 +81,7 @@ class _StatsState extends ConsumerState<StatsScreen> {
             fact('Average session', '${s.averageSession} min'),
             if (s.longestDay != null) fact('Longest day', '${dayLabel(s.longestDay!)} · ${hm(s.longestDayMinutes)}'),
             fact('Drifts noticed', '${s.drifts}'),
+            for (final l in driftLines(v, a, b)) Text(l, style: const TextStyle(color: dim)),
             const SizedBox(height: 12),
             const H('Time per project'),
             for (final (n, m) in s.byProject)

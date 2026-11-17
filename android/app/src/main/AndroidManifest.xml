@@ -85,6 +85,8 @@
                 android:value="User-enabled app blocker that checks the foreground app and shows a block screen until the first focus session of the day is finished." />
         </service>
 
+        <service android:name=".FloatService" android:exported="false" />
+
         <receiver android:name=".StartWidget" android:exported="false" android:label="Start 2 min">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
