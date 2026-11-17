@@ -25,10 +25,13 @@ Pressure needFor(int n) => relentlessFeatures.contains(n)
         ? Pressure.firm
         : Pressure.gentle;
 
+/// Owner decision (plan v2, rule R5): the dial starts on Firm.
+const int defaultPressure = 1;
+
 class Dial {
   const Dial(this.level, {this.lowerTo, this.lowerAt});
   factory Dial.parse(String? s) {
-    if (s == null) return const Dial(0);
+    if (s == null) return const Dial(defaultPressure);
     final j = jsonDecode(s) as Map;
     return Dial(j['level'] as int, lowerTo: j['lowerTo'] as int?, lowerAt: j['lowerAt'] as int?);
   }
@@ -50,7 +53,23 @@ class Dial {
 }
 
 Dial dialOf(DayView v) => Dial.parse(v.kv['pressure']);
-bool dialAllows(DayView v, int n) => n < 601 || n > 700 || dialOf(v).effective(v.now.ms) >= needFor(n).index;
+/// Rule R5 burnout check: after 3 finished days in a row above the user's own
+/// daily limit, pressure is eased by one step until a day comes in under it.
+bool burnoutEase(DayView v) {
+  final limit = (int.tryParse(v.kv['dailyLimitHours'] ?? '') ?? 6) * 60;
+  for (var d = v.today - 1; d >= v.today - 3; d--) {
+    final m = v.type(Ev.sessionDone).where((e) => e.day == d).fold(0, (a, e) => a + (e.get<num>('minutes') ?? 0).toInt());
+    if (m <= limit) return false;
+  }
+  return true;
+}
+
+int pressureLevel(DayView v) {
+  final l = dialOf(v).effective(v.now.ms);
+  return burnoutEase(v) && l > 0 ? l - 1 : l;
+}
+
+bool dialAllows(DayView v, int n) => n < 601 || n > 700 || pressureLevel(v) >= needFor(n).index;
 
 // ---- loss and ownership ---------------------------------------------------------
 /// 601: of the 100 points in the wallet, what was left when the first

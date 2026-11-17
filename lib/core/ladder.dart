@@ -15,6 +15,7 @@ import 'dart:math';
 import 'engine.dart';
 import 'events.dart';
 import 'extras.dart';
+import 'focus.dart';
 
 const double halfLifeDays = 5;
 const int demoteAfterDays = 3;
@@ -103,6 +104,11 @@ Map<int, int> minutesByDay(DayView v) {
   final m = <int, int>{};
   for (final e in v.type(Ev.sessionDone)) {
     m[e.day] = (m[e.day] ?? 0) + (e.get<num>('minutes') ?? 0).toInt();
+  }
+  // A failed Beast session costs a fixed 10 minutes of that day's score, never below zero.
+  for (final f in beastFails(v).entries) {
+    final left = (m[f.key] ?? 0) - f.value * beastPenaltyMinutes;
+    m[f.key] = left < 0 ? 0 : left;
   }
   return m;
 }

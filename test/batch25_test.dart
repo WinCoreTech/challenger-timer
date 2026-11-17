@@ -22,11 +22,11 @@ Future<Rig> rig(int level) async {
 
 void main() {
   group('701 pressure dial', () {
-    test('defaults to Gentle; nothing Firm or Relentless is on by default', () {
+    test('defaults to Firm (owner decision); Relentless stays opt-in', () {
       final r = Rig();
-      expect(dialOf(r.v).effective(r.clock.ms), Pressure.gentle.index);
-      for (final n in [...firmFeatures, ...relentlessFeatures]) {
-        expect(r.v.flagOn(n), isFalse, reason: 'feature $n needs the dial raised');
+      expect(dialOf(r.v).effective(r.clock.ms), Pressure.firm.index);
+      for (final n in relentlessFeatures) {
+        expect(r.v.flagOn(n), isFalse, reason: 'feature $n needs the dial raised by hand');
       }
       expect(relentlessFeatures, containsAll([633, 637, 641]));
     });
@@ -52,6 +52,7 @@ void main() {
     });
     test('Version 1 is untouched by the dial: the bonus stays a flat 100 on Gentle', () async {
       final r = Rig(clock: TestClock(DateTime.utc(2026, 11, 11, 15)));
+      await r.app.setKv('pressure', const Dial(0).encode());
       await r.session();
       r.clock.advance(const Duration(days: 1));
       expect(r.v.xpExtras.any((e) => e.$1.startsWith('Deposit')), isFalse);

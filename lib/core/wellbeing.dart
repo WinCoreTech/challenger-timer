@@ -63,7 +63,11 @@ bool hoursWarning(DayView v) {
 /// 303: the protected sleep window in minutes of day (from, to).
 (int, int) sleepWindow(DayView v) => (v.settingInt('bedHour', 23) * 60, v.settingInt('wakeHour', 7) * 60);
 
+/// Rule R3: 00:00 to 04:00 is always protected and no setting changes that.
+const int hardSleepUntil = 4 * 60;
+
 bool inSleepWindow(DayView v, int minute) {
+  if (minute % 1440 < hardSleepUntil) return true;
   if (!v.flagOn(303)) return false;
   final (from, to) = sleepWindow(v);
   return from < to ? minute >= from && minute < to : minute >= from || minute < to;

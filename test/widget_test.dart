@@ -73,8 +73,10 @@ void main() {
     await t.tap(find.byKey(const Key('tile-work')));
     await t.pumpAndSettle();
     await t.tap(find.byKey(const Key('workStart')));
+    await t.pumpAndSettle();
+    await t.tap(find.text('START'));
     await t.pump(const Duration(milliseconds: 600));
-    expect(r.v.active, isNotNull, reason: 'one tap starts the session');
+    expect(r.v.active, isNotNull, reason: 'the label is prefilled, so starting is two taps');
     expect(find.text('25:00'), findsOneWidget);
     expect(find.text('WORKING'), findsOneWidget);
 

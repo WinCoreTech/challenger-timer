@@ -8,6 +8,8 @@ import '../../app/state.dart';
 import '../../core/day.dart';
 import '../../core/engine.dart';
 import '../../core/events.dart';
+import '../../core/extras.dart';
+import '../../core/focus.dart';
 import '../../core/settings.dart';
 import '../../core/tree.dart';
 import '../theme.dart';
@@ -59,10 +61,22 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
     super.dispose();
   }
 
+  /// 6.1: a task label is required. The last one is offered so it is one tap.
   Future<void> _start(DayView v, App app) async {
     final pid = v.kv[K.lastProject];
-    await app.startSession(minutes: v.workMinutes(pid), projectId: pid, source: 'work');
+    final mode = modeOf(v.pref(S.focusMode));
+    final label = await askText(context, mode.id == 'beast' ? 'Goal for this session' : 'What is this session for?',
+        initial: mode.id == 'beast' ? '' : v.kv['lastLabel'] ?? v.nextStep, hint: 'One line', ok: 'START');
+    if (label == null) return;
+    if (label.trim().isEmpty) {
+      if (mounted) toast(context, 'One line is enough. It keeps the session honest.');
+      return;
+    }
+    await app.setKv('lastLabel', label.trim());
+    await app.startSession(minutes: v.workMinutes(pid), projectId: pid, source: 'work', title: label.trim(), meta: {'mode': mode.id});
   }
+
+  String? _driftSid;
 
   Future<void> _lateDialog(DayView v, App app) async {
     final late = v.type(Ev.lateFinish).last.get<int>('ms') ?? 0;
@@ -158,6 +172,16 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
           child: Text('START\nWORK SESSION', textAlign: TextAlign.center, style: const TextStyle(fontSize: 20, letterSpacing: 2))),
       const SizedBox(height: 8),
       Center(child: Text('${v.workMinutes(v.kv[K.lastProject])} minutes', style: const TextStyle(color: dim))),
+      if (lastFocusScore(v) != null && v.pendingProof != null)
+        Center(child: Text('Focus score for that one: ${lastFocusScore(v)} of 100', key: const Key('focusScore'), style: const TextStyle(color: cyan))),
+      const SizedBox(height: 16),
+      const H('Focus mode'),
+      const SizedBox(height: 6),
+      Wrap(spacing: 8, runSpacing: 8, children: [
+        for (final m in focusModes.values)
+          ChoiceChip(key: Key('mode-${m.id}'), label: Text(m.name.toUpperCase()), selected: v.pref(S.focusMode) == m.id, onSelected: (_) => app.setSetting(S.focusMode, m.id)),
+      ]),
+      Padding(padding: const EdgeInsets.only(top: 6), child: Text(modeOf(v.pref(S.focusMode)).about, style: const TextStyle(color: dim, fontSize: 12))),
       if (need != null && !v.prefOn(S.casualMode)) ...[
         const SizedBox(height: 20),
         Panel(
@@ -234,6 +258,45 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
               onPressed: () => app.setSetting(S.loop, loop ? '0' : '1'),
               icon: Icon(Icons.loop, color: loop ? cyan : dim))),
       Center(child: Text(loop ? 'Continuous: the break and the next session start by themselves.' : 'Single session.', style: const TextStyle(color: dim, fontSize: 12))),
+      if (!s.isBreak) ...[
+        const SizedBox(height: 8),
+        if (_driftSid == s.sid)
+          Wrap(alignment: WrapAlignment.center, spacing: 6, children: [
+            for (final c in driftCauses)
+              ActionChip(
+                  key: Key('cause-$c'),
+                  label: Text(c),
+                  onPressed: () {
+                    app.log(Ev.tool, {'n': driftCauseTool, 'sid': s.sid, 'cause': c});
+                    setState(() => _driftSid = null);
+                  }),
+          ])
+        else
+          Center(
+              child: TextButton(
+                  key: const Key('workDrift'),
+                  onPressed: () {
+                    app.log(Ev.tool, {'n': 92, 'sid': s.sid});
+                    setState(() => _driftSid = s.sid);
+                  },
+                  child: Text('LOST FOCUS · ${wanderCount(v, sid: s.sid)}'))),
+        Wrap(alignment: WrapAlignment.center, children: [
+          if (s.paused)
+            FilledButton(key: const Key('workResume'), onPressed: app.resumeSession, child: const Text('RESUME'))
+          else ...[
+            if (s.pauses < (s.meta['mode'] == null ? 2 : modeOf(s.meta['mode'] as String?).pauses))
+              TextButton(
+                  key: const Key('workPause'),
+                  onPressed: () async {
+                    final why = await askText(context, 'Pause for what?', hint: 'Door, water, a question', ok: 'PAUSE');
+                    if (why != null && why.trim().isNotEmpty) await app.pauseSession(why.trim());
+                  },
+                  child: const Text('PAUSE')),
+            if (!emergencyUsedToday(v))
+              TextButton(key: const Key('workEmergency'), onPressed: app.emergencyPause, child: const Text('EMERGENCY PAUSE')),
+          ],
+        ]),
+      ],
       const Spacer(),
       Center(
           child: IconButton(

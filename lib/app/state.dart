@@ -8,6 +8,7 @@ import '../core/events.dart';
 import '../core/backup.dart';
 import '../core/coach.dart';
 import '../core/flags.dart';
+import '../core/focus.dart';
 import '../core/pressure.dart';
 import '../core/wellbeing.dart';
 import '../core/reminders.dart';
@@ -139,7 +140,7 @@ class App extends Notifier<AppData> {
     }, Moment(begin, now.offsetMin));
     native.haptic();
     if (hard) await native.keepScreenOn(true);
-    if (v.on(204) && v.kv['autoDnd'] == '1') await native.dnd(true);
+    if ((v.on(204) && v.kv['autoDnd'] == '1') || const {'hyper', 'beast'}.contains(meta['mode'])) await native.dnd(true);
     if (startMs == null) await native.startTimer(s.endMs, s.title);
     await syncNative();
   }
@@ -148,8 +149,13 @@ class App extends Notifier<AppData> {
   /// while the app was dead, records it at the moment it ended. Returns true
   /// if a work session was completed.
   Future<bool> completeIfDue() async {
-    final s = view.active;
+    var s = view.active;
     final now = _now;
+    // An emergency pause ends by itself after 10 minutes.
+    if (s != null && s.paused && now.ms - s.pausedAt! >= emergencyPauseMs && view.type(Ev.sessionPause).lastOrNull?.payload['emergency'] == true) {
+      await resumeSession();
+      s = view.active;
+    }
     if (s == null || s.paused || now.ms < s.endMs) return false;
     if (s.isBreak) {
       await _endBreak(s, now.ms - s.endMs);
@@ -212,14 +218,17 @@ class App extends Notifier<AppData> {
     } else {
       await setKv(K.active, null);
       await log(Ev.sessionAbandon,
-          {'sid': s.sid, 'elapsedSec': s.elapsedMs(now.ms) ~/ 1000, if (reason.isNotEmpty) 'reason': reason});
+          {
+        'sid': s.sid, 'elapsedSec': s.elapsedMs(now.ms) ~/ 1000,
+        if (reason.isNotEmpty) 'reason': reason, if (s.meta['mode'] != null) 'mode': s.meta['mode'],
+      });
       await syncNative();
     }
   }
 
   Future<void> _quiet(ActiveSession s) async {
     if (s.hard) await native.keepScreenOn(false);
-    if (view.on(204) && view.kv['autoDnd'] == '1') await native.dnd(false);
+    if ((view.on(204) && view.kv['autoDnd'] == '1') || const {'hyper', 'beast'}.contains(s.meta['mode'])) await native.dnd(false);
     if (view.kv['noise'] != null && view.kv['noise']!.isNotEmpty) await native.noise('');
   }
 
@@ -263,12 +272,26 @@ class App extends Notifier<AppData> {
     }
   }
 
-  /// Feature 91: at most two pauses per session, each with a reason.
+  /// Pauses: Normal mode (and the older timer) allow two, each with a reason.
+  /// Hyper and Beast allow none.
   Future<bool> pauseSession(String reason) async {
     final s = view.active;
-    if (s == null || s.paused || s.isBreak || s.hard || s.pauses >= 2) return false;
+    if (s == null || s.paused || s.isBreak || s.hard) return false;
+    final allowed = s.meta['mode'] == null ? 2 : modeOf(s.meta['mode'] as String?).pauses;
+    if (s.pauses >= allowed) return false;
     await setKv(K.active, s.copy(pausedAt: _now.ms, pauses: s.pauses + 1).encode());
     await log(Ev.sessionPause, {'sid': s.sid, 'reason': reason});
+    await native.stopTimer();
+    return true;
+  }
+
+  /// Rule R6: one emergency pause a day, in any mode, at most 10 minutes.
+  /// It never fails a session and does not use up a normal pause.
+  Future<bool> emergencyPause() async {
+    final s = view.active;
+    if (s == null || s.paused || s.isBreak || emergencyUsedToday(view)) return false;
+    await setKv(K.active, s.copy(pausedAt: _now.ms).encode());
+    await log(Ev.sessionPause, {'sid': s.sid, 'reason': 'emergency', 'emergency': true});
     await native.stopTimer();
     return true;
   }
@@ -281,11 +304,16 @@ class App extends Notifier<AppData> {
     await native.startTimer(r.endMs, r.title);
   }
 
-  /// Feature 90: called when the app comes back. Returns true if the session
-  /// was ended because the user left during hard mode.
+  /// Called when the app comes back. A session with a focus mode fails if
+  /// the user was out of the app longer than the mode's grace (Beast: none),
+  /// with the screen on and no phone call. Paused sessions never fail (R6).
   Future<bool> hardModeCheck(int awayMs, {required bool leftWithScreenOn}) async {
     final s = view.active;
-    if (s == null || !s.hard || s.isBreak || awayMs < 10000 || !leftWithScreenOn) return false;
+    if (s == null || s.isBreak || s.paused || !leftWithScreenOn) return false;
+    final mode = s.meta['mode'] as String?;
+    if (mode == null && !s.hard) return false;
+    final grace = mode == null ? 10000 : modeOf(mode).graceMs;
+    if (awayMs < grace || (grace == 0 && awayMs < 1000)) return false;
     await stopSession(reason: 'left');
     return true;
   }
@@ -458,6 +486,8 @@ class App extends Notifier<AppData> {
     final v = view;
     await native.faceDown(v.on(206) && v.kv['faceDown'] == '1' && v.active == null);
     Map<String, Object?> sw(String k) => {'on': v.sw(k).on, 'offAt': v.sw(k).offAt ?? 0};
+    // Rule R3: a cue time inside the protected sleep window is never armed.
+    final cueAsleep = inSleepWindow(v, v.todayPlan?.cueMinute ?? v.cueMinute) || inSleepWindow(v, v.tomorrowPlan?.cueMinute ?? v.cueMinute);
     final lastDone = v.sessionDays.isEmpty ? -1 : v.sessionDays.reduce((a, b) => a > b ? a : b);
     await native.sync({
       'dayEndHour': v.dayEndHour,
@@ -474,7 +504,7 @@ class App extends Notifier<AppData> {
       'msgZero': buddyMessage(name: v.name, sessions: 0, minutes: 0, streak: v.master.current),
       'blockedApps': v.blockedApps,
       'block': sw(K.swBlock),
-      'cue': sw(K.swCue),
+      'cue': cueAsleep ? const {'on': false, 'offAt': 0} : sw(K.swCue),
       'buddy': sw(K.swBuddy),
       'rescue': sw(K.swRescue),
       'onboarded': v.onboarded,

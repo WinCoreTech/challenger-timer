@@ -135,3 +135,16 @@ Every choice made without asking, newest section last.
 - Loading a backup is by pasting the file's text. A file picker needs a new plugin and
   was left for the polish phase.
 - Project colours: bolt and bright = worked in the last 7 days; moon and dim = resting.
+- Firm is now the default dial level (owner decision). That switches on the Firm-level
+  XP rules for everyone who has not chosen a level: the daily 100 points drain until the
+  first start, the first start pays more early in the day, the double hour, and the bonus
+  for starting within five minutes of opening. Screen-level Firm features (typed cancel
+  sentence, 30-second wait) still unlock by rank.
+- Sleep protection has two layers: 00:00 to 04:00 is fixed in code; the user's wider
+  window (bed hour to wake hour) applies on top when feature 303 is on.
+- Beast penalty: each failed Beast session removes 10 minutes from that day's rank-score
+  minutes, never below zero. It does not touch XP or streaks.
+- Leaving detection uses the app lifecycle plus two native facts captured when the app
+  goes to the background: screen still on, and no call ringing or active. Untested on device.
+- A task label is required before a Work session. The last label is prefilled, so the
+  usual start is two taps. Beast starts with an empty goal field on purpose.

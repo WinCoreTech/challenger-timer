@@ -207,3 +207,13 @@ model and Android version.
   used for alarm-started 2-minute sessions and Toolbox modes.
   Untested on device: everything, as before, plus the late-finish detection and the
   robust-countdown switch added to the Kotlin side.
+- Phase 2, first slice (17 Nov 2026): pressure dial now defaults to Firm; burnout check
+  eases it one step after 3 days over the daily limit; 00:00 to 04:00 is protected in code
+  (no reminder, no cue alarm, no auto-start, no setting overrides it); focus modes Normal,
+  Hyper, Beast on the Work screen with pauses, grace, XP multipliers and the Beast rank
+  penalty; emergency pause; phone calls do not count as leaving; required task label;
+  LOST FOCUS button with a cause; focus score on the finished line.
+  Still to do in Phase 2: streak day = 25+ minutes, 3 freezes and weekly rest day, the
+  2-minute door with its own streak, floating timer, funny reminder pack and 5-a-day cap,
+  7 pm rescue session, night shutdown ritual and daily score, goal tracker card, drift
+  charts in Stats, onboarding sleep-window question.

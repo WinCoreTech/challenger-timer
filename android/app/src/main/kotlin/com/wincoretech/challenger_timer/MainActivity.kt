@@ -93,7 +93,9 @@ class MainActivity : FlutterActivity(), SensorEventListener {
     override fun onPause() {
         getSystemService(SensorManager::class.java).unregisterListener(this)
         // Feature 90: tells "switched to another app" apart from "screen turned off".
-        screenOnAtPause = getSystemService(PowerManager::class.java).isInteractive
+        // Rule R6: a phone call (ringing or active) is not "leaving the app".
+        val inCall = getSystemService(AudioManager::class.java).mode != AudioManager.MODE_NORMAL
+        screenOnAtPause = getSystemService(PowerManager::class.java).isInteractive && !inCall
         super.onPause()
     }
 

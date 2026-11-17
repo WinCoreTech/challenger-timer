@@ -102,8 +102,12 @@ void main() {
     expect(find.text('WORK SESSIONS COMPLETED TODAY'), findsOneWidget);
     expect(find.textContaining('sessions'), findsWidgets);
     await t.tap(find.byKey(const Key('workStart')));
-    await t.pump(const Duration(milliseconds: 300));
+    await t.pumpAndSettle();
+    expect(find.text('WHAT IS THIS SESSION FOR?'), findsOneWidget);
+    await t.tap(find.text('START'));
+    await t.pump(const Duration(milliseconds: 600));
     expect(r.v.active!.minutes, 50);
+    expect(r.v.active!.meta['mode'], 'normal');
     expect(find.text('WORKING'), findsOneWidget);
     expect(find.text('50:00'), findsOneWidget);
     await t.tap(find.byKey(const Key('workLoop')));
