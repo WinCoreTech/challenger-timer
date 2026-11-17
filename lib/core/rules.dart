@@ -67,15 +67,18 @@ XpBreakdown computeXp(List<Event> events, int today, {bool bonusOn = true, bool 
 
 // ---- Ranks (defined in assets/ranks.json) -----------------------------
 class Rank {
-  const Rank(this.name, this.xp, this.blurb);
+  const Rank(this.name, this.xp, this.blurb, [this.score = 0]);
   final String name;
   final int xp;
   final String blurb;
+
+  /// Ladder threshold: the decayed-minutes score needed to hold this rank.
+  final int score;
 }
 
 List<Rank> parseRanks(String json) => [
       for (final r in jsonDecode(json) as List)
-        Rank(r['name'] as String, r['xp'] as int, r['blurb'] as String? ?? '')
+        Rank(r['name'] as String, r['xp'] as int, r['blurb'] as String? ?? '', r['score'] as int? ?? 0)
     ]..sort((a, b) => a.xp.compareTo(b.xp));
 
 class RankView {

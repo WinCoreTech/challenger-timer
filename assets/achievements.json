@@ -314,5 +314,63 @@
   "desc": "Start within ten minutes of your cue five times.",
   "metric": "onCue",
   "gte": 5
+ },
+ {
+  "id": "cancel_1",
+  "name": "Changed My Mind",
+  "desc": "Start a session, then cancel it. It happens.",
+  "metric": "cancels",
+  "gte": 1,
+  "hidden": true
+ },
+ {
+  "id": "day_120",
+  "name": "Two-Hour Day",
+  "desc": "Work 2 hours in one day.",
+  "metric": "bestDayMinutes",
+  "gte": 120
+ },
+ {
+  "id": "day_240",
+  "name": "Four-Hour Day",
+  "desc": "Work 4 hours in one day.",
+  "metric": "bestDayMinutes",
+  "gte": 240
+ },
+ {
+  "id": "day_480",
+  "name": "Eight-Hour Day",
+  "desc": "Work 8 hours in one day.",
+  "metric": "bestDayMinutes",
+  "gte": 480,
+  "hidden": true
+ },
+ {
+  "id": "sessions_10",
+  "name": "Ten Sessions",
+  "desc": "Finish 10 sessions.",
+  "metric": "sessions",
+  "gte": 10
+ },
+ {
+  "id": "return_4",
+  "name": "Back After A Gap",
+  "desc": "Finish a session after more than 4 days away.",
+  "metric": "returnsAfter4",
+  "gte": 1
+ },
+ {
+  "id": "steady_14",
+  "name": "Two Steady Weeks",
+  "desc": "Two weeks without losing a rank.",
+  "metric": "noDemotionDays",
+  "gte": 14
+ },
+ {
+  "id": "regain",
+  "name": "Took It Back",
+  "desc": "Regain a rank you had lost.",
+  "metric": "regained",
+  "gte": 1
  }
 ]

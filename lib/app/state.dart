@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/day.dart';
 import '../core/engine.dart';
 import '../core/events.dart';
+import '../core/backup.dart';
 import '../core/coach.dart';
 import '../core/flags.dart';
 import '../core/pressure.dart';
@@ -493,13 +494,24 @@ class App extends Notifier<AppData> {
   // ---- data ownership
   Future<void> markExported() => setKv('lastExport', '${_now.ms}');
 
-  String exportJson() => const JsonEncoder.withIndent(' ').convert({
-        'app': 'Productivity Challenger Timer',
-        'exportedAt': _now.ms,
-        'settings': state.kv,
-        'events': [for (final e in state.events) e.toJson()],
-        'records': [for (final r in state.recs) r.toJson()],
-      });
+  String exportJson({bool redacted = false}) =>
+      encodeBackup(nowMs: _now.ms, settings: state.kv, events: state.events, recs: state.recs, redacted: redacted);
+
+  /// Replaces everything with [b]. Rank, streaks and XP rebuild from its events.
+  Future<void> loadBackup(Backup b) async {
+    await native.stopTimer();
+    await _store.wipe();
+    for (final e in b.events) {
+      await _store.addEvent(e);
+    }
+    for (final r in b.recs) {
+      await _store.putRec(r);
+    }
+    for (final e in b.settings.entries) {
+      if (e.key != K.active) await _store.setKv(e.key, e.value);
+    }
+    await load();
+  }
 
   Future<void> wipe() async {
     await native.stopTimer();

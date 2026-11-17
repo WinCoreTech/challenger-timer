@@ -8,6 +8,7 @@ import 'day.dart';
 import 'events.dart';
 import 'extras.dart';
 import 'flags.dart';
+import 'ladder.dart';
 import 'pressure.dart';
 import 'rules.dart';
 import 'streak_engine.dart';
@@ -237,6 +238,10 @@ class DayView {
   // ---- XP, rank, bonus
   late final XpBreakdown xp = computeXp(events, today, bonusOn: isOn(K.swBonus), stackBonus: flagOn(43));
 
+  /// Rank ladder with promotion and demotion (plan v2). Separate from XP.
+  late final Ladder ladder = ladderOf(this);
+  Rank get ladderRank => ranks[ladder.index.clamp(0, ranks.length - 1)];
+
   /// Feature XP on top of the base rules, as (label, amount) lines.
   late final List<(String, int)> xpExtras = featureXp(this);
   late final int xpTotal = () {
@@ -298,6 +303,12 @@ class DayView {
       'longestSession': longestSession,
       'bestDaySessions': perDay.values.fold(0, (a, b) => a > b ? a : b),
       'xp': xpTotal,
+      'cancels': type(Ev.sessionAbandon).length,
+      'bestDayMinutes': minutesByDay(this).values.fold(0, (a, b) => a > b ? a : b),
+      'returnsAfter4': master.comebackDays.where((d) => !showedUpDays.any((x) => x < d && x >= d - 4)).length,
+      'noDemotionDays': daysWithoutDemotion(this, ladder),
+      'regained': ladder.regained ? 1 : 0,
+      'ladder': ladder.peak,
       'legendary': type(Ev.sessionDone).where((e) => legendary(e.get<String>('sid') ?? '')).length,
       'weekdays': weekdaySet(this).length,
       'onCue': onCueStarts(this),

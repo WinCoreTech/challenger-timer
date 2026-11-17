@@ -13,6 +13,17 @@ import 'tabs.dart';
 import 'theme.dart';
 import 'timer.dart';
 import 'toolbox.dart';
+import 'v2/about_screen.dart';
+import 'v2/achievements_screen.dart';
+import 'v2/backup_screen.dart';
+import 'v2/dashboard.dart';
+import 'v2/project_edit.dart';
+import 'v2/projects_screen.dart';
+import 'v2/ranks_screen.dart';
+import 'v2/schedule_screen.dart';
+import 'v2/settings_v2.dart';
+import 'v2/stats_screen.dart';
+import 'v2/work_screen.dart';
 
 const _tabs = [
   ('/', 'HOME', Icons.play_circle_fill),
@@ -53,6 +64,18 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
               GoRoute(path: '/plan', pageBuilder: (c, s) => const NoTransitionPage(child: PlanScreen())),
               GoRoute(path: '/me', pageBuilder: (c, s) => const NoTransitionPage(child: MeScreen())),
             ]),
+        // Plan v2 screens (reference shell).
+        GoRoute(path: '/dash', builder: (c, s) => const DashboardScreen()),
+        GoRoute(path: '/work', builder: (c, s) => const WorkScreen()),
+        GoRoute(path: '/projects', builder: (c, s) => const ProjectsScreen()),
+        GoRoute(path: '/project/:id', builder: (c, s) => ProjectEditScreen(s.pathParameters['id']!)),
+        GoRoute(path: '/achievements', builder: (c, s) => const AchievementsScreen()),
+        GoRoute(path: '/stats', builder: (c, s) => const StatsScreen()),
+        GoRoute(path: '/schedule', builder: (c, s) => const ScheduleScreen()),
+        GoRoute(path: '/prefs', builder: (c, s) => const SettingsV2Screen()),
+        GoRoute(path: '/backup', builder: (c, s) => const BackupScreen()),
+        GoRoute(path: '/about', builder: (c, s) => const AboutScreen()),
+        GoRoute(path: '/ranks', builder: (c, s) => const RanksScreen()),
         GoRoute(path: '/proof', builder: (c, s) => const ProofScreen()),
         GoRoute(path: '/receipt', builder: (c, s) => const ReceiptScreen()),
         GoRoute(path: '/settings', builder: (c, s) => const SettingsScreen()),

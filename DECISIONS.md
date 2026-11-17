@@ -110,3 +110,15 @@ Every choice made without asking, newest section last.
 - Section 7 data changes are made as new JSON fields on existing records and events, not
   as new SQL tables. The store is three document tables, so this needs no migration and
   cannot lose data. The schema version stays 1. A test loads old-shaped rows.
+- Rank ladder (5.9): score = sum of daily minutes x 0.5^(age/5 days). Thresholds per rank
+  live in `assets/ranks.json` ("score": 0, 20, 45, 80, 120, 170, 230, 300, 380, 470, 570,
+  680; about 25 min a day holds rank 6, about 90 min a day reaches the top). Promotion is
+  immediate. Demotion is one step after 3 counted days under the current rank's own
+  threshold. Rest weekdays, sick/travel days, exam days and freeze days are not counted.
+  Today never counts toward demotion until it is over.
+- XP stays and still unlocks Toolbox items; the ladder is what Home and Work show as rank.
+- Backup format 2 adds "format" and "redacted". Format 1 files (builds up to 18) still load.
+  A redacted backup replaces names, titles, notes and proof text with placeholders and
+  drops the user's name, buddy contact and tool notes.
+- Eight achievements were added for reference triggers with no existing match (cancel,
+  2/4/8-hour days, 10 sessions, return after 4+ days, two steady weeks, regained rank).
