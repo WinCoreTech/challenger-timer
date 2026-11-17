@@ -50,6 +50,7 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
     super.initState();
     _t = Timer.periodic(const Duration(milliseconds: 250), (_) async {
       if (!mounted || ref.read(viewProvider).active == null) return;
+      _cues();
       await ref.read(appProvider.notifier).completeIfDue();
       if (mounted) setState(() {});
     });
@@ -78,6 +79,27 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
   }
 
   String? _driftSid;
+  String? _almostSid;
+  int _lastTick = -1;
+
+  /// Cues that belong to a running countdown (only while this screen is open).
+  void _cues() {
+    final v = ref.read(viewProvider);
+    final s = v.active;
+    if (s == null || s.paused || s.isBreak) return;
+    final now = ref.read(clockProvider)().ms;
+    final left = s.remainingMs(now);
+    final app = ref.read(appProvider.notifier);
+    if (v.prefOn(S.almostSound) && left <= 30000 && left > 0 && _almostSid != s.sid) {
+      _almostSid = s.sid;
+      app.playCue('almost');
+    }
+    final sec = s.elapsedMs(now) ~/ 1000;
+    if (v.prefInt(S.tickingVolume) > 0 && sec != _lastTick) {
+      _lastTick = sec;
+      app.playCue('tick');
+    }
+  }
 
   Future<void> _lateDialog(DayView v, App app) async {
     final late = v.type(Ev.lateFinish).last.get<int>('ms') ?? 0;
@@ -164,6 +186,14 @@ class _WorkState extends ConsumerState<WorkScreen> with SingleTickerProviderStat
       const SizedBox(height: 24),
       if (v.pendingProof != null) ...[
         FilledButton(key: const Key('workProof'), onPressed: () => context.push('/proof'), child: const Text('LOG WHAT I DID')),
+        const SizedBox(height: 12),
+      ],
+      if (v.pendingProof != null && v.prefInt(S.overtimeStep) > 0) ...[
+        OutlinedButton(
+            key: const Key('workOvertime'),
+            onPressed: () => app.startSession(
+                minutes: v.prefInt(S.overtimeStep), projectId: v.pendingProof?['projectId'] as String?, title: v.pendingProof?['title'] as String?, source: 'five_more'),
+            child: Text('KEEP GOING: ${v.prefInt(S.overtimeStep)} MORE')),
         const SizedBox(height: 12),
       ],
       if (stayOffer(v)) ...[

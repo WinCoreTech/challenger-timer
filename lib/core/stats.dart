@@ -12,6 +12,7 @@ import 'game.dart';
 import 'planning.dart';
 import 'projects.dart';
 import 'tools.dart';
+import 'v2_day.dart';
 import 'wellbeing.dart';
 import 'streak_engine.dart';
 
@@ -141,6 +142,11 @@ List<String> _challenge(Challenge c, [String extra = '']) => [
 String _f(double? x) => x == null ? '-' : x.toStringAsFixed(1);
 
 final Map<String, Stat> stats = {
+  'deadlines': (v) => [
+        '${onTimeStreak(v)}',
+        'tasks in a row finished on or before their due day',
+        for (final (n, streak, total) in projectDeadlines(v)) '$n: $streak in a row ($total finished with a due date)',
+      ],
   'pareto': (v) {
     final rows = [
       for (final p in v.projects)

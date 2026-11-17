@@ -169,3 +169,40 @@ int nudgeMinute(DayView v) {
   if (peak == null) return (v.cueMinute + 30) % 1440;
   return (peak * 60).clamp(4 * 60, 23 * 60 + 59);
 }
+
+// ---- A2: project deadlines -------------------------------------------------------
+/// Finished tasks with a due day, newest first: true if done on or before it.
+List<bool> deadlineResults(DayView v) {
+  final done = [
+    for (final t in v.of(Kind.task))
+      if (t.flag('done') && t.data['due'] is int && t.data['doneTs'] is int) (t.integer('doneTs'), t.integer('due'))
+  ]..sort((a, b) => b.$1.compareTo(a.$1));
+  return [for (final (ts, due) in done) dayOf(ts, v.now.offsetMin, v.dayEndHour) <= due];
+}
+
+/// Tasks in a row finished on or before their due day.
+int onTimeStreak(DayView v) {
+  var n = 0;
+  for (final ok in deadlineResults(v)) {
+    if (!ok) break;
+    n++;
+  }
+  return n;
+}
+
+/// Per project: (name, on-time streak, finished with a due date).
+List<(String, int, int)> projectDeadlines(DayView v) => [
+      for (final p in v.projects)
+        () {
+          final tasks = [
+            for (final t in v.tasksOf(p.id))
+              if (t.flag('done') && t.data['due'] is int && t.data['doneTs'] is int) t
+          ]..sort((a, b) => b.integer('doneTs').compareTo(a.integer('doneTs')));
+          var streak = 0;
+          for (final t in tasks) {
+            if (dayOf(t.integer('doneTs'), v.now.offsetMin, v.dayEndHour) > t.integer('due')) break;
+            streak++;
+          }
+          return (p.str('name'), streak, tasks.length);
+        }()
+    ].where((r) => r.$3 > 0).toList();

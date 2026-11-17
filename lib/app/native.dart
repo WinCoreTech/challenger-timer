@@ -16,7 +16,11 @@ abstract class Native {
   Future<void> openSettings(String which);
   Future<List<Map<String, String>>> listApps();
   Future<bool> sendSms(String phone, String text);
-  Future<void> tone();
+  /// A short cue: kind is complete, almost, tick or other. Volume 0 to 100.
+  Future<void> tone({String kind = 'complete', int volume = 50, String channel = 'media'});
+
+  /// Window brightness: -1 = device default, otherwise 0.05 to 1.
+  Future<void> brightness(double level);
 
   Future<void> openUrl(String url);
 
@@ -100,7 +104,10 @@ class ChannelNative implements Native {
   Future<bool> sendSms(String phone, String text) async =>
       await _call<bool>('sendSms', {'phone': phone, 'text': text}) ?? false;
   @override
-  Future<void> tone() => _call<void>('tone');
+  Future<void> tone({String kind = 'complete', int volume = 50, String channel = 'media'}) =>
+      _call<void>('tone', {'kind': kind, 'volume': volume, 'channel': channel});
+  @override
+  Future<void> brightness(double level) => _call<void>('brightness', level);
   @override
   Future<void> openUrl(String url) => _call<void>('openUrl', url);
   @override
@@ -180,7 +187,10 @@ class FakeNative implements Native {
   }
 
   @override
-  Future<void> tone() async => calls.add('tone');
+  Future<void> brightness(double level) async => calls.add('brightness:$level');
+  @override
+  Future<void> tone({String kind = 'complete', int volume = 50, String channel = 'media'}) async =>
+      calls.add(kind == 'complete' ? 'tone' : 'tone:$kind:$volume:$channel');
   String? heard;
   bool screenOnAtPause = true;
   @override

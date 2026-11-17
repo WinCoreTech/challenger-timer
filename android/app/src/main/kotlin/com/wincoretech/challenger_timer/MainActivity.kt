@@ -237,7 +237,11 @@ class MainActivity : FlutterActivity(), SensorEventListener {
                     }
                 }
                 "tone" -> {
-                    tone()
+                    tone(call.argument<String>("kind") ?: "complete", call.argument<Int>("volume") ?: 50, call.argument<String>("channel") ?: "media")
+                    result.success(null)
+                }
+                "brightness" -> {
+                    brightness((call.arguments as? Number)?.toDouble() ?: -1.0)
                     result.success(null)
                 }
                 else -> result.notImplemented()
@@ -279,6 +283,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         e.putStringSet("allowApps", (m["allowApps"] as? List<*>)?.filterIsInstance<String>()?.toSet() ?: emptySet())
         e.putBoolean("unlockFriction", m["unlockFriction"] == true)
         e.putBoolean("sticky", m["sticky"] == true)
+        e.putBoolean("wakeOnDone", m["wakeOnDone"] != false)
         e.putBoolean("floating", m["floating"] == true)
         e.putBoolean("robust", m["robust"] != false)
         e.putBoolean("autoStart", m["autoStart"] == true)
@@ -457,13 +462,33 @@ class MainActivity : FlutterActivity(), SensorEventListener {
         }
     }
 
-    private fun tone() {
+    /** Short cue sounds. Volume is 0 to 100 and relative to the phone's own volume. */
+    private fun tone(kind: String, volume: Int, channel: String) {
+        if (volume <= 0) return
         try {
-            val t = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 70)
-            t.startTone(ToneGenerator.TONE_PROP_ACK, 180)
-            Handler(Looper.getMainLooper()).postDelayed({ t.release() }, 400L)
+            val stream = when (channel) {
+                "alarm" -> AudioManager.STREAM_ALARM
+                "notification" -> AudioManager.STREAM_NOTIFICATION
+                else -> AudioManager.STREAM_MUSIC
+            }
+            val t = ToneGenerator(stream, volume.coerceIn(1, 100))
+            val (id, ms) = when (kind) {
+                "almost" -> ToneGenerator.TONE_PROP_BEEP2 to 250
+                "tick" -> ToneGenerator.TONE_PROP_BEEP to 40
+                "other" -> ToneGenerator.TONE_PROP_PROMPT to 120
+                else -> ToneGenerator.TONE_PROP_ACK to 180
+            }
+            t.startTone(id, ms)
+            Handler(Looper.getMainLooper()).postDelayed({ t.release() }, ms + 250L)
         } catch (e: Exception) {
             // No sound available. The haptic still fires from Flutter.
         }
+    }
+
+    /** Screen brightness for this window: -1 leaves it to the device, 0..1 sets it. */
+    private fun brightness(level: Double) {
+        val lp = window.attributes
+        lp.screenBrightness = if (level < 0) WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE else level.toFloat().coerceIn(0.05f, 1f)
+        window.attributes = lp
     }
 }

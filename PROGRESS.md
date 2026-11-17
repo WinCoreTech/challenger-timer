@@ -236,3 +236,10 @@ model and Android version.
   banner on Work), reminder nudge moves to your best hour after 14 days, onboarding asks
   whether to protect 23:00 to 06:00 (on by default; 00:00 to 04:00 is always protected).
   Still open in section 6: PDF portfolio export, project deadline streaks.
+- Stage A1/A2 (17 Nov 2026): sound settings now reach the timer (complete, almost-complete
+  in the last 30 s, ticking, other cues; volume, channel and mute), keep-screen-on,
+  brightness during countdowns, wake screen on finish, overtime step button; on-time task
+  streak and per-project deadline streaks; PDF portfolio of pinned proof (built on the
+  phone, photos included only in the file you share). Ticking and the almost-complete cue
+  only play while the Work screen is open; background cues need a native service.
+  Untested on device: all cue sounds, brightness, wake-on-finish, PDF share.

@@ -192,6 +192,13 @@ object Core {
             .setContentIntent(activityPending(c, Intent.ACTION_MAIN, "done", 2))
             .build()
         notify(c, N_DONE, n)
+        if (p.getBoolean("wakeOnDone", true)) {
+            // Turn the screen on for a few seconds so the finish is seen.
+            @Suppress("DEPRECATION")
+            val wl = c.getSystemService(android.os.PowerManager::class.java)
+                .newWakeLock(android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK or android.os.PowerManager.ACQUIRE_CAUSES_WAKEUP, "pct:done")
+            wl.acquire(4000L)
+        }
         Extras.updateWidgets(c)
         Extras.sticky(c)
     }

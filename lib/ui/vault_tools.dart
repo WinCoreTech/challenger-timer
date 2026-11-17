@@ -11,6 +11,7 @@ import '../core/day.dart';
 import '../core/deadlines.dart';
 import '../core/events.dart';
 import '../core/extras.dart';
+import '../core/portfolio.dart';
 import '../core/vault.dart';
 import 'photo.dart';
 import 'share.dart';
@@ -77,6 +78,18 @@ class VaultTool extends ConsumerWidget {
                 child: Panel(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [H(dayLabel(p.integer('day')), size: 10), const SizedBox(height: 6), _proofThumb(p)]))),
           if (n == 143 && items.isNotEmpty)
             FilledButton(key: const Key('exportPortfolio'), onPressed: () => share(text: portfolioExport(v)), child: const Text('EXPORT AS TEXT')),
+          if (n == 143)
+            Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: OutlinedButton(
+                    key: const Key('exportPdf'),
+                    onPressed: () async {
+                      final bytes = await buildPortfolioPdf(v);
+                      final file = File(p.join((await getTemporaryDirectory()).path, 'portfolio.pdf'));
+                      await file.writeAsBytes(bytes);
+                      await share(filePath: file.path);
+                    },
+                    child: const Text('EXPORT AS PDF'))),
         ]);
       case 144:
         return const ShareCardTool();

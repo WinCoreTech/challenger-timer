@@ -145,6 +145,7 @@ class App extends Notifier<AppData> {
     }, Moment(begin, now.offsetMin));
     native.haptic();
     if (hard) await native.keepScreenOn(true);
+    await applyScreen(running: true);
     if ((v.on(204) && v.kv['autoDnd'] == '1') || const {'hyper', 'beast'}.contains(meta['mode'])) await native.dnd(true);
     if (startMs == null) await native.startTimer(s.endMs, s.title);
     await syncNative();
@@ -232,6 +233,7 @@ class App extends Notifier<AppData> {
   }
 
   Future<void> _quiet(ActiveSession s) async {
+    await applyScreen(running: false);
     if (s.hard) await native.keepScreenOn(false);
     if ((view.on(204) && view.kv['autoDnd'] == '1') || const {'hyper', 'beast'}.contains(s.meta['mode'])) await native.dnd(false);
     if (view.kv['noise'] != null && view.kv['noise']!.isNotEmpty) await native.noise('');
@@ -475,7 +477,27 @@ class App extends Notifier<AppData> {
   // ---- native
   void celebrate() {
     native.haptic(heavy: true);
-    if (!view.prefOn(S.muted)) native.tone();
+    playCue('complete');
+  }
+
+  /// Plays a cue at the user's volume and channel. Muted or zero volume is silent.
+  void playCue(String kind) {
+    final v = view;
+    if (v.prefOn(S.muted)) return;
+    final vol = switch (kind) {
+      'complete' => v.prefInt(S.completeVolume),
+      'tick' => v.prefInt(S.tickingVolume),
+      _ => v.prefInt(S.otherVolume),
+    };
+    if (vol <= 0) return;
+    native.tone(kind: kind, volume: vol, channel: v.pref(S.soundChannel));
+  }
+
+  /// Screen settings while a countdown runs (reference 5.11).
+  Future<void> applyScreen({required bool running}) async {
+    final v = view;
+    await native.keepScreenOn(running && v.prefOn(S.keepScreenOn));
+    await native.brightness(!running ? -1 : switch (v.pref(S.screenDuringCountdown)) { 'dim' => 0.15, 'on' => 1.0, _ => -1 });
   }
 
   /// Reference 5.3: records a session finish that ran more than 5 seconds late
@@ -519,6 +541,7 @@ class App extends Notifier<AppData> {
       'blockInSession': v.on(201) && v.kv['blockInSession'] == '1',
       'allowApps': v.kv['allowApps'] == null ? const <String>[] : (jsonDecode(v.kv['allowApps']!) as List).cast<String>(),
       'robust': v.prefOn(S.robustCountdown),
+      'wakeOnDone': v.prefOn(S.screenOnComplete),
       'sticky': v.on(697) && v.kv['sticky'] == '1',
       // 633 never auto-starts inside the protected sleep window.
       'autoStart': v.on(633) && v.kv['autoStart'] == '1' && !inSleepWindow(v, v.cueMinute),
