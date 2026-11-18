@@ -1,3 +1,4 @@
+import '../brand.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -137,7 +138,7 @@ class _AppState extends ConsumerState<ChallengerApp> with WidgetsBindingObserver
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-      title: 'Challenger Timer',
+      title: appName,
       debugShowCheckedModeBanner: false,
       theme: appTheme(),
       builder: (context, child) {

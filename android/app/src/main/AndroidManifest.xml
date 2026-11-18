@@ -30,7 +30,7 @@
     <uses-feature android:name="android.hardware.microphone" android:required="false" />
 
     <application
-        android:label="Challenger Timer"
+        android:label="Productivity Go"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -50,11 +50,12 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- challengertimer://start starts a session. An NFC sticker holding this link works too. -->
+            <!-- productivitygo://start (and the older challengertimer://start) starts a session. An NFC sticker holding either link works. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="productivitygo" android:host="start" />
                 <data android:scheme="challengertimer" android:host="start" />
             </intent-filter>
         </activity>

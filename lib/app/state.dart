@@ -1,3 +1,4 @@
+import '../brand.dart';
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -440,7 +441,7 @@ class App extends Notifier<AppData> {
     for (final p in const ['usage', 'overlay', 'notifications']) {
       final had = state.kv['perm.$p'] == '1';
       if (had && st[p] == false && (state.kv[K.buddyPhone] ?? '').isNotEmpty) {
-        await native.sendSms(state.kv[K.buddyPhone]!, '${v.name.isEmpty ? 'Your buddy' : v.name} switched off a permission that Challenger Timer needs ($p). Worth a kind check-in.');
+        await native.sendSms(state.kv[K.buddyPhone]!, '${v.name.isEmpty ? 'Your buddy' : v.name} switched off a permission that $appName needs ($p). Worth a kind check-in.');
       }
       if (st[p] != null) await setKv('perm.$p', st[p]! ? '1' : '0');
     }

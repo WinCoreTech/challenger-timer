@@ -1,4 +1,4 @@
-# Productivity Challenger Timer: 702 Features
+# Productivity Go: 702 Features
 
 Nov 11, 2026 · @winzo
 

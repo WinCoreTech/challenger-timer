@@ -1,13 +1,15 @@
 import 'dart:math' as math;
+
+import '../brand.dart';
 import 'package:flutter/material.dart';
 
 /// Design system (plan v2 phase 3): orange on navy.
-const accent = Color(0xFFFF8A1F);
-const ink = Color(0xFF0A1020);
-const panel = Color(0xFF131B2E);
-const line = Color(0xFF26324D);
+const accent = brandOrange;
+const ink = brandDeepNavy;
+const panel = Color(0xFF10223F);
+const line = Color(0xFF223B63);
 const dim = Color(0xFF93A1BC);
-const gold = Color(0xFFFFE066);
+const gold = brandAmber;
 
 /// [font] is only set by the screenshot script; on a phone the system font is used.
 ThemeData appTheme({bool rest = false, String? font}) {
@@ -318,4 +320,50 @@ class _HeatPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_HeatPainter old) => true;
+}
+
+
+/// The Productivity Go mark, drawn in code from the same numbers as
+/// brand/logo.svg: a three-quarter progress ring and a double chevron.
+class BrandMark extends StatelessWidget {
+  const BrandMark({super.key, this.size = 48, this.tile = false});
+  final double size;
+
+  /// Draw the rounded navy tile behind the mark (the launcher look).
+  final bool tile;
+  @override
+  Widget build(BuildContext context) =>
+      Semantics(label: appName, image: true, child: SizedBox.square(dimension: size, child: CustomPaint(painter: _MarkPainter(tile))));
+}
+
+class _MarkPainter extends CustomPainter {
+  _MarkPainter(this.tile);
+  final bool tile;
+  @override
+  void paint(Canvas canvas, Size s) {
+    final u = s.width / 512;
+    final box = Rect.fromLTWH(0, 0, s.width, s.height);
+    if (tile) {
+      canvas.drawRRect(RRect.fromRectAndRadius(box, Radius.circular(112 * u)),
+          Paint()..shader = const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFF17407A), Color(0xFF091528)]).createShader(box));
+    }
+    final c = Offset(256 * u, 256 * u);
+    final ring = Rect.fromCircle(center: c, radius: 150 * u);
+    Paint stroke(double w) => Paint()..style = PaintingStyle.stroke..strokeWidth = w * u..strokeCap = StrokeCap.round;
+    canvas.drawCircle(c, 150 * u, stroke(36)..color = const Color(0x1AFFFFFF));
+    final grad = const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [brandAmber, Color(0xFFFF4F1A)]).createShader(box);
+    canvas.drawArc(ring, -math.pi / 2, math.pi * 1.5, false, stroke(40)..color = const Color(0x8CFF6A1F)..maskFilter = MaskFilter.blur(BlurStyle.normal, 10 * u));
+    canvas.drawArc(ring, -math.pi / 2, math.pi * 1.5, false, stroke(36)..shader = grad);
+    canvas.drawCircle(Offset(106 * u, 256 * u), 12 * u, Paint()..color = const Color(0xFFFFF4E6));
+    Path chev(double x) => Path()
+      ..moveTo(x * u, 192 * u)
+      ..lineTo((x + 64) * u, 256 * u)
+      ..lineTo(x * u, 320 * u);
+    final join = stroke(34)..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(chev(196), join..color = brandCream);
+    canvas.drawPath(chev(254), stroke(34)..strokeJoin = StrokeJoin.round..shader = const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFFFFE2B8), Color(0xFFFF8A2B)]).createShader(box));
+  }
+
+  @override
+  bool shouldRepaint(_MarkPainter old) => old.tile != tile;
 }

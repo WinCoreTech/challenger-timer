@@ -39,7 +39,7 @@ class _BackupState extends ConsumerState<BackupScreen> {
 
   Future<void> _make(bool redacted) async {
     final app = ref.read(appProvider.notifier);
-    final path = await ref.read(backupFileProvider)(redacted ? 'challenger-timer-redacted.json' : 'challenger-timer-backup.json', app.exportJson(redacted: redacted));
+    final path = await ref.read(backupFileProvider)(redacted ? 'productivity-go-redacted.json' : 'productivity-go-backup.json', app.exportJson(redacted: redacted));
     await ref.read(shareProvider)(filePath: path);
     if (!redacted) await app.markExported();
   }

@@ -1,3 +1,4 @@
+import '../brand.dart';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
@@ -174,7 +175,7 @@ class _ShareCardState extends ConsumerState<ShareCardTool> {
                   color: ink,
                   padding: const EdgeInsets.all(24),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const H('Challenger Timer', color: accent, size: 16),
+                    const H(appName, color: accent, size: 16),
                     const Spacer(),
                     Poster(PosterArt.flame, size: 120, level: flameLevel(v.master.current)),
                     Big('${v.master.current}', size: 120, color: Colors.white),
@@ -192,7 +193,7 @@ class _ShareCardState extends ConsumerState<ShareCardTool> {
             final boundary = key.currentContext!.findRenderObject()! as RenderRepaintBoundary;
             final image = await boundary.toImage(pixelRatio: 1080 / boundary.size.width);
             final bytes = await image.toByteData(format: ui.ImageByteFormat.png);
-            final file = File(p.join((await getTemporaryDirectory()).path, 'challenger-status.png'));
+            final file = File(p.join((await getTemporaryDirectory()).path, 'productivity-go-status.png'));
             await file.writeAsBytes(bytes!.buffer.asUint8List());
             await ref.read(shareProvider)(filePath: file.path);
           },

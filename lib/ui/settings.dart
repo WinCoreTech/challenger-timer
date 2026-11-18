@@ -1,3 +1,4 @@
+import '../brand.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -169,7 +170,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> with WidgetsBindingOb
 
   Future<void> _export() async {
     final json = ref.read(appProvider.notifier).exportJson();
-    final file = File(p.join((await getTemporaryDirectory()).path, 'challenger-timer-export.json'));
+    final file = File(p.join((await getTemporaryDirectory()).path, 'productivity-go-export.json'));
     await file.writeAsString(json);
     await ref.read(shareProvider)(filePath: file.path);
     await ref.read(appProvider.notifier).markExported();
@@ -431,9 +432,9 @@ class _WelcomeState extends ConsumerState<WelcomeScreen> {
                 padding: const EdgeInsets.all(24),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                   Row(children: [
-                    const Poster(PosterArt.door, size: 64),
+                    const BrandMark(size: 64, tile: true),
                     const SizedBox(width: 12),
-                    Expanded(child: H('Productivity\nChallenger Timer', color: Colors.white, size: 18)),
+                    Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [H(appName, color: Colors.white, size: 18), const SizedBox(height: 4), const Text(appSlogan, style: TextStyle(color: dim, fontSize: 12))])),
                   ]),
                   const SizedBox(height: 8),
                   Bar((step + 1) / pages.length, height: 4),

@@ -1,5 +1,5 @@
 name: challenger_timer
-description: "Productivity Challenger Timer: start a 2-minute session every day and save proof."
+description: "Productivity Go: start in 2 minutes, stay for the streak."
 publish_to: 'none'
 version: 0.2.0+2
 

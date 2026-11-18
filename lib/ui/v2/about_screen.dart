@@ -1,3 +1,4 @@
+import '../../brand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +40,9 @@ class AboutScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) => Scaffold(
       appBar: AppBar(title: const Text('ABOUT')),
       body: ListView(padding: const EdgeInsets.all(16), children: [
-        const Text('Productivity Challenger Timer', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800)),
+        const Row(children: [BrandMark(size: 56, tile: true), SizedBox(width: 14), Expanded(child: Text(appName, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)))]),
+        const SizedBox(height: 6),
+        const Text(appSlogan, style: TextStyle(color: dim)),
         const Text('Version $appVersion', key: Key('aboutVersion'), style: TextStyle(color: dim)),
         const SizedBox(height: 16),
         const Text('A timer that keeps score. You press start, it counts, and your rank follows what you actually did this week. '

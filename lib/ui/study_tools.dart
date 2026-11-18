@@ -123,7 +123,7 @@ class _StudyState extends ConsumerState<StudyTool> {
         return FilledButton(
             key: const Key('csv'),
             onPressed: () async {
-              final file = File(p.join((await getTemporaryDirectory()).path, 'challenger-timer-events.csv'));
+              final file = File(p.join((await getTemporaryDirectory()).path, 'productivity-go-events.csv'));
               await file.writeAsString(eventsCsv(v));
               await ref.read(shareProvider)(filePath: file.path);
               await app.markExported();

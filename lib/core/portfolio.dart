@@ -2,6 +2,7 @@
 /// file is built locally and only leaves if the user shares it.
 library;
 
+import '../brand.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -13,7 +14,7 @@ import 'engine.dart';
 import 'vault.dart';
 
 Future<Uint8List> buildPortfolioPdf(DayView v) async {
-  final doc = pw.Document(title: 'Work I can show', author: v.name.isEmpty ? 'Challenger Timer' : v.name);
+  final doc = pw.Document(title: 'Work I can show', author: v.name.isEmpty ? appName : v.name);
   final items = pinned(v).isEmpty ? v.proofs.take(30).toList() : pinned(v);
   final widgets = <pw.Widget>[
     pw.Header(level: 0, child: pw.Text(v.name.isEmpty ? 'Work I can show' : "${v.name}: work I can show", style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold))),

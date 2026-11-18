@@ -86,7 +86,7 @@
 "n": 16,
 "kind": "card",
 "title": "Home-screen widget",
-"body": "Long-press your home screen, choose Widgets, find Challenger Timer and drop \"Start 2 min\" anywhere. It shows your streak and starts a session without opening the app. It turns from red to green once you have worked today."
+"body": "Long-press your home screen, choose Widgets, find Productivity Go and drop \"Start 2 min\" anywhere. It shows your streak and starts a session without opening the app. It turns from red to green once you have worked today."
 },
 {
 "n": 17,
@@ -104,7 +104,7 @@
 "n": 19,
 "kind": "card",
 "title": "NFC desk tag",
-"body": "Write the link challengertimer://start to an NFC sticker with any free NFC writer app, and stick it on your desk. Tapping the phone on it starts a 2-minute session."
+"body": "Write the link productivitygo://start to an NFC sticker with any free NFC writer app, and stick it on your desk. Tapping the phone on it starts a 2-minute session."
 },
 {
 "n": 20,

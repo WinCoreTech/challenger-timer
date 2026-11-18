@@ -2,6 +2,7 @@
 /// the buddy message. No Flutter imports.
 library;
 
+import '../brand.dart';
 import 'dart:convert';
 import 'day.dart';
 import 'events.dart';
@@ -182,11 +183,11 @@ String buddyMessage({required String name, required int sessions, required int m
   final s = streak == 1 ? '1 day' : '$streak days';
   if (sessions <= 0) {
     return '$who did not start a session today. Streak stands at $s. '
-        'A kind nudge tomorrow morning would help. (Sent automatically by Challenger Timer)';
+        'A kind nudge tomorrow morning would help. (Sent automatically by $appName)';
   }
   final n = sessions == 1 ? '1 session' : '$sessions sessions';
   return '$who showed up today: $n, $minutes min of work, proof saved. Streak: $s. '
-      '(Sent automatically by Challenger Timer)';
+      '(Sent automatically by $appName)';
 }
 
 // ---- Next tiny step ------------------------------------------------------

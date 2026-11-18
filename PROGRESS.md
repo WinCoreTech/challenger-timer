@@ -251,3 +251,20 @@ model and Android version.
   checks 48 dp targets and labels on every new screen. Light screenshots for 5 screens are
   in docs/screens/*-light.png. Not yet done: light screenshots for the remaining screens,
   more tile artwork, high-contrast option, haptic tuning (needs a phone to judge).
+- Part B (18 Nov 2026): the app is now **Productivity Go** ("Start in 2 minutes. Stay for the
+  streak."). One constant in `lib/brand.dart`; launcher label, About, onboarding, backup and
+  export file names, share text, README and CI release title updated. The package id stays
+  `com.wincoretech.challenger_timer` so new builds install over old ones. Old backups and
+  the old NFC link still work. New logo (`brand/*.svg`): adaptive and themed launcher icons,
+  notification icon, launch screen, Play Store images, all rendered by `tools/make_icons.py`.
+  Brand palette applied app-wide. Not seen on a device: launcher icon, themed icon,
+  notification icon and launch screen are on the phone checklist below.
+  Name availability on the Play Store and as a trademark has NOT been checked.
+
+Phone checklist additions (brand):
+26. The launcher shows the orange ring and double chevron on navy, labelled "Productivity Go".
+27. Long-press the icon area in the launcher settings and switch on themed icons (Android 13+):
+    the icon becomes a single-colour ring and chevron.
+28. Start a session and pull down the shade: the notification icon is a white ring with chevrons.
+29. Cold-start the app: a navy launch screen with the mark shows before the dashboard.
+30. The dashboard header shows the mark and the name; About shows the mark and the slogan.

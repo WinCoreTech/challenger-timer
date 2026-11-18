@@ -130,7 +130,7 @@ class MainActivity : FlutterActivity(), SensorEventListener {
     private fun handle(intent: Intent?) {
         when (intent?.action) {
             Core.ACTION_START2 -> Core.nativeStart(this, intent.getStringExtra("source") ?: "alarm")
-            Intent.ACTION_VIEW -> if (intent.data?.scheme == "challengertimer") Core.nativeStart(this, "tag")
+            Intent.ACTION_VIEW -> if (intent.data?.scheme == "productivitygo" || intent.data?.scheme == "challengertimer") Core.nativeStart(this, "tag")
             Core.ACTION_REPORT -> Core.prefs(this).edit().putString("pendingAction", "report").apply()
         }
         intent?.action = Intent.ACTION_MAIN

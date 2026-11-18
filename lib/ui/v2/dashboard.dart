@@ -6,6 +6,7 @@ import '../../app/state.dart';
 import '../../core/settings.dart';
 import '../../core/v2_dash.dart';
 import '../../core/v2_day.dart';
+import '../../brand.dart';
 import '../theme.dart';
 import 'celebrate.dart';
 
@@ -46,6 +47,13 @@ class DashboardScreen extends ConsumerWidget {
                           if (warn) const Padding(padding: EdgeInsets.only(left: 6), child: Icon(Icons.warning_amber, key: Key('backupWarning'), color: gold)),
                         ]))))));
 
+    final header = Padding(
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(children: [
+          const BrandMark(size: 36, tile: true),
+          const SizedBox(width: 10),
+          Expanded(child: H(appName, color: Colors.white, size: 14)),
+        ]));
     final work = Material(
         color: panel,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8), side: const BorderSide(color: accent, width: 2)),
@@ -98,11 +106,11 @@ class DashboardScreen extends ConsumerWidget {
                 padding: const EdgeInsets.fromLTRB(14, 14, 14, 8),
                 child: wide
                     ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Expanded(flex: 4, child: SingleChildScrollView(child: Column(children: [const CelebrationBanner(), work]))),
+                        Expanded(flex: 4, child: SingleChildScrollView(child: Column(children: [header, const CelebrationBanner(), work]))),
                         const SizedBox(width: 12),
                         Expanded(flex: 6, child: SingleChildScrollView(child: grid(MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2))),
                       ])
-                    : ListView(children: [const CelebrationBanner(), work, const SizedBox(height: 10), grid(size.width < 380 || MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2)]))),
+                    : ListView(children: [header, const CelebrationBanner(), work, const SizedBox(height: 10), grid(size.width < 380 || MediaQuery.textScalerOf(context).scale(1) > 1.4 ? 1 : 2)]))),
         bottomNavigationBar: SafeArea(
             child: InkWell(
                 key: const Key('rankBar'),

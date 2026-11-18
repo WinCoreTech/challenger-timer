@@ -1,4 +1,6 @@
-# Productivity Challenger Timer
+# Productivity Go
+
+_Start in 2 minutes. Stay for the streak._
 
 An Android app for people who delay work until the deadline is at their neck. One job:
 start a 2-minute session every day and save proof of it.
@@ -62,7 +64,7 @@ lets through Doze, and the running session ends by alarm, not by a sleeping time
 phones with aggressive battery savers you should also:
 
 1. Me, Settings, Permissions, **Ignore battery optimisation**, Allow.
-2. In the phone's own settings, allow **Autostart** for Challenger Timer if your phone has
+2. In the phone's own settings, allow **Autostart** for Productivity Go if your phone has
    that switch (Xiaomi, Oppo, Vivo, Realme).
 3. Do not swipe-lock or "clean" the app in the recent-apps cleaner.
 

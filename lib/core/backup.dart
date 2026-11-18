@@ -1,12 +1,13 @@
 /// Versioned backup (reference spec 5.12). Pure Dart.
 library;
 
+import '../brand.dart';
 import 'dart:convert';
 
 import 'events.dart';
 
 const int backupFormat = 2;
-const String backupApp = 'Productivity Challenger Timer';
+const String backupApp = appName;
 
 class BackupError implements Exception {
   const BackupError(this.message);
@@ -66,8 +67,8 @@ Backup decodeBackup(String text) {
   } on FormatException {
     throw const BackupError('This file is not a backup: it is not valid JSON.');
   }
-  if (j is! Map || j['app'] != backupApp || j['events'] is! List || j['records'] is! List) {
-    throw const BackupError('This file is not a Challenger Timer backup.');
+  if (j is! Map || (j['app'] != backupApp && !legacyAppNames.contains(j['app'])) || j['events'] is! List || j['records'] is! List) {
+    throw const BackupError('This file is not a $appName backup.');
   }
   final format = j['format'] as int? ?? 1;
   if (format > backupFormat) {

@@ -228,12 +228,12 @@ void main() {
     expect(find.text('Last backup: never'), findsOneWidget);
     await t.tap(find.byKey(const Key('bkMake')));
     await settle(t);
-    expect(shared.single, '/tmp/challenger-timer-backup.json');
+    expect(shared.single, '/tmp/productivity-go-backup.json');
     expect(r.v.kv[S.lastBackup], isNotNull);
     await t.tap(find.byKey(const Key('bkRedacted')));
     await settle(t);
-    expect(files['challenger-timer-redacted.json'], isNot(contains('Secret project')));
-    final good = files['challenger-timer-backup.json']!;
+    expect(files['productivity-go-redacted.json'], isNot(contains('Secret project')));
+    final good = files['productivity-go-backup.json']!;
     await r.app.addRec(Kind.project, {'name': 'Added later'});
     await t.enterText(find.byKey(const Key('bkPaste')), 'not a backup');
     await t.tap(find.byKey(const Key('bkLoad')));
