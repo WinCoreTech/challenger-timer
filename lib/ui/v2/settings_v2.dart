@@ -106,6 +106,12 @@ class SettingsV2Screen extends ConsumerWidget {
             if (r is String) Padding(padding: const EdgeInsets.fromLTRB(16, 20, 16, 4), child: H(r, color: accent)) else build(r as _Row),
           const Padding(padding: EdgeInsets.fromLTRB(16, 20, 16, 4), child: H('More', color: accent)),
           ListTile(key: const Key('set-locks'), title: const Text('Locks, permissions and buddy'), trailing: const Icon(Icons.chevron_right), onTap: () => context.push('/settings')),
+          SwitchListTile(
+              key: const Key('set-social'),
+              title: const Text('Friends and sharing'),
+              subtitle: const Text('Note: off by default. When on, only minutes, sessions, streak and rank are shared with friends you accept. Never projects, notes or photos.', style: TextStyle(color: gold, fontSize: 12)),
+              value: v.kv['social'] == '1',
+              onChanged: (x) => app.setSetting('social', x ? '1' : '0')),
           ListTile(
               key: const Key('set-goal'),
               title: const Text('Long-term goal'),

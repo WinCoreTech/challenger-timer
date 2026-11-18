@@ -19,6 +19,7 @@ import 'v2/about_screen.dart';
 import 'v2/achievements_screen.dart';
 import 'v2/backup_screen.dart';
 import 'v2/dashboard.dart';
+import 'v2/friends_screen.dart';
 import 'v2/project_edit.dart';
 import 'v2/projects_screen.dart';
 import 'v2/ranks_screen.dart';
@@ -50,6 +51,7 @@ final routerProvider = Provider<GoRouter>((ref) => GoRouter(
           GoRoute(path: 'backup', builder: (c, s) => const BackupScreen()),
           GoRoute(path: 'about', builder: (c, s) => const AboutScreen()),
           GoRoute(path: 'shutdown', builder: (c, s) => const ShutdownScreen()),
+          GoRoute(path: 'friends', builder: (c, s) => const FriendsScreen()),
           GoRoute(path: 'ranks', builder: (c, s) => const RanksScreen()),
           GoRoute(path: 'timer', builder: (c, s) => const TimerScreen()),
           GoRoute(path: 'streaks', builder: (c, s) => const StreaksScreen()),

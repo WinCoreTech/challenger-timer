@@ -268,3 +268,11 @@ Phone checklist additions (brand):
 28. Start a session and pull down the shade: the notification icon is a white ring with chevrons.
 29. Cold-start the app: a navy launch screen with the mark shows before the dashboard.
 30. The dashboard header shows the mark and the name; About shows the mark and the slogan.
+- Phase 4 without Firebase (18 Nov 2026): friend, shared-streak, nudge, duel and weekly-board
+  logic (`lib/core/social.dart`) with an in-memory fake server that applies the same rules;
+  Firestore security rules (`firebase/firestore.rules`) with 15 tests that run on the real
+  Firestore emulator (`cd firebase && npm test`, also a CI job); a Friends screen, off by
+  default, that says "not connected" until a Firebase project exists; account deletion;
+  `docs/FIREBASE_SETUP.md`. Only numbers are ever shared: the rules reject any day row with
+  a project name, note or photo field. Awaiting the Firebase file: Google sign-in, live
+  sync, push nudges. Untested: everything against a live Firebase project.

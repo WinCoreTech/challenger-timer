@@ -9,3 +9,4 @@ One line per finished task: time (UTC), task, result, commit. Read this first af
 - 18 Nov 2026 | Part B: rename to Productivity Go, logo and icons, brand palette | in progress
 - 18 Nov 2026 | Part B: rename, logo, icons, brand palette, brand tests | done | (this commit)
 - 18 Nov 2026 | Phase 4 (no Firebase file): social logic, fake backend, Firestore rules, 15 emulator rules tests, setup guide | done | (this commit)
+- 18 Nov 2026 | Friends screen (off by default, fake-backed tests, honest unavailable state) | done | (this commit)

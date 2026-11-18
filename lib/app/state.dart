@@ -15,6 +15,7 @@ import '../core/wellbeing.dart';
 import '../core/reminders.dart';
 import '../core/rules.dart';
 import '../core/settings.dart';
+import '../core/social.dart';
 import '../core/tools.dart';
 import '../core/v2_day.dart';
 import '../data/store.dart';
@@ -34,6 +35,8 @@ final storeProvider = Provider<Store>((ref) => throw UnimplementedError('overrid
 final nativeProvider = Provider<Native>((ref) => FakeNative());
 final clockProvider = Provider<Clock>((ref) => systemClock);
 final ranksProvider = Provider<List<Rank>>((ref) => const [Rank('Professional Postponer', 0, '')]);
+/// The social backend. Until a Firebase project is connected this refuses everything.
+final socialProvider = Provider<SocialBackend>((ref) => const UnavailableSocial());
 final linesProvider = Provider<Lines>((ref) => Lines.empty);
 
 /// Minutes a session needs to count for the streak (0 = Version 1 rule).

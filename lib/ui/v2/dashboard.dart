@@ -91,6 +91,7 @@ class DashboardScreen extends ConsumerWidget {
       tile('vault', 'Vault', Icons.inventory_2, '/vault', value: '${v.proofs.length}'),
       tile('plan', 'Plan', Icons.checklist, '/plan'),
       tile('shutdown', 'Shutdown', Icons.nightlight_round, '/shutdown', value: shutdownDone(v) ? 'done' : '${dailyScore(v, v.today)}'),
+      if (v.kv['social'] == '1') tile('friends', 'Friends', Icons.group, '/friends'),
       tile('settings', 'Settings', Icons.settings, '/prefs'),
       tile('backup', 'Backup', Icons.save_alt, '/backup', warn: v.kv[S.lastBackup] == null),
       tile('about', 'About', Icons.info_outline, '/about'),
