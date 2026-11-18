@@ -1,0 +1,140 @@
+rules_version = '2';
+
+// Productivity Go: Firestore security rules.
+//
+// Only summaries are stored: a day row has minutes, sessions, streak and rank.
+// There is no field for project names, notes, photos or proof, and the rules
+// reject any document that carries one. Every social feature is opt-in on the
+// phone; these rules are the second lock.
+//
+// Layout
+//   codes/{code}                  -> { uid }                invite code lookup (get only)
+//   users/{uid}                   -> { name, code }
+//   users/{uid}/links/{other}     -> { state, name }        how {uid} sees {other}
+//   users/{uid}/days/{day}        -> { uid, day, minutes, sessions, streak, rank }
+//   nudges/{from_to_day}          -> { from, to, day, line }
+//   duels/{id}                    -> { from, to, day, state, endsAt, fromMinutes?, toMinutes? }
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+
+    function linkState(a, b) {
+      return exists(/databases/$(database)/documents/users/$(a)/links/$(b))
+        ? get(/databases/$(database)/documents/users/$(a)/links/$(b)).data.state
+        : 'none';
+    }
+    function liked(s) { return s == 'accepted' || s == 'muted'; }
+    function friends(a, b) { return liked(linkState(a, b)) && liked(linkState(b, a)); }
+
+    function onlyKeys(keys) { return request.resource.data.keys().hasOnly(keys); }
+    function hasAll(keys) { return request.resource.data.keys().hasAll(keys); }
+    function shortText(v) { return v is string && v.size() > 0 && v.size() <= 30; }
+
+    // ---- invite codes -------------------------------------------------------
+    match /codes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn() && !exists(/databases/$(database)/documents/codes/$(code))
+        && onlyKeys(['uid']) && request.resource.data.uid == me();
+      allow delete: if signedIn() && resource.data.uid == me();
+      allow update: if false;
+    }
+
+    // ---- profile ------------------------------------------------------------
+    match /users/{uid} {
+      allow read: if signedIn() && (uid == me() || friends(uid, me()));
+      allow create, update: if signedIn() && uid == me() && onlyKeys(['name', 'code'])
+        && hasAll(['name', 'code']) && shortText(request.resource.data.name)
+        && request.resource.data.code is string && request.resource.data.code.size() == 8;
+      allow delete: if signedIn() && uid == me();
+
+      // ---- links ------------------------------------------------------------
+      match /links/{other} {
+        allow read: if signedIn() && uid == me();
+
+        // The owner asks (requested), or later changes how they see someone.
+        allow create: if signedIn() && uid == me() && onlyKeys(['state', 'name'])
+          && request.resource.data.state == 'requested'
+          && other != me() && linkState(other, me()) != 'blocked';
+
+        // Someone else asks: creates a pending doc in the owner's list. It
+        // cannot overwrite anything, so a blocked or existing link stays put.
+        allow create: if signedIn() && other == me() && uid != me() && onlyKeys(['state', 'name'])
+          && request.resource.data.state == 'pending' && shortText(request.resource.data.name);
+
+        allow update: if signedIn() && uid == me() && onlyKeys(['state', 'name'])
+          && (
+            (resource.data.state == 'pending' && request.resource.data.state == 'accepted')
+            || (liked(resource.data.state) && liked(request.resource.data.state))
+            // The asker completes their own side once the other person accepted.
+            || (resource.data.state == 'requested' && request.resource.data.state == 'accepted' && linkState(other, uid) == 'accepted')
+            || request.resource.data.state == 'blocked'
+          );
+
+        // Unfriend, decline, or remove the other side when deleting an account.
+        allow delete: if signedIn() && (uid == me() || other == me());
+      }
+
+      // ---- day summaries ----------------------------------------------------
+      match /days/{day} {
+        allow read: if signedIn() && (uid == me() || friends(uid, me()));
+        allow create, update: if signedIn() && uid == me()
+          && onlyKeys(['uid', 'day', 'minutes', 'sessions', 'streak', 'rank'])
+          && hasAll(['uid', 'day', 'minutes', 'sessions', 'streak', 'rank'])
+          && request.resource.data.uid == me()
+          && request.resource.data.day is int && string(request.resource.data.day) == day
+          && request.resource.data.minutes is int && request.resource.data.minutes >= 0 && request.resource.data.minutes <= 1440
+          && request.resource.data.sessions is int && request.resource.data.sessions >= 0 && request.resource.data.sessions <= 100
+          && request.resource.data.streak is int && request.resource.data.streak >= 0 && request.resource.data.streak <= 5000
+          && request.resource.data.rank is int && request.resource.data.rank >= 0 && request.resource.data.rank <= 30;
+        allow delete: if signedIn() && uid == me();
+      }
+    }
+
+    // ---- nudges: one per friend per day (the id carries the day) ---------------
+    match /nudges/{id} {
+      allow read: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+      allow create: if signedIn() && onlyKeys(['from', 'to', 'day', 'line'])
+        && request.resource.data.from == me() && friends(me(), request.resource.data.to)
+        && request.resource.data.day is int && request.resource.data.line is int
+        && request.resource.data.line >= 0 && request.resource.data.line < 3
+        && id == request.resource.data.from + '_' + request.resource.data.to + '_' + string(request.resource.data.day);
+      allow update: if false;
+      allow delete: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+    }
+
+    // ---- duels ----------------------------------------------------------------
+    match /duels/{id} {
+      allow read: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+
+      allow create: if signedIn() && onlyKeys(['from', 'to', 'day', 'state', 'endsAt'])
+        && request.resource.data.from == me() && friends(me(), request.resource.data.to)
+        && request.resource.data.state == 'invited' && request.resource.data.day is int
+        && request.resource.data.endsAt is timestamp;
+
+      // The invited person answers.
+      allow update: if signedIn() && resource.data.to == me() && resource.data.state == 'invited'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state'])
+        && (request.resource.data.state == 'active' || request.resource.data.state == 'declined');
+
+      // Either player settles it after it ended, with the numbers the day rows really hold.
+      allow update: if signedIn() && (resource.data.from == me() || resource.data.to == me())
+        && resource.data.state == 'active' && request.time >= resource.data.endsAt
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['state', 'fromMinutes', 'toMinutes'])
+        && request.resource.data.state == 'finished'
+        && request.resource.data.fromMinutes == (exists(/databases/$(database)/documents/users/$(resource.data.from)/days/$(string(resource.data.day)))
+              ? get(/databases/$(database)/documents/users/$(resource.data.from)/days/$(string(resource.data.day))).data.minutes : 0)
+        && request.resource.data.toMinutes == (exists(/databases/$(database)/documents/users/$(resource.data.to)/days/$(string(resource.data.day)))
+              ? get(/databases/$(database)/documents/users/$(resource.data.to)/days/$(string(resource.data.day))).data.minutes : 0);
+
+      allow delete: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+    }
+
+    // Everything else is closed.
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

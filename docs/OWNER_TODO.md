@@ -17,3 +17,5 @@ Things only the owner can do. Each has the default that was applied so work cont
    fake and are marked "awaiting Firebase file".
 6. **A release signing key**, when you want a Play Store build. *Default applied:* debug
    keys only; builds from different CI runs may not install over each other.
+7. **Firebase:** follow `docs/FIREBASE_SETUP.md` (45 minutes). Phase 4 logic and the security
+   rules are done and tested; only the connection is missing.

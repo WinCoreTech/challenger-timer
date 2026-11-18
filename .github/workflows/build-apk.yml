@@ -55,3 +55,22 @@ jobs:
           tag_name: build-${{ github.run_number }}
           name: Productivity Go build ${{ github.run_number }}
           files: build/app/outputs/flutter-apk/app-debug.apk
+
+  # Runs the Firestore security rules against the real emulator. Separate from
+  # the APK job so a rules problem never blocks an app build.
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Security rules tests
+        working-directory: firebase
+        run: |
+          npm ci
+          npm test
